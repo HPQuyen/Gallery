@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- "Add neww album" -->
+    <item
+        android:id="@+id/AddNewAlbum_ViewAlbums"
+        android:title="@string/actionbar_addnewalbum_layout_1"
+        android:icon="@drawable/ic_add"
+        app:showAsAction="ifRoom" />
+
+    <!-- "Settings" -->
+    <item
+        android:id="@+id/Settings_ViewAll"
+        android:title="@string/actionbar_settings_1"
+        android:onClick="settings"
+        app:showAsAction="never" />
+
+</menu>
