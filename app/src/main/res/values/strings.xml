@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">GalleryApplication</string>
+    <string name="desc_image">TODO</string>
+    <!--    #region Activity Photo Detail-->
+    <string name="info_dropdown_item_2">Info</string>
+    <string name="copy_dropdown_item_2">Copy To...</string>
+    <string name="set_picture_as_dropdown_item_2">Set picture as</string>
+
+    <string name="back_btn_2">Back</string>
+    <string name="share_btn_2">Share image</string>
+    <string name="delete_btn_2">Delete image</string>
+    <string name="more_option_btn_2">More Options</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--    #endregion-->
 </resources>
