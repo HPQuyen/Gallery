@@ -13,12 +13,14 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.fonts.FontStyle;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -38,22 +40,19 @@ public class CameraActivity extends AppCompatActivity{
 
 
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
-    PreviewView previewView = null;
+    private PreviewView previewView = null;
+    private Intent photoDetail = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TurnOffTitle();
         setContentView(R.layout.activity_camera);
         Start();
-        if (HasCameraPermission()) {
-            EnableCamera();
-        } else {
-            RequestPermission();
-        }
-
-        Log.d("mytag","here");
     }
     private void Start(){
+
+        photoDetail = new Intent(this, PhotoDetailActivity.class);
+
         CarouselPicker carouselPicker = (CarouselPicker) findViewById(R.id.camera_mode_carousel);
         //Case 2 : To populate the picker with text
         List<CarouselPicker.PickerItem> textItems = new ArrayList<>();
@@ -79,6 +78,15 @@ public class CameraActivity extends AppCompatActivity{
 
             }
         });
+
+        if (HasCameraPermission()) {
+            EnableCamera();
+        } else {
+            RequestPermission();
+        }
+    }
+    public void ViewPhotoDetail(View view){
+        startActivity(photoDetail);
     }
     private boolean HasCameraPermission(){
         return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;

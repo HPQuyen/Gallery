@@ -52,7 +52,8 @@
             android:padding="1dp"
             android:scaleType="centerCrop"
             android:cropToPadding="true"
-            android:background="@drawable/border_image_view" />
+            android:background="@drawable/border_image_view"
+            android:onClick="ViewPhotoDetail"/>
 
         <LinearLayout
             android:layout_width="200dp"
