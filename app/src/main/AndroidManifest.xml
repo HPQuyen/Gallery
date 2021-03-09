@@ -7,6 +7,9 @@
         android:minSdkVersion="14"
         android:targetSdkVersion="30" />
 
+    <uses-feature android:name="android.hardware.camera.any" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -14,6 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GalleryApplication">
+        <activity android:name=".CameraActivity" />
+        <activity android:name=".PhotoDetailActivity" />
         <activity
             android:name=".GalleryViewActivity"
             android:label="@string/default_title_1">
