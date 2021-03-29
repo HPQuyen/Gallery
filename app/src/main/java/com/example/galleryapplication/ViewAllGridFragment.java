@@ -1,12 +1,24 @@
 package com.example.galleryapplication;
 
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -53,14 +65,69 @@ public class ViewAllGridFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
+    private HashMap<String, ArrayList<String>> GetAllImages(){
+        final int MAXLOADING = 10;
+        Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        HashMap<String, ArrayList<String>> dictImages = new HashMap<>();
+        String[] projections = new String[]{
+                MediaStore.Images.ImageColumns._ID,
+                MediaStore.Images.ImageColumns.BUCKET_ID,
+                MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME,
+                MediaStore.Images.ImageColumns.DATA,
+                MediaStore.Images.ImageColumns.SIZE };
+        Cursor cursor = getActivity().getContentResolver().query(uri, projections, null, null, null);
+        int i = 0;
+        if(cursor != null && cursor.getCount() > 0){
+            while (cursor.moveToNext()){
+                Log.d("Nothing", cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns._ID)));
+                Log.d("Nothing", cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.BUCKET_ID)));
+                Log.d("Nothing", cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME)));
+                Log.d("Nothing", cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)));
+                Log.d("Nothing", cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.SIZE)));
+                String albumName = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME));
+                if(!dictImages.containsKey(albumName)){
+                    dictImages.put(albumName, new ArrayList<>());
+                }
+                ArrayList<String> arrayImages = dictImages.get(albumName);
+                arrayImages.add(cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)));
+                i++;
+                if(i >= MAXLOADING)
+                    break;
+            }
+        }
+        return dictImages;
+    }
+
+    private Bitmap ImagePathToBitmap(String imagePath){
+        File f = new File(imagePath);
+        return BitmapFactory.decodeFile(f.getPath());
+    }
+
+    private void SetImage(View thisView){
+        ImageView[] imageViews = new ImageView[]{thisView.findViewById(R.id.imageView),thisView.findViewById(R.id.imageView2),thisView.findViewById(R.id.imageView3),thisView.findViewById(R.id.imageView4),thisView.findViewById(R.id.imageView5)};
+        HashMap<String, ArrayList<String>> dictImages = GetAllImages();
+        int i = 0;
+        for (Map.Entry item : dictImages.entrySet()) {
+            ArrayList<String> arrayImages = (ArrayList<String>) item.getValue();
+            for (String imagePath : arrayImages){
+                if(i > 4)
+                    return;
+                Bitmap imageBitmap = ImagePathToBitmap(imagePath);
+                imageViews[i].setImageBitmap(imageBitmap);
+                i++;
+            }
+        }
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View thisView = inflater.inflate(R.layout.fragment_viewall_grid, container, false);
-
+        SetImage(thisView);
         return thisView;
+
     }
 }

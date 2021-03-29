@@ -9,17 +9,15 @@
     tools:context=".PhotoDetailActivity">
 
 
-
-    <ja.burhanrashid52.photoeditor.PhotoEditorView
-        android:id="@+id/photoEditorView"
+    <ImageView
+        android:id="@+id/photoDetailPreview"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent" />
 
-    </ja.burhanrashid52.photoeditor.PhotoEditorView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/top_toolbar_layout"
@@ -43,7 +41,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_baseline_keyboard_backspace_24" />
+            app:srcCompat="@drawable/ic_baseline_keyboard_backspace_24"
+            android:layout_marginLeft="5dp" />
 
         <ImageButton
             android:layout_width="60dp"
@@ -57,7 +56,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_baseline_share_24" />
+            app:srcCompat="@drawable/ic_baseline_share_24"
+            android:layout_marginRight="150dp" />
 
         <ImageButton
             android:layout_width="60dp"
@@ -71,7 +71,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_baseline_delete_24" />
+            app:srcCompat="@drawable/ic_baseline_delete_24"
+            android:layout_marginRight="80dp" />
 
         <ImageButton
             android:id="@+id/more_option_dropdown"
@@ -87,7 +88,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_baseline_more_vert_24" />
+            app:srcCompat="@drawable/ic_baseline_more_vert_24"
+            android:layout_marginRight="10dp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -114,7 +116,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_baseline_favorite_border_24" />
+            app:srcCompat="@drawable/ic_baseline_favorite_border_24"
+            android:layout_marginLeft="5dp" />
 
         <ImageButton
             android:layout_width="60dp"
@@ -127,7 +130,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_baseline_rotate_left_24" />
+            app:srcCompat="@drawable/ic_baseline_rotate_left_24"
+            android:layout_marginRight="150dp" />
 
         <ImageButton
             android:layout_width="60dp"
@@ -140,7 +144,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_baseline_rotate_right_24" />
+            app:srcCompat="@drawable/ic_baseline_rotate_right_24"
+            android:layout_marginRight="80dp" />
 
         <ImageButton
             android:layout_width="60dp"
@@ -153,7 +158,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_baseline_edit_24" />
+            app:srcCompat="@drawable/ic_baseline_edit_24"
+            android:layout_marginRight="10dp"
+            android:onClick="OnClickEditPhoto"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

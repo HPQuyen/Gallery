@@ -83,6 +83,8 @@ public class GalleryViewActivity extends AppCompatActivity {
                     }
                 }
         );
+
+        //startActivity(new Intent(this, PhotoDetailActivity.class));
     }
 
     @Override
