@@ -18,7 +18,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GalleryApplication">
-
+        <activity android:name=".VideoDetailActivity"></activity>
+        <activity android:name=".PhotoDetailActivity" />
         <activity
             android:name=".GalleryViewActivity"
             android:label="@string/default_title_1">
