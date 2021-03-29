@@ -3,7 +3,9 @@ package com.example.galleryapplication;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -68,54 +70,84 @@ public class ViewAllGridFragment extends Fragment {
 
     }
 
-    private HashMap<String, ArrayList<String>> GetAllImages(){
+    private void GetAllImages(HashMap<String, ArrayList<String>> dictImages){
         final int MAXLOADING = 10;
         Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-        HashMap<String, ArrayList<String>> dictImages = new HashMap<>();
+
         String[] projections = new String[]{
                 MediaStore.Images.ImageColumns._ID,
                 MediaStore.Images.ImageColumns.BUCKET_ID,
                 MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME,
                 MediaStore.Images.ImageColumns.DATA,
                 MediaStore.Images.ImageColumns.SIZE };
+
         Cursor cursor = getActivity().getContentResolver().query(uri, projections, null, null, null);
         int i = 0;
         if(cursor != null && cursor.getCount() > 0){
             while (cursor.moveToNext()){
-                Log.d("Nothing", cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns._ID)));
-                Log.d("Nothing", cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.BUCKET_ID)));
-                Log.d("Nothing", cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME)));
-                Log.d("Nothing", cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)));
-                Log.d("Nothing", cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.SIZE)));
                 String albumName = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME));
                 if(!dictImages.containsKey(albumName)){
                     dictImages.put(albumName, new ArrayList<>());
                 }
                 ArrayList<String> arrayImages = dictImages.get(albumName);
-                arrayImages.add(cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)));
+                String imagePath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA));
+                arrayImages.add(imagePath);
                 i++;
                 if(i >= MAXLOADING)
                     break;
             }
         }
-        return dictImages;
     }
 
-    private Bitmap ImagePathToBitmap(String imagePath){
+    private void GetAllVideos(HashMap<String, ArrayList<String>> dictVideos){
+        final int MAXLOADING = 10;
+        Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+        String[] projections = new String[]{
+                MediaStore.Video.VideoColumns._ID,
+                MediaStore.Video.VideoColumns.BUCKET_ID,
+                MediaStore.Video.VideoColumns.BUCKET_DISPLAY_NAME,
+                MediaStore.Video.VideoColumns.DATA,
+                MediaStore.Video.VideoColumns.SIZE };
+        Cursor cursor = getActivity().getContentResolver().query(uri, projections, null, null, null);
+        int i = 0;
+        if(cursor != null && cursor.getCount() > 0){
+            while (cursor.moveToNext()){
+                Log.d("Nothing", cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns._ID)));
+                Log.d("Nothing", cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.BUCKET_ID)));
+                Log.d("Nothing", cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.BUCKET_DISPLAY_NAME)));
+                Log.d("Nothing", cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DATA)));
+                Log.d("Nothing", cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.SIZE)));
+                String albumName = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.BUCKET_DISPLAY_NAME));
+                if(!dictVideos.containsKey(albumName)){
+                    dictVideos.put(albumName, new ArrayList<>());
+                }
+                ArrayList<String> arrayVideos = dictVideos.get(albumName);
+                String imagePath = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DATA));
+                arrayVideos.add(imagePath);
+                i++;
+                if(i >= MAXLOADING)
+                    break;
+            }
+        }
+    }
+
+    private Bitmap ImagePathToBitmap(String imagePath, int thumbSize){
         File f = new File(imagePath);
-        return BitmapFactory.decodeFile(f.getPath());
+        return ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(f.getPath()), thumbSize, thumbSize);
     }
 
     private void SetImage(View thisView){
         ImageView[] imageViews = new ImageView[]{thisView.findViewById(R.id.imageView),thisView.findViewById(R.id.imageView2),thisView.findViewById(R.id.imageView3),thisView.findViewById(R.id.imageView4),thisView.findViewById(R.id.imageView5)};
-        HashMap<String, ArrayList<String>> dictImages = GetAllImages();
+        HashMap<String, ArrayList<String>> dictMediaFiles = new HashMap<>();
+        GetAllImages(dictMediaFiles);
+        GetAllVideos(dictMediaFiles);
         int i = 0;
-        for (Map.Entry item : dictImages.entrySet()) {
-            ArrayList<String> arrayImages = (ArrayList<String>) item.getValue();
-            for (String imagePath : arrayImages){
+        for (Map.Entry item : dictMediaFiles.entrySet()) {
+            ArrayList<String> arrayMediaFiles = (ArrayList<String>) item.getValue();
+            for (String filePath : arrayMediaFiles){
                 if(i > 4)
                     return;
-                Bitmap imageBitmap = ImagePathToBitmap(imagePath);
+                Bitmap imageBitmap = ImagePathToBitmap(filePath, 256);
                 imageViews[i].setImageBitmap(imageBitmap);
                 i++;
             }

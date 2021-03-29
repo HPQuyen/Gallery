@@ -277,38 +277,6 @@ public class PhotoDetailActivity extends AppCompatActivity implements Permission
     }
     //#endregion
 
-    private HashMap<String, ArrayList<String>> GetAllImages(){
-        Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-        HashMap<String, ArrayList<String>> dictImages = new HashMap<>();
-        String[] projections = new String[]{
-                MediaStore.Images.ImageColumns._ID,
-                MediaStore.Images.ImageColumns.BUCKET_ID,
-                MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME,
-                MediaStore.Images.ImageColumns.DATA,
-                MediaStore.Images.ImageColumns.SIZE };
-        Cursor cursor = getApplicationContext().getContentResolver().query(uri, projections, null, null, null);
-        if(cursor != null && cursor.getCount() > 0){
-            while (cursor.moveToNext()){
-                Log.d("Nothing", cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns._ID)));
-                Log.d("Nothing", cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.BUCKET_ID)));
-                Log.d("Nothing", cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME)));
-                Log.d("Nothing", cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)));
-                Log.d("Nothing", cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.SIZE)));
-                String albumName = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME));
-                if(!dictImages.containsKey(albumName)){
-                    dictImages.put(albumName, new ArrayList<>());
-                }
-                ArrayList<String> arrayImages = dictImages.get(albumName);
-                arrayImages.add(cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)));
-            }
-        }
-        return dictImages;
-    }
-
-    private Bitmap ImagePathToBitmap(String imagePath){
-        File f = new File(imagePath);
-        return BitmapFactory.decodeFile(f.getPath());
-    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
