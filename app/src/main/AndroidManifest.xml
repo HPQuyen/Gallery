@@ -5,24 +5,24 @@
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="30" />
+        android:targetSdkVersion="30"
+        tools:ignore="GradleOverrides" />
 
     <uses-feature android:name="android.hardware.camera.any" />
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GalleryApplication">
-        <activity android:name=".PhotoDetailActivity" />
+
         <activity
             android:name=".GalleryViewActivity"
             android:label="@string/default_title_1">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,11 +31,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".SettingsActivity"
             android:label="@string/actionbar_settings_1"
+
             android:parentActivityName=".GalleryViewActivity"
-            tools:ignore="DuplicateActivity"
             tools:targetApi="jelly_bean">
 
             <!-- The meta-data element is needed for versions lower than 4.1 -->
@@ -43,6 +44,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.galleryapplication.GalleryViewActivity" />
         </activity>
+
+        <activity android:name=".PhotoDetailActivity" />
+
     </application>
 
 </manifest>
