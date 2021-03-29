@@ -8,7 +8,7 @@
     tools:ignore="NestedWeights">
 
     <FrameLayout
-        android:id="@+id/FrameLayout_Fragment"
+        android:id="@+id/fragment_FrameLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
