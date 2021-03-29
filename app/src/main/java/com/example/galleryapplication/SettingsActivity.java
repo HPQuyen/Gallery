@@ -2,7 +2,6 @@ package com.example.galleryapplication;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NavUtils;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -47,7 +46,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void setCurrentFragment (Fragment fragment) {
         FragmentTransaction fragTransaction = getSupportFragmentManager().beginTransaction();
-        fragTransaction.replace(R.id.FrameLayout_Fragment, fragment);
+        fragTransaction.replace(R.id.fragment_FrameLayout, fragment);
         fragTransaction.commit();
     }
 

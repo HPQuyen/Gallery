@@ -1,6 +1,5 @@
 package com.example.galleryapplication;
 
-import android.app.ActionBar;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -97,7 +96,7 @@ public class LanguageSettingsFragment extends Fragment {
 
     private void setCurrentFragment (Fragment fragment) {
         FragmentTransaction fragTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-        fragTransaction.replace(R.id.FrameLayout_Fragment, fragment);
+        fragTransaction.replace(R.id.fragment_FrameLayout, fragment);
         fragTransaction.commit();
     }
 }

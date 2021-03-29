@@ -1,13 +1,11 @@
 package com.example.galleryapplication;
 
-import android.app.ActionBar;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -98,7 +96,7 @@ public class ThemeSettingsFragment extends Fragment {
 
     private void setCurrentFragment (Fragment fragment) {
         FragmentTransaction fragTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-        fragTransaction.replace(R.id.FrameLayout_Fragment, fragment);
+        fragTransaction.replace(R.id.fragment_FrameLayout, fragment);
         fragTransaction.commit();
     }
 }
