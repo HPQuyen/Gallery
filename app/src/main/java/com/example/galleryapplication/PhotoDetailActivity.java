@@ -68,37 +68,20 @@ import ly.img.android.pesdk.ui.utils.PermissionRequest;
 import ly.img.android.serializer._3.IMGLYFileWriter;
 
 
-public class PhotoDetailActivity extends AppCompatActivity implements PermissionRequest.Response {
+public class PhotoDetailActivity extends AppCompatActivity {
 
     //#region Fields
 
     //#region Layout Components
-    ImageView photoDetailPreview = null;
-    ConstraintLayout topToolbarLayout,bottomToolbarLayout;
-    PopupMenu popupMenu = null;
-    Uri selectedImage = null;
-    ExifInterface imageExif = null;
+    private ImageView photoDetailPreview = null;
+    private ConstraintLayout topToolbarLayout,bottomToolbarLayout;
+    private PopupMenu popupMenu = null;
+    private Uri selectedImage = null;
+    private ExifInterface imageExif = null;
     //#endregion
     public static int PESDK_RESULT = 6968;
-    public static int GALLERY_RESULT = 6969;
     //#endregion
 
-    // Important permission request for Android 6.0 and above, don't forget to add this!
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        PermissionRequest.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-    @Override
-    public void permissionGranted() {}
-
-    @Override
-    public void permissionDenied() {
-        /* TODO: The Permission was rejected by the user. The Editor was not opened,
-         * Show a hint to the user and try again. */
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +89,6 @@ public class PhotoDetailActivity extends AppCompatActivity implements Permission
         TurnOffTitle();
         setContentView(R.layout.activity_photo_detail);
         Init();
-        OpenSystemGalleryToSelectAnImage();
 
 //        Uri uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 //        String[] projection = { MediaStore.MediaColumns.DATA,
@@ -145,13 +127,16 @@ public class PhotoDetailActivity extends AppCompatActivity implements Permission
             return true;
         });
 
-
-//        photoDetailPreview.setImageResource(R.drawable._28195615_136128921308288_9046592716708631099_n);
-
         topToolbarLayout = findViewById(R.id.top_toolbar_layout);
         bottomToolbarLayout = findViewById(R.id.bottom_toolbar_layout);
 
-
+        Intent intent = getIntent();
+        Bitmap selectedImageBitmap = Image.GetBitMap(intent.getStringExtra(MediaFile.FILE_PATH));
+        photoDetailPreview = findViewById(R.id.photoDetailPreview);
+        photoDetailPreview.setImageBitmap(selectedImageBitmap);
+        photoDetailPreview.setOnClickListener(this::ToggleToolbars);
+        selectedImage = Uri.fromFile(new File(intent.getStringExtra(MediaFile.FILE_PATH)));
+        imageExif = UriToExifInterface(selectedImage);
     }
     private CharSequence MenuIconWithText(int icon, int title) {
         Drawable drawable = getResources().getDrawable(icon);
@@ -169,18 +154,19 @@ public class PhotoDetailActivity extends AppCompatActivity implements Permission
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
     }
 
-    private void OpenSystemGalleryToSelectAnImage() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intent, GALLERY_RESULT);
-        } else {
-            Toast.makeText(
-                    this,
-                    "No Gallery APP installed",
-                    Toast.LENGTH_LONG
-            ).show();
-        }
-    }
+//    private void OpenSystemGalleryToSelectAnImage() {
+//        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//        if (intent.resolveActivity(getPackageManager()) != null) {
+//            startActivityForResult(intent, GALLERY_RESULT);
+//        } else {
+//            Toast.makeText(
+//                    this,
+//                    "No Gallery APP installed",
+//                    Toast.LENGTH_LONG
+//            ).show();
+//        }
+//    }
+
     private SettingsList CreatePesdkSettingsList() {
 
         // Create a empty new SettingsList and apply the changes on this referance.
@@ -225,8 +211,6 @@ public class PhotoDetailActivity extends AppCompatActivity implements Permission
                 .setSettingsList(settingsList)
                 .startActivityForResult(this, PESDK_RESULT);
     }
-
-
     private ExifInterface UriToExifInterface(Uri uri){
         ExifInterface exifInterface = null;
         InputStream in = null;
@@ -277,15 +261,50 @@ public class PhotoDetailActivity extends AppCompatActivity implements Permission
     }
     //#endregion
 
+    private void TransitionViewDetail(String mediaFilePath){
+        Intent imageDetailIntent = null, videoDetailIntent = null;
+        Uri queryUri = MediaStore.Files.getContentUri("external");
+        String[] projections = new String[]{
+                MediaStore.Files.FileColumns._ID,
+                MediaStore.Files.FileColumns.BUCKET_ID,
+                MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME,
+                MediaStore.Files.FileColumns.DATA,
+                MediaStore.Files.FileColumns.DATE_ADDED,
+                MediaStore.Files.FileColumns.MEDIA_TYPE,
+                MediaStore.Files.FileColumns.TITLE,
+                MediaStore.Files.FileColumns.RESOLUTION,
+                MediaStore.Files.FileColumns.SIZE };
+        String selection = MediaStore.Files.FileColumns.DATA + "='" + mediaFilePath + "'";
+        Cursor resultSet = getContentResolver().query(queryUri, projections, selection, null, null);
+        if(resultSet != null && resultSet.moveToNext()){
+            Intent intent = null;
+            if(resultSet.getInt(resultSet.getColumnIndex(MediaStore.Files.FileColumns.MEDIA_TYPE)) == MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE){
+                Log.d("Nothing","This is image");
+                if(imageDetailIntent == null)
+                    imageDetailIntent = new Intent(this, PhotoDetailActivity.class);
+                intent = imageDetailIntent;
+            }else{
+                Log.d("Nothing","This is video");
+                if(videoDetailIntent == null)
+                    videoDetailIntent = new Intent(this, VideoDetailActivity.class);
+                intent = videoDetailIntent;
+            }
+            intent.putExtra(MediaFile.FILE_ID, resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns._ID)));
+            intent.putExtra(MediaFile.FILE_PATH, resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.DATA)));
+            intent.putExtra(MediaFile.FILE_ALBUM_NAME, resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME)));
+            intent.putExtra(MediaFile.FILE_DATE, resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.DATE_ADDED)));
+            intent.putExtra(MediaFile.FILE_RESOLUTION, resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.RESOLUTION)));
+            intent.putExtra(MediaFile.FILE_SIZE, resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.SIZE)));
+            startActivity(intent);
+        }else{
+            Toast.makeText(this,"No such file", Toast.LENGTH_LONG).show();
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
 
-        if (resultCode == RESULT_OK && requestCode == GALLERY_RESULT) {
-            // Open Editor with some uri in this case with an image selected from the system gallery.
-            selectedImage = intent.getData();
-
-            imageExif = UriToExifInterface(selectedImage);
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 //                if(imageExif.hasAttribute(ExifInterface.TAG_DEFAULT_CROP_SIZE))
 //                    Log.d("Nothing",imageExif.getAttribute(ExifInterface.TAG_DEFAULT_CROP_SIZE));
@@ -293,15 +312,8 @@ public class PhotoDetailActivity extends AppCompatActivity implements Permission
 //                if(imageExif.hasAttribute(ExifInterface.TAG_DATETIME_DIGITIZED))
 //                    Log.d("Nothing",imageExif.getAttribute(ExifInterface.TAG_DATETIME_DIGITIZED));
 //            }
-            try {
-                Bitmap selectedImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-                photoDetailPreview = findViewById(R.id.photoDetailPreview);
-                photoDetailPreview.setImageBitmap(selectedImageBitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
 
-        } else if (resultCode == RESULT_OK && requestCode == PESDK_RESULT) {
+        if (resultCode == RESULT_OK && requestCode == PESDK_RESULT) {
             // Editor has saved an Image.
             EditorSDKResult data = new EditorSDKResult(intent);
 

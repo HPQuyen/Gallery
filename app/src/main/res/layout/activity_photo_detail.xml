@@ -33,6 +33,7 @@
             android:layout_width="60dp"
             android:layout_height="40dp"
             android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:background="@null"
@@ -41,14 +42,14 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_baseline_keyboard_backspace_24"
-            android:layout_marginLeft="5dp" />
+            app:srcCompat="@drawable/ic_baseline_keyboard_backspace_24" />
 
         <ImageButton
             android:layout_width="60dp"
             android:layout_height="40dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="150dp"
+            android:layout_marginRight="150dp"
             android:layout_marginBottom="5dp"
             android:background="@null"
             android:backgroundTint="@null"
@@ -56,14 +57,14 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_baseline_share_24"
-            android:layout_marginRight="150dp" />
+            app:srcCompat="@drawable/ic_baseline_share_24" />
 
         <ImageButton
             android:layout_width="60dp"
             android:layout_height="40dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="80dp"
+            android:layout_marginRight="80dp"
             android:layout_marginBottom="5dp"
             android:background="@null"
             android:backgroundTint="@null"
@@ -71,8 +72,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_baseline_delete_24"
-            android:layout_marginRight="80dp" />
+            app:srcCompat="@drawable/ic_baseline_delete_24" />
 
         <ImageButton
             android:id="@+id/more_option_dropdown"
@@ -80,6 +80,7 @@
             android:layout_height="40dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginBottom="5dp"
             android:background="@null"
             android:backgroundTint="@null"
@@ -88,8 +89,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_baseline_more_vert_24"
-            android:layout_marginRight="10dp" />
+            app:srcCompat="@drawable/ic_baseline_more_vert_24" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
