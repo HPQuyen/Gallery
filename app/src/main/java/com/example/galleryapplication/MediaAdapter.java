@@ -14,17 +14,17 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-public class MediaAdapter extends ArrayAdapter<String> {
+public class MediaAdapter extends ArrayAdapter<MediaFile> {
     private final Context context;
     private final LayoutInflater layoutInflater;
-    private final List<String> imgURLs;
+    private final List<MediaFile> mediaFiles;
 
-    public MediaAdapter(@NonNull Context context, int resource, @NonNull List<String> imgURLs) {
-        super(context, resource, imgURLs);
+    public MediaAdapter(@NonNull Context context, int resource, @NonNull List<MediaFile> mediaFiles) {
+        super(context, resource, mediaFiles);
 
         this.context = context;
         this.layoutInflater = LayoutInflater.from(context);
-        this.imgURLs = imgURLs;
+        this.mediaFiles = mediaFiles;
     }
 
     @NonNull
@@ -38,7 +38,7 @@ public class MediaAdapter extends ArrayAdapter<String> {
 
         Glide
                 .with(this.context)
-                .load(imgURLs.get(position))
+                .load(mediaFiles.get(position).fileUrl)
                 .into((ImageView) convertView);
 
         return convertView;

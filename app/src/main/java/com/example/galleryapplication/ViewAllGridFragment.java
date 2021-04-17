@@ -1,5 +1,8 @@
 package com.example.galleryapplication;
 
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -7,6 +10,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,11 +58,11 @@ public class ViewAllGridFragment extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     private void loadAllImage(View thisView) {
-        HashMap<String, ArrayList<String>> dictMediaFiles =
+        HashMap<String, ArrayList<MediaFile>> dictMediaFiles =
                 ((GalleryViewActivity)requireActivity()).getMediaCollections();
 
-        ArrayList<String> mediaEntries = new ArrayList<>();
-        for (Map.Entry<String, ArrayList<String>> item : dictMediaFiles.entrySet()) {
+        ArrayList<MediaFile> mediaEntries = new ArrayList<>();
+        for (Map.Entry<String, ArrayList<MediaFile>> item : dictMediaFiles.entrySet()) {
             mediaEntries.addAll(item.getValue());
         }
 
@@ -71,7 +76,10 @@ public class ViewAllGridFragment extends Fragment {
                 (parent, view, position, id) -> {
                     CharSequence realMsg = "Image " + id + "is clicked";
                     Toast.makeText(view.getContext(), realMsg, Toast.LENGTH_SHORT).show();
+                    ((GalleryViewActivity)requireActivity()).TransitionViewDetail(mediaEntries.get(position));
                 }
         );
     }
+
+
 }
