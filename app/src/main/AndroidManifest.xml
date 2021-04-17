@@ -8,22 +8,26 @@
         android:targetSdkVersion="30"
         tools:ignore="GradleOverrides" />
 
-    <uses-feature android:name="android.hardware.camera.any" />
+    <uses-feature
+        android:name="android.hardware.camera.any"
+        android:required="true" />
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
-        android:label="@string/app_name"
         android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GalleryApplication">
-        <activity android:name=".VideoDetailActivity"></activity>
+        <activity android:name=".CameraActivity"></activity>
+        <activity android:name=".VideoDetailActivity" />
         <activity android:name=".PhotoDetailActivity" />
         <activity
             android:name=".GalleryViewActivity"
             android:label="@string/default_title_1">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,11 +36,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".SettingsActivity"
             android:label="@string/actionbar_settings_1"
-
             android:parentActivityName=".GalleryViewActivity"
             tools:targetApi="jelly_bean">
 
@@ -45,9 +47,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.galleryapplication.GalleryViewActivity" />
         </activity>
-
-        <activity android:name=".PhotoDetailActivity" />
-
     </application>
 
 </manifest>

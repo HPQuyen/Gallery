@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">GalleryApplication</string>
-
+    <string name="content_description">TODO</string>
     <!--    #region Activity Default    -->
     <string name="default_title_1">Photos &amp; Videos</string>
 
@@ -30,4 +30,8 @@
     <string name="delete_btn_2">Delete image</string>
     <string name="more_option_btn_2">More Options</string>
     <!--    #endregion    -->
+
+
+    <string name="tv_photocamera_pick_6">Photo</string>
+    <string name="tv_videocamera_pick_6">Video</string>
 </resources>

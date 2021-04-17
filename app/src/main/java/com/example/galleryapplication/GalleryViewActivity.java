@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -49,7 +50,7 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
 
     private Fragment albumFragment;
 
-    private HashMap<String, ArrayList<String>> dictMediaFiles;
+    private HashMap<String, ArrayList<MediaFile>> dictMediaFiles;
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
@@ -57,15 +58,20 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
         super.onCreate(savedInstanceState);
         setContentView(R.layout.galleryviewactivity_main);
 
+        startActivity(new Intent(this, CameraActivity.class));
+        if(true)
+            return;
+        
         if (checkPermission(this)) init();
 
         dictMediaFiles = new HashMap<>();
-        getAllImages(dictMediaFiles);
-        getAllVideos(dictMediaFiles);
+        getAllMediaFiles(dictMediaFiles);
     }
 
     @SuppressLint("NonConstantResourceId")
     private void init() {
+
+
         mainActionbar = getSupportActionBar();
 
         assert mainActionbar != null;
@@ -186,89 +192,44 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
     // **************************  GET DATA IN MOBILE DEVICES  *************************
     // *********************************************************************************
     // Important permission request for Android 6.0 and above, don't forget to add this!
-    @RequiresApi(api = Build.VERSION_CODES.Q)
-    @SuppressLint("Recycle")
-    private void getAllImages(HashMap<String, ArrayList<String>> dictImages) {
-        // final int _MAXLOADING = 10;
+    private void getAllMediaFiles(HashMap<String, ArrayList<MediaFile>> dictMediaFiles){
+        Uri queryUri = MediaStore.Files.getContentUri("external");
 
-        Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         String[] projections = new String[]{
-                MediaStore.Images.ImageColumns._ID,
-                MediaStore.Images.ImageColumns.BUCKET_ID,
-                MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME,
-                MediaStore.Images.ImageColumns.DATA,
-                MediaStore.Images.ImageColumns.SIZE
-        };
-        Cursor cursor = this.getContentResolver().query(
-                uri, projections, null, null, null
-        );
+                MediaStore.Files.FileColumns._ID,
+                MediaStore.Files.FileColumns.BUCKET_ID,
+                MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME,
+                MediaStore.Files.FileColumns.DATA,
+                MediaStore.Files.FileColumns.DATE_ADDED,
+                MediaStore.Files.FileColumns.MEDIA_TYPE,
+                MediaStore.Files.FileColumns.TITLE,
+                MediaStore.Files.FileColumns.RESOLUTION,
+                MediaStore.Files.FileColumns.SIZE };
+        String selection = MediaStore.Files.FileColumns.MEDIA_TYPE + " = ?" + " OR " + MediaStore.Files.FileColumns.MEDIA_TYPE + " = ?";
+        String []selectionArgs = new String[]{
+                String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
+                String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) };
 
-        // int i = 0;
-        if (cursor != null && cursor.getCount() > 0) {
-            while (cursor.moveToNext()) {
-                String albumName = cursor.getString(
-                        cursor.getColumnIndex(MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME)
+        Cursor resultSet = getContentResolver().query(queryUri, projections, selection, selectionArgs, null);
+        if(resultSet != null){
+            while (resultSet.moveToNext()){
+                String albumName = resultSet.getString(
+                        resultSet.getColumnIndex(MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME)
                 );
-
-                if (!dictImages.containsKey(albumName)) {
-                    dictImages.put(albumName, new ArrayList<>());
+                if (!dictMediaFiles.containsKey(albumName)) {
+                    dictMediaFiles.put(albumName, new ArrayList<>());
                 }
-                ArrayList<String> arrayImages = dictImages.get(albumName);
-                String imagePath = cursor.getString(
-                        cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
-                );
-
-                assert arrayImages != null;
-                arrayImages.add(imagePath);
-
-                // i++;
-                // if (i >= _MAXLOADING) break;
+                int mediaType = resultSet.getInt(resultSet.getColumnIndex(MediaStore.Files.FileColumns.MEDIA_TYPE));
+                String fileUrl = resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.DATA));
+                ArrayList<MediaFile> arrayMediaFiles = dictMediaFiles.get(albumName);
+                arrayMediaFiles.add(new MediaFile(mediaType, fileUrl));
             }
+        }else{
+            Toast.makeText(this,"No such file", Toast.LENGTH_LONG).show();
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.Q)
-    @SuppressLint("Recycle")
-    private void getAllVideos(HashMap<String, ArrayList<String>> dictVideos) {
-        // final int _MAXLOADING = 10;
-
-        Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-        String[] projections = new String[]{
-                MediaStore.Video.VideoColumns._ID,
-                MediaStore.Video.VideoColumns.BUCKET_ID,
-                MediaStore.Video.VideoColumns.BUCKET_DISPLAY_NAME,
-                MediaStore.Video.VideoColumns.DATA,
-                MediaStore.Video.VideoColumns.SIZE
-        };
-        Cursor cursor = this.getContentResolver().query(
-                uri, projections, null, null, null
-        );
-
-        // int i = 0;
-        if (cursor != null && cursor.getCount() > 0) {
-            while (cursor.moveToNext()) {
-                String albumName = cursor.getString(
-                        cursor.getColumnIndex(MediaStore.Video.VideoColumns.BUCKET_DISPLAY_NAME)
-                );
-
-                if (!dictVideos.containsKey(albumName)) {
-                    dictVideos.put(albumName, new ArrayList<>());
-                }
-                ArrayList<String> arrayVideos = dictVideos.get(albumName);
-                String imagePath = cursor.getString(
-                        cursor.getColumnIndex(MediaStore.Video.VideoColumns.DATA)
-                );
-
-                assert arrayVideos != null;
-                arrayVideos.add(imagePath);
-
-                // i++;
-                // if (i >= _MAXLOADING) break;
-            }
-        }
-    }
-
-    public HashMap<String, ArrayList<String>> getMediaCollections() {
+    public HashMap<String, ArrayList<MediaFile>> getMediaCollections() {
         return this.dictMediaFiles;
     }
 
@@ -326,5 +287,48 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
     public void permissionDenied() {
         // TODO: The Permission was rejected by the user.
 
+    }
+
+    // *********************************************************************************
+    // ***************************        Public methods for Fragments         *********
+    // *********************************************************************************
+    public void TransitionViewDetail(MediaFile mediaFile){
+        Intent imageDetailIntent = null, videoDetailIntent = null;
+        Uri queryUri = MediaStore.Files.getContentUri("external");
+        String[] projections = new String[]{
+                MediaStore.Files.FileColumns._ID,
+                MediaStore.Files.FileColumns.BUCKET_ID,
+                MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME,
+                MediaStore.Files.FileColumns.DATA,
+                MediaStore.Files.FileColumns.DATE_ADDED,
+                MediaStore.Files.FileColumns.MEDIA_TYPE,
+                MediaStore.Files.FileColumns.TITLE,
+                MediaStore.Files.FileColumns.RESOLUTION,
+                MediaStore.Files.FileColumns.SIZE };
+        String selection = MediaStore.Files.FileColumns.DATA + "='" + mediaFile.fileUrl + "'";
+        Cursor resultSet = getContentResolver().query(queryUri, projections, selection, null, null);
+        if(resultSet != null && resultSet.moveToNext()){
+            Intent intent = null;
+            if(resultSet.getInt(resultSet.getColumnIndex(MediaStore.Files.FileColumns.MEDIA_TYPE)) == MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE){
+                Log.d("Nothing","This is image");
+                if(imageDetailIntent == null)
+                    imageDetailIntent = new Intent(this, PhotoDetailActivity.class);
+                intent = imageDetailIntent;
+            }else{
+                Log.d("Nothing","This is video");
+                if(videoDetailIntent == null)
+                    videoDetailIntent = new Intent(this, VideoDetailActivity.class);
+                intent = videoDetailIntent;
+            }
+            intent.putExtra(MediaFile.FILE_ID, resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns._ID)));
+            intent.putExtra(MediaFile.FILE_PATH, resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.DATA)));
+            intent.putExtra(MediaFile.FILE_ALBUM_NAME, resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME)));
+            intent.putExtra(MediaFile.FILE_DATE, resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.DATE_ADDED)));
+            intent.putExtra(MediaFile.FILE_RESOLUTION, resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.RESOLUTION)));
+            intent.putExtra(MediaFile.FILE_SIZE, resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.SIZE)));
+            startActivity(intent);
+        }else{
+            Toast.makeText(this,"No such file", Toast.LENGTH_LONG).show();
+        }
     }
 }

@@ -1,3 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"/>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/favorite"
+        android:icon="@drawable/ic_baseline_share_24"
+        android:title="@string/share_btn_2"
+        android:contentDescription="@string/content_description"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/ic_baseline_delete_24"
+        android:title="@string/delete_btn_2"
+        android:contentDescription="@string/content_description"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/more"
+        android:icon="@drawable/ic_baseline_more_vert_24"
+        android:title="@string/more_option_btn_2"
+        android:contentDescription="@string/content_description"
+        app:showAsAction="ifRoom">
+    <menu >
+        <item
+            android:id="@+id/info"
+            android:title="@string/info_dropdown_item_2"
+            android:icon="@drawable/ic_baseline_info_24"
+            android:contentDescription="@string/content_description"
+            app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/copy"
+            android:title="@string/copy_dropdown_item_2"
+            android:icon="@drawable/ic_baseline_file_copy_24"
+            android:contentDescription="@string/content_description"
+            app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/set_picture_as"
+            android:title="@string/set_picture_as_dropdown_item_2"
+            android:icon="@drawable/ic_baseline_add_to_home_screen_24"
+            android:contentDescription="@string/content_description"
+            app:showAsAction="ifRoom" />
+    </menu>
+
+    </item>
+
+
+</menu>
