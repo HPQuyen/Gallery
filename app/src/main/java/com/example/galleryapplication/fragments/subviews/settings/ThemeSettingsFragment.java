@@ -1,4 +1,4 @@
-package com.example.galleryapplication;
+package com.example.galleryapplication.fragments.subviews;
 
 import android.os.Bundle;
 
@@ -10,6 +10,9 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.galleryapplication.GeneralSettingsFragment;
+import com.example.galleryapplication.R;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -75,7 +78,7 @@ public class ThemeSettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_theme_settings, container, false);
+        return inflater.inflate(R.layout.fragment_settings_theme, container, false);
     }
 
     @Override

@@ -10,7 +10,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
@@ -51,29 +50,22 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
 
     private Fragment albumFragment;
 
-    private HashMap<String, ArrayList<MediaFile>> dictMediaFiles = new HashMap<>();
+    private HashMap<String, ArrayList<MediaFile>> dictMediaFiles;
 
-    @RequiresApi(api = Build.VERSION_CODES.Q)
+    @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.galleryviewactivity_main);
-
-        startActivity(new Intent(this, CameraActivity.class));
-        if(true)
-            return;
         
-        if (!checkPermission(this))
-            return;
-        init();
+        if (checkPermission(this)) init();
 
+        dictMediaFiles = new HashMap<>();
+        getAllMediaFiles(dictMediaFiles);
     }
 
     @SuppressLint("NonConstantResourceId")
     private void init() {
-
-        getAllMediaFiles(dictMediaFiles);
-
         mainActionbar = getSupportActionBar();
 
         assert mainActionbar != null;
@@ -180,6 +172,7 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
     private void setCurrentFragment (Fragment fragment) {
         FragmentTransaction fragTransaction = getSupportFragmentManager().beginTransaction();
         fragTransaction.replace(R.id.fragment_FrameLayout, fragment);
+        // fragTransaction.addToBackStack(null);
         fragTransaction.commit();
     }
 
@@ -194,6 +187,7 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
     // **************************  GET DATA IN MOBILE DEVICES  *************************
     // *********************************************************************************
     // Important permission request for Android 6.0 and above, don't forget to add this!
+    @RequiresApi(api = Build.VERSION_CODES.R)
     private void getAllMediaFiles(HashMap<String, ArrayList<MediaFile>> dictMediaFiles){
         Uri queryUri = MediaStore.Files.getContentUri("external");
 
@@ -211,22 +205,11 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
         String []selectionArgs = new String[]{
                 String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
                 String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) };
-        String sortOrder = MediaStore.Files.FileColumns.DATE_ADDED + " DESC";
 
-        Cursor resultSet = getContentResolver().query(queryUri, projections, selection, selectionArgs, sortOrder);
-
-
-
+        @SuppressLint("Recycle")
+        Cursor resultSet = getContentResolver().query(queryUri, projections, selection, selectionArgs, null);
         if(resultSet != null){
             while (resultSet.moveToNext()){
-                Log.d("Nothing", resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.DATA)));
-                Log.d("Nothing", resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns._ID)));
-                Log.d("Nothing", resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.BUCKET_ID)));
-                Log.d("Nothing", resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME)));
-                if(resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.RESOLUTION)) != null)
-                    Log.d("Nothing", resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.RESOLUTION)));
-                if(resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.DATE_ADDED)) != null)
-                    Log.d("Nothing", resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.DATE_ADDED)));
                 String albumName = resultSet.getString(
                         resultSet.getColumnIndex(MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME)
                 );
@@ -251,39 +234,16 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
     // ***************************        PERMISSION         ***************************
     // *********************************************************************************
     // Important permission request for Android 6.0 and above, don't forget to add this!
-    @Override
-    public void onRequestPermissionsResult(
-            int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults
-    ) {
-        PermissionRequest.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                init();
-            } else {
-                Toast.makeText(this, "Access Permission Denied",
-                        Toast.LENGTH_SHORT).show();
-                onBackPressed();
-            }
-        } else {
-            super.onRequestPermissionsResult(requestCode, permissions,
-                    grantResults);
-        }
-    }
-
     public boolean checkPermission(final Context context) {
         int currentAPIVersion = Build.VERSION.SDK_INT;
 
         if (currentAPIVersion >= android.os.Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(
                     context, Manifest.permission.READ_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-                    context, Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED ) {
+            ) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(
                         (Activity) context,
-                        new String[]{ Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                         MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
                 );
                 return false;
@@ -297,20 +257,40 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
 
     @Override
     public void permissionGranted() {
-        // TODO: The Permission was granted by the user.
-        init();
+        // TODO: The Permission was rejected by the user.
 
     }
+
     @Override
     public void permissionDenied() {
         // TODO: The Permission was rejected by the user.
 
+    }
 
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults
+    ) {
+        PermissionRequest.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                init();
+            } else {
+                Toast.makeText(this, "Access Permission Denied",
+                        Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions,
+                    grantResults);
+        }
     }
 
     // *********************************************************************************
-    // ***************************        Public methods for Fragments         *********
+    // *******************        Public methods for Fragments         *****************
     // *********************************************************************************
+    @RequiresApi(api = Build.VERSION_CODES.R)
     public void TransitionViewDetail(MediaFile mediaFile){
         Intent imageDetailIntent = null, videoDetailIntent = null;
         Uri queryUri = MediaStore.Files.getContentUri("external");
@@ -325,9 +305,10 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
                 MediaStore.Files.FileColumns.RESOLUTION,
                 MediaStore.Files.FileColumns.SIZE };
         String selection = MediaStore.Files.FileColumns.DATA + "='" + mediaFile.fileUrl + "'";
+        @SuppressLint("Recycle")
         Cursor resultSet = getContentResolver().query(queryUri, projections, selection, null, null);
         if(resultSet != null && resultSet.moveToNext()){
-            Intent intent = null;
+            Intent intent;
             if(resultSet.getInt(resultSet.getColumnIndex(MediaStore.Files.FileColumns.MEDIA_TYPE)) == MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE){
                 Log.d("Nothing","This is image");
                 if(imageDetailIntent == null)

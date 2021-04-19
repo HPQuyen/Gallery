@@ -63,7 +63,7 @@ public class InfoDetail extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         Log.d("mytag","fragment on create view");
-        return inflater.inflate(R.layout.fragment_info_detail, container, false);
+        return inflater.inflate(R.layout.fragment_details_info, container, false);
     }
 
     @Override
