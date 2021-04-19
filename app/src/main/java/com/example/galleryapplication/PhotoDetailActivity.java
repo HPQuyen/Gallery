@@ -2,21 +2,26 @@ package com.example.galleryapplication;
 
 
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.documentfile.provider.DocumentFile;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 
 import android.media.ExifInterface;
 import android.media.Image;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
@@ -35,7 +40,10 @@ import android.widget.PopupMenu;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.MaterialToolbar;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -249,6 +257,7 @@ public class PhotoDetailActivity extends AppCompatActivity {
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
@@ -268,10 +277,25 @@ public class PhotoDetailActivity extends AppCompatActivity {
             // This adds the result and source image to Android's gallery
             data.notifyGallery(EditorSDKResult.UPDATE_RESULT & EditorSDKResult.UPDATE_SOURCE);
 
-            Log.i("PESDK", "Source image is located here " + data.getSourceUri());
-            Log.i("PESDK", "Result image is located here " + data.getResultUri());
+            Log.i("Nothing", "Source image is located here " + data.getSourceUri());
+            Log.i("Nothing", "Result image is located here " + data.getResultUri());
 
             // TODO: Do something with the result image
+            Uri resultImage = data.getResultUri();
+            try {
+                InputStream stream = getContentResolver().openInputStream(resultImage);
+                Bitmap photo = BitmapFactory.decodeStream(stream);
+                Log.d("Nothing", String.valueOf(photo.getWidth()));
+                Log.d("Nothing", String.valueOf(photo.getHeight()));
+                if (MediaFile.SaveImage(this, photo, "Photo & Video")){
+                    Log.d("Nothing", "Save image success");
+                    getContentResolver().delete(resultImage, null, null);
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+
 
 //            // OPTIONAL: read the latest state to save it as a serialisation
 //            SettingsList lastState = data.getSettingsList();

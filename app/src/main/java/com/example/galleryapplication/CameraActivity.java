@@ -5,15 +5,19 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
@@ -24,13 +28,14 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
-import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.function.Consumer;
 
 public class CameraActivity extends AppCompatActivity {
@@ -46,12 +51,17 @@ public class CameraActivity extends AppCompatActivity {
 
     private static final int PHOTO_CAMERA_REQUEST = 1888;
     private static final int VIDEO_CAMERA_REQUEST = 1999;
-    private static final int MY_CAMERA_PERMISSION_CODE = 100;
+    private static final int PHOTO_REQUEST_PERMISSION_CODE = 100;
+    private static final int VIDEO_REQUEST_PERMISSION_CODE = 200;
+
     private ImageView imageView;
     private VideoView videoView;
     private ConstraintLayout photo_camera_layout, video_camera_layout;
     private MaterialAlertDialogBuilder alertDialogBuilder;
     private boolean dialogPopup = false;
+
+
+    private String currentPhotoPath;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -61,20 +71,32 @@ public class CameraActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
         setContentView(R.layout.activity_camera);
+        Init();
+    }
 
-        photo_camera_layout = findViewById(R.id.photo_camera_layout);
-        imageView = (ImageView)this.findViewById(R.id.image_view_preview);
-        photo_camera_layout.setVisibility(View.GONE);
+//    private void InitializePlayer(Uri videoUri){
+//        videoView.setVideoURI(videoUri);
+//        videoView.setOnPreparedListener(mp -> {
+//            videoView.seekTo(1);
+//        });
+//    }
 
-        video_camera_layout = findViewById(R.id.video_camera_layout);
-        videoView = findViewById(R.id.video_view_preview);
-        MediaController videoController = new MediaController(this);
-        videoController.setAnchorView(videoView);
-        videoView.setMediaController(videoController);
-        videoView.setOnCompletionListener(mediaPlayer -> {
-            videoView.seekTo(1);
-        });
-        video_camera_layout.setVisibility(View.GONE);
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void Init(){
+        //        photo_camera_layout = findViewById(R.id.photo_camera_layout);
+//        imageView = (ImageView)this.findViewById(R.id.image_view_preview);
+//        photo_camera_layout.setVisibility(View.GONE);
+//
+//        video_camera_layout = findViewById(R.id.video_camera_layout);
+//        videoView = findViewById(R.id.video_view_preview);
+//        MediaController videoController = new MediaController(this);
+//        videoController.setAnchorView(videoView);
+//        videoView.setMediaController(videoController);
+//        videoView.setOnCompletionListener(mediaPlayer -> {
+//            videoView.seekTo(1);
+//        });
+//        video_camera_layout.setVisibility(View.GONE);
+
 
         final Item[] items = new Item[] {
                 new Item(getString(R.string.tv_photocamera_pick_6), R.drawable.ic_baseline_photo_camera_24),
@@ -114,19 +136,23 @@ public class CameraActivity extends AppCompatActivity {
                 consumer = s -> {
                     if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
                     {
-                        requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_PERMISSION_CODE);
+                        requestPermissions(new String[]{Manifest.permission.CAMERA}, PHOTO_REQUEST_PERMISSION_CODE);
                     }
                     else
                     {
-                        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(cameraIntent, PHOTO_CAMERA_REQUEST);
+                        try {
+                            OpenBackCamera();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
                     }
                 };
             }else {
                 consumer = s -> {
                     if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
                     {
-                        requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_PERMISSION_CODE);
+                        requestPermissions(new String[]{ Manifest.permission.CAMERA }, VIDEO_REQUEST_PERMISSION_CODE);
                     }
                     else
                     {
@@ -144,15 +170,13 @@ public class CameraActivity extends AppCompatActivity {
             }, 200);
         });
         alertDialogBuilder.setCancelable(false);
+        alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> {
+            onBackPressed();
+        });
         alertDialogBuilder.show();
     }
 
-    private void InitializePlayer(Uri videoUri){
-        videoView.setVideoURI(videoUri);
-        videoView.setOnPreparedListener(mp -> {
-            videoView.seekTo(1);
-        });
-    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -162,40 +186,93 @@ public class CameraActivity extends AppCompatActivity {
             alertDialogBuilder.show();
             Log.d("Nothing", "show");
         }
-
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == MY_CAMERA_PERMISSION_CODE){
+        if(requestCode == PHOTO_REQUEST_PERMISSION_CODE){
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, PHOTO_CAMERA_REQUEST);
+                try {
+                    OpenBackCamera();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }else{
+                dialogPopup = true;
+                onStart();
+                Toast.makeText(this, "camera permission denied", Toast.LENGTH_LONG).show();
+            }
+        }else if(requestCode == VIDEO_REQUEST_PERMISSION_CODE){
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Intent videoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                startActivityForResult(videoIntent, VIDEO_CAMERA_REQUEST);
+            }else{
+                dialogPopup = true;
+                onStart();
                 Toast.makeText(this, "camera permission denied", Toast.LENGTH_LONG).show();
             }
         }
     }
 
+
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d("Nothing", "onActivityResult");
-        if(resultCode == Activity.RESULT_OK){
-            if(requestCode == PHOTO_CAMERA_REQUEST){
-                Bitmap photo = (Bitmap) data.getExtras().get("data");
-                imageView.setImageBitmap(photo);
-                photo_camera_layout.setVisibility(View.VISIBLE);
-            }else if(requestCode == VIDEO_CAMERA_REQUEST){
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == PHOTO_CAMERA_REQUEST) {
+                File imgFile = new File(currentPhotoPath);
+                if (imgFile.exists()) {
+                    Bitmap photo = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    Log.d("Nothing", currentPhotoPath);
+                    Log.d("Nothing", String.valueOf(photo.getWidth()));
+                    Log.d("Nothing", String.valueOf(photo.getHeight()));
+                    if (MediaFile.SaveImage(this, photo, "Camera"))
+                        Log.d("Nothing", "Save image success");
+                }
+            } else if (requestCode == VIDEO_CAMERA_REQUEST) {
                 Uri videoUri = data.getData();
-                InitializePlayer(videoUri);
-                video_camera_layout.setVisibility(View.VISIBLE);
+//                InitializePlayer(videoUri);
+//                video_camera_layout.setVisibility(View.VISIBLE);
+
             }
-        }else {
-            dialogPopup = true;
         }
-        Log.d("Nothing",""+dialogPopup);
+        dialogPopup = true;
+        Log.d("Nothing", "" + dialogPopup);
     }
 
+    private void OpenBackCamera() throws IOException {
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        File photoFile = CreateImageFile();
+        if(photoFile != null){
+            Uri outputFileUri = FileProvider.getUriForFile(this,
+                    "com.example.galleryapplication.fileprovider",
+                    photoFile);
+            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+            startActivityForResult(cameraIntent, PHOTO_CAMERA_REQUEST);
+        }
+    }
+
+    private File CreateImageFile() throws IOException {
+        // Create an image file name
+        String imageFileName = "Temporary_capture_image";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File tempImageFile = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = tempImageFile.getAbsolutePath();
+        return tempImageFile;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }
