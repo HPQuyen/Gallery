@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ViewAllDateFragment"
+    tools:context=".fragments.mainviews.ViewAllDateFragment"
     tools:ignore="NestedWeights" >
 
     <ScrollView
@@ -59,7 +59,7 @@
                         android:layout_height="match_parent"
                         android:layout_margin="1dp"
                         android:layout_weight="1"
-                        android:contentDescription="@string/image_desc"
+                        android:contentDescription="@string/image_desc_1"
                         android:scaleType="centerCrop"
                         android:src="@drawable/pathetic" />
 
@@ -69,7 +69,7 @@
                         android:layout_height="match_parent"
                         android:layout_margin="1dp"
                         android:layout_weight="1"
-                        android:contentDescription="@string/image_desc"
+                        android:contentDescription="@string/image_desc_1"
                         android:scaleType="centerCrop"
                         android:src="@drawable/pathetic" />
 
@@ -79,7 +79,7 @@
                         android:layout_height="match_parent"
                         android:layout_margin="1dp"
                         android:layout_weight="1"
-                        android:contentDescription="@string/image_desc"
+                        android:contentDescription="@string/image_desc_1"
                         android:scaleType="centerCrop"
                         android:src="@drawable/pathetic" />
 
@@ -89,7 +89,7 @@
                         android:layout_height="match_parent"
                         android:layout_margin="1dp"
                         android:layout_weight="1"
-                        android:contentDescription="@string/image_desc"
+                        android:contentDescription="@string/image_desc_1"
                         android:scaleType="centerCrop"
                         android:src="@drawable/pathetic" />
                 </LinearLayout>
@@ -109,7 +109,7 @@
                         android:layout_height="match_parent"
                         android:layout_margin="1dp"
                         android:layout_weight="1"
-                        android:contentDescription="@string/image_desc"
+                        android:contentDescription="@string/image_desc_1"
                         android:scaleType="centerCrop"
                         android:src="@drawable/pathetic" />
 
@@ -119,7 +119,7 @@
                         android:layout_height="match_parent"
                         android:layout_margin="1dp"
                         android:layout_weight="1"
-                        android:contentDescription="@string/image_desc"
+                        android:contentDescription="@string/image_desc_1"
                         android:scaleType="centerCrop"
                         android:src="@drawable/pathetic" />
 
@@ -129,7 +129,7 @@
                         android:layout_height="match_parent"
                         android:layout_margin="1dp"
                         android:layout_weight="1"
-                        android:contentDescription="@string/image_desc"
+                        android:contentDescription="@string/image_desc_1"
                         android:scaleType="centerCrop"
                         android:src="@drawable/pathetic" />
 
@@ -173,7 +173,7 @@
                         android:layout_height="match_parent"
                         android:layout_margin="1dp"
                         android:layout_weight="1"
-                        android:contentDescription="@string/image_desc"
+                        android:contentDescription="@string/image_desc_1"
                         android:scaleType="centerCrop"
                         android:src="@drawable/pathetic" />
 
@@ -183,7 +183,7 @@
                         android:layout_height="match_parent"
                         android:layout_margin="1dp"
                         android:layout_weight="1"
-                        android:contentDescription="@string/image_desc"
+                        android:contentDescription="@string/image_desc_1"
                         android:scaleType="centerCrop"
                         android:src="@drawable/pathetic" />
 
@@ -193,7 +193,7 @@
                         android:layout_height="match_parent"
                         android:layout_margin="1dp"
                         android:layout_weight="1"
-                        android:contentDescription="@string/image_desc"
+                        android:contentDescription="@string/image_desc_1"
                         android:scaleType="centerCrop"
                         android:src="@drawable/pathetic" />
 
@@ -203,7 +203,7 @@
                         android:layout_height="match_parent"
                         android:layout_margin="1dp"
                         android:layout_weight="1"
-                        android:contentDescription="@string/image_desc"
+                        android:contentDescription="@string/image_desc_1"
                         android:scaleType="centerCrop"
                         android:src="@drawable/pathetic" />
                 </LinearLayout>
@@ -230,7 +230,7 @@
                         android:layout_height="match_parent"
                         android:layout_margin="1dp"
                         android:layout_weight="1"
-                        android:contentDescription="@string/image_desc"
+                        android:contentDescription="@string/image_desc_1"
                         android:scaleType="centerCrop"
                         android:src="@drawable/pathetic" />
 
@@ -240,7 +240,7 @@
                         android:layout_height="match_parent"
                         android:layout_margin="1dp"
                         android:layout_weight="1"
-                        android:contentDescription="@string/image_desc"
+                        android:contentDescription="@string/image_desc_1"
                         android:scaleType="centerCrop"
                         android:src="@drawable/pathetic" />
                 </LinearLayout>

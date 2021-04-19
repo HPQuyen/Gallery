@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LanguageSettingsFragment"
+    tools:context=".fragments.subviews.settings.ThemeSettingsFragment"
     tools:ignore="UselessParent">
 
     <ScrollView
-        android:id="@+id/ScrollView_Settings_Language"
+        android:id="@+id/ScrollView_Settings_Theme"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:id="@+id/Linear_Vertical_Language_SettingsView"
+            android:id="@+id/Linear_Vertical_Theme_SettingsView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical">
@@ -27,15 +27,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:checkedButton="@id/eng_RadioButtion">
+                android:checkedButton="@id/light_RadioButtion">
 
                 <RadioButton
-                    android:id="@+id/eng_RadioButtion"
+                    android:id="@+id/light_RadioButtion"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:layout_weight="1"
                     android:padding="10dp"
-                    android:text="English"
+                    android:text="Light"
                     android:textStyle="bold" />
 
                 <View
@@ -45,12 +45,12 @@
                     android:background="?android:attr/listDivider" />
 
                 <RadioButton
-                    android:id="@+id/vi_RadioButton"
+                    android:id="@+id/dark_RadioButton"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:layout_weight="1"
                     android:padding="10dp"
-                    android:text="Tiếng Việt"
+                    android:text="Dark"
                     android:textStyle="bold" />
 
                 <View
@@ -63,5 +63,4 @@
 
         </LinearLayout>
     </ScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

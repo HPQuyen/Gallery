@@ -1,4 +1,4 @@
-package com.example.galleryapplication;
+package com.example.galleryapplication.fragments.mainviews;
 
 import android.os.Bundle;
 
@@ -8,7 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class ViewAllDateFragment extends Fragment {
+import com.example.galleryapplication.R;
+import com.example.galleryapplication.interfaces.IOnBackPressed;
+
+public class ViewAllDateFragment extends Fragment implements IOnBackPressed {
 
     public ViewAllDateFragment() {
 
@@ -25,5 +28,10 @@ public class ViewAllDateFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_viewall_date, container, false);
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        return false;
     }
 }
