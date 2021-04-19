@@ -63,8 +63,7 @@ public class VideoDetailActivity extends AppCompatActivity {
     }
 
     private void InitializePlayer(){
-        String vidAddress = "/storage/emulated/0/DCIM/Camera/V_20161112_161516.mp4";
-        videoView.setVideoPath(vidAddress);
+        videoView.setVideoPath(filePath);
         videoView.setOnPreparedListener(mp -> {
             // Restore saved position, if available.
             if (currentPosition > 0) {
