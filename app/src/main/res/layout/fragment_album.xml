@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GalleryViewActivity"
+    tools:context=".activities.GalleryViewActivity"
     tools:ignore="NestedWeights, UselessParent" >
 
     <ScrollView
@@ -64,7 +64,7 @@
                             android:id="@+id/imageView1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:contentDescription="@string/image_desc"
+                            android:contentDescription="@string/image_desc_1"
                             android:scaleType="centerCrop"
                             app:srcCompat="@drawable/pathetic" />
 
@@ -170,7 +170,7 @@
                             android:id="@+id/imageView2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:contentDescription="@string/image_desc"
+                            android:contentDescription="@string/image_desc_1"
                             android:scaleType="centerCrop"
                             app:srcCompat="@drawable/pathetic" />
 
@@ -222,7 +222,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@android:color/transparent"
-                            android:contentDescription="@string/image_desc"
+                            android:contentDescription="@string/image_desc_1"
                             app:srcCompat="@drawable/ic_add_black" />
 
                         <TextView
@@ -281,7 +281,7 @@
                             android:id="@+id/imageView3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:contentDescription="@string/image_desc"
+                            android:contentDescription="@string/image_desc_1"
                             android:scaleType="centerCrop"
                             app:srcCompat="@drawable/pathetic" />
 
@@ -365,7 +365,7 @@
                             android:id="@+id/imageView100"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:contentDescription="@string/image_desc"
+                            android:contentDescription="@string/image_desc_1"
                             android:scaleType="centerCrop"
                             app:srcCompat="@drawable/pathetic" />
 

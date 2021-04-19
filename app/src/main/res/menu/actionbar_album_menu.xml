@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- "Add neww album" -->
+    <!-- "Add new album" -->
     <item
         android:id="@+id/AddNewAlbum_ViewAlbums"
         android:title="@string/actionbar_addnewalbum_layout_1"

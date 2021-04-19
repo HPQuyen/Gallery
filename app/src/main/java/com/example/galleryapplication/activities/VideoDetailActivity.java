@@ -1,11 +1,8 @@
-package com.example.galleryapplication;
+package com.example.galleryapplication.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
@@ -13,6 +10,9 @@ import android.view.WindowManager;
 import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
+
+import com.example.galleryapplication.classes.MediaFile;
+import com.example.galleryapplication.R;
 
 public class VideoDetailActivity extends AppCompatActivity {
 
@@ -27,8 +27,8 @@ public class VideoDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TurnOffTitle();
-        setContentView(R.layout.activity_video_detail);
+        // TurnOffTitle();
+        setContentView(R.layout.activity_details_video);
 
         if(savedInstanceState != null){
             currentPosition = savedInstanceState.getInt(PLAYBACK_TIME);

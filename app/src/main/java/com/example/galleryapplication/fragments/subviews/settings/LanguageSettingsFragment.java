@@ -1,4 +1,4 @@
-package com.example.galleryapplication;
+package com.example.galleryapplication.fragments.subviews.settings;
 
 import android.os.Bundle;
 
@@ -11,12 +11,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.galleryapplication.R;
+
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ThemeSettingsFragment#newInstance} factory method to
+ * Use the {@link LanguageSettingsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ThemeSettingsFragment extends Fragment {
+public class LanguageSettingsFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -29,7 +31,7 @@ public class ThemeSettingsFragment extends Fragment {
 
     private Fragment settingsFragment;
 
-    public ThemeSettingsFragment() {
+    public LanguageSettingsFragment() {
         // Required empty public constructor
     }
 
@@ -39,11 +41,11 @@ public class ThemeSettingsFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ThemeSettingsFragment.
+     * @return A new instance of fragment LanguageSettingsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ThemeSettingsFragment newInstance(String param1, String param2) {
-        ThemeSettingsFragment fragment = new ThemeSettingsFragment();
+    public static LanguageSettingsFragment newInstance(String param1, String param2) {
+        LanguageSettingsFragment fragment = new LanguageSettingsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -75,7 +77,7 @@ public class ThemeSettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_theme_settings, container, false);
+        return inflater.inflate(R.layout.fragment_settings_language, container, false);
     }
 
     @Override

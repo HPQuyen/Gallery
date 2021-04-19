@@ -1,21 +1,21 @@
-package com.example.galleryapplication;
+package com.example.galleryapplication.fragments.subviews.settings;
 
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.galleryapplication.R;
+
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link InfoDetail#newInstance} factory method to
+ * Use the {@link GeneralSettingsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class InfoDetail extends Fragment {
+public class GeneralSettingsFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,7 +26,7 @@ public class InfoDetail extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public InfoDetail() {
+    public GeneralSettingsFragment() {
         // Required empty public constructor
     }
 
@@ -36,11 +36,11 @@ public class InfoDetail extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment InfoDetail.
+     * @return A new instance of fragment GeneralSettingsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static InfoDetail newInstance(String param1, String param2) {
-        InfoDetail fragment = new InfoDetail();
+    public static GeneralSettingsFragment newInstance(String param1, String param2) {
+        GeneralSettingsFragment fragment = new GeneralSettingsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -50,7 +50,6 @@ public class InfoDetail extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.d("mytag","fragment on create");
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -62,13 +61,6 @@ public class InfoDetail extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        Log.d("mytag","fragment on create view");
-        return inflater.inflate(R.layout.fragment_info_detail, container, false);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        Log.d("mytag","fragment on activity created");
-        super.onActivityCreated(savedInstanceState);
+        return inflater.inflate(R.layout.fragment_settings_general, container, false);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.galleryapplication;
+package com.example.galleryapplication.activities;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,6 +8,11 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.example.galleryapplication.fragments.subviews.settings.GeneralSettingsFragment;
+import com.example.galleryapplication.fragments.subviews.settings.LanguageSettingsFragment;
+import com.example.galleryapplication.R;
+import com.example.galleryapplication.fragments.subviews.settings.ThemeSettingsFragment;
 
 public class SettingsActivity extends AppCompatActivity {
 
