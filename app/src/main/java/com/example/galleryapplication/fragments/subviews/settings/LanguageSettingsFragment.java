@@ -1,4 +1,4 @@
-package com.example.galleryapplication;
+package com.example.galleryapplication.fragments.subviews.settings;
 
 import android.os.Bundle;
 
@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.galleryapplication.R;
 
 /**
  * A simple {@link Fragment} subclass.

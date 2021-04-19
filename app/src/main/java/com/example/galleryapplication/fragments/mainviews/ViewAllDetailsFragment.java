@@ -1,14 +1,35 @@
-package com.example.galleryapplication;
+package com.example.galleryapplication.fragments.mainviews;
 
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class ViewAllDetailsFragment extends Fragment {
+import com.example.galleryapplication.R;
+import com.example.galleryapplication.activities.GalleryViewActivity;
+import com.example.galleryapplication.adapters.MediaFileAdapter;
+import com.example.galleryapplication.classes.MediaFile;
+import com.example.galleryapplication.enumerators._LAYOUT;
+import com.example.galleryapplication.interfaces.IOnBackPressed;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+public class ViewAllDetailsFragment extends Fragment implements IOnBackPressed {
+
+    private RecyclerView recyclerView;
 
     public ViewAllDetailsFragment() {
 
@@ -17,13 +38,51 @@ public class ViewAllDetailsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_viewall_details, container, false);
+        return inflater.inflate(
+                R.layout.fragment_viewall_details, container, false
+        );
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.R)
+    @Override
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
+        this.recyclerView = view.findViewById(R.id.recyclerView);
+        loadAllImage(view);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.R)
+    private void loadAllImage(View thisView) {
+        HashMap<String, ArrayList<MediaFile>> dictMediaFiles =
+                ((GalleryViewActivity)requireActivity()).getMediaCollections();
+
+        ArrayList<MediaFile> mediaEntries = new ArrayList<>();
+        for (Map.Entry<String, ArrayList<MediaFile>> item : dictMediaFiles.entrySet()) {
+            mediaEntries.addAll(item.getValue());
+        }
+
+        MediaFileAdapter mediaFileAdapter =
+                new MediaFileAdapter(
+                        thisView.getContext(),
+                        mediaEntries,
+                        _LAYOUT._DETAILS
+                );
+        this.recyclerView.setAdapter(mediaFileAdapter);
+        this.recyclerView.setLayoutManager(
+                new LinearLayoutManager(
+                        thisView.getContext(), RecyclerView.VERTICAL, false
+                )
+        );
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        return false;
     }
 }

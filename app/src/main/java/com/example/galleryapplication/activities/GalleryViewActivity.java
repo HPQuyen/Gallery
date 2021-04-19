@@ -1,4 +1,4 @@
-package com.example.galleryapplication;
+package com.example.galleryapplication.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,11 +23,21 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.galleryapplication.fragments.mainviews.AlbumFragment;
+import com.example.galleryapplication.classes.MediaFile;
+import com.example.galleryapplication.R;
+import com.example.galleryapplication.fragments.mainviews.ViewAllDateFragment;
+import com.example.galleryapplication.fragments.mainviews.ViewAllDetailsFragment;
+import com.example.galleryapplication.fragments.mainviews.ViewAllGridFragment;
+import com.example.galleryapplication.enumerators._LAYOUT;
+import com.example.galleryapplication.enumerators._VIEW;
+import com.example.galleryapplication.interfaces.IOnBackPressed;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -38,7 +49,7 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
 
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 987;
 
-    private ActionBar mainActionbar;
+    private TextView mainTitle;
     private Menu optionsMenuActionBar;
 
     private _LAYOUT mainLayout = _LAYOUT._GRID;
@@ -56,7 +67,7 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.galleryviewactivity_main);
+        setContentView(R.layout.activity_main_galleryview);
         
         if (checkPermission(this)) init();
 
@@ -64,12 +75,16 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
         getAllMediaFiles(dictMediaFiles);
     }
 
-    @SuppressLint("NonConstantResourceId")
+    @SuppressLint({"NonConstantResourceId"})
     private void init() {
-        mainActionbar = getSupportActionBar();
+        Toolbar toolbar = findViewById(R.id.main_Toolbar);
+        setSupportActionBar(toolbar);
 
-        assert mainActionbar != null;
-        mainActionbar.setDisplayShowTitleEnabled(true);
+        ActionBar mainActionBar = getSupportActionBar();
+        assert mainActionBar != null;
+        mainActionBar.setDisplayShowTitleEnabled(false);
+
+        mainTitle = findViewById(R.id.main_Title);
 
         viewAllGridFragment = new ViewAllGridFragment();
         viewAllDateFragment = new ViewAllDateFragment();
@@ -79,7 +94,7 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
 
         setCurrentFragment(viewAllGridFragment);
 
-        BottomNavigationView bottomNavBar = findViewById(R.id.main_bottomNavigator);
+        BottomNavigationView bottomNavBar = findViewById(R.id.main_BottomNavigator);
         bottomNavBar.setOnNavigationItemSelectedListener(
                 item -> {
                     switch (item.getItemId()) {
@@ -94,12 +109,12 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
                                 case _DATE:
                                     setCurrentFragment(viewAllDateFragment);
                                     break;
-                                case __DETAILS:
+                                case _DETAILS:
                                     setCurrentFragment(viewAllDetailsFragment);
                                     break;
                             }
 
-                            mainActionbar.setTitle("Photos & Videos");
+                            mainTitle.setText(R.string.title_default_1);
                             break;
 
                         case R.id.fragItems_Albums:
@@ -108,7 +123,7 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
 
                             setCurrentFragment(albumFragment);
 
-                            mainActionbar.setTitle("Albums");
+                            mainTitle.setText(R.string.title_albums_1);
                             break;
                     }
                     return true;
@@ -155,8 +170,8 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
                 return true;
 
             case R.id.DetailsList_ViewAll:
-                if (mainLayout == _LAYOUT.__DETAILS) break;
-                mainLayout = _LAYOUT.__DETAILS;
+                if (mainLayout == _LAYOUT._DETAILS) break;
+                mainLayout = _LAYOUT._DETAILS;
 
                 setCurrentFragment(viewAllDetailsFragment);
 
@@ -167,6 +182,14 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
         }
 
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_FrameLayout);
+        if (!(fragment instanceof IOnBackPressed) || !((IOnBackPressed) fragment).onBackPressed()) {
+            super.onBackPressed();
+        }
     }
 
     private void setCurrentFragment (Fragment fragment) {
@@ -219,6 +242,7 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
                 int mediaType = resultSet.getInt(resultSet.getColumnIndex(MediaStore.Files.FileColumns.MEDIA_TYPE));
                 String fileUrl = resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.DATA));
                 ArrayList<MediaFile> arrayMediaFiles = dictMediaFiles.get(albumName);
+                assert arrayMediaFiles != null;
                 arrayMediaFiles.add(new MediaFile(mediaType, fileUrl));
             }
         }else{
@@ -292,7 +316,7 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
     // *********************************************************************************
     @RequiresApi(api = Build.VERSION_CODES.R)
     public void TransitionViewDetail(MediaFile mediaFile){
-        Intent imageDetailIntent = null, videoDetailIntent = null;
+        Intent imageDetailIntent, videoDetailIntent;
         Uri queryUri = MediaStore.Files.getContentUri("external");
         String[] projections = new String[]{
                 MediaStore.Files.FileColumns._ID,
@@ -311,13 +335,11 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
             Intent intent;
             if(resultSet.getInt(resultSet.getColumnIndex(MediaStore.Files.FileColumns.MEDIA_TYPE)) == MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE){
                 Log.d("Nothing","This is image");
-                if(imageDetailIntent == null)
-                    imageDetailIntent = new Intent(this, PhotoDetailActivity.class);
+                imageDetailIntent = new Intent(this, PhotoDetailActivity.class);
                 intent = imageDetailIntent;
             }else{
                 Log.d("Nothing","This is video");
-                if(videoDetailIntent == null)
-                    videoDetailIntent = new Intent(this, VideoDetailActivity.class);
+                videoDetailIntent = new Intent(this, VideoDetailActivity.class);
                 intent = videoDetailIntent;
             }
             intent.putExtra(MediaFile.FILE_ID, resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns._ID)));
@@ -330,5 +352,9 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
         }else{
             Toast.makeText(this,"No such file", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public _LAYOUT getMainLayout() {
+        return this.mainLayout;
     }
 }

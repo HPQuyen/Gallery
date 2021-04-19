@@ -1,5 +1,5 @@
-package com.example.galleryapplication;
+package com.example.galleryapplication.enumerators;
 
 public enum _LAYOUT {
-    _GRID, _DATE, __DETAILS
+    _GRID, _DATE, _DETAILS
 }

@@ -1,22 +1,24 @@
-package com.example.galleryapplication;
+package com.example.galleryapplication.fragments.mainviews;
 
-import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
-import android.widget.Toast;
+
+import com.example.galleryapplication.adapters.MediaFileAdapter;
+import com.example.galleryapplication.classes.MediaFile;
+import com.example.galleryapplication.R;
+import com.example.galleryapplication.activities.GalleryViewActivity;
+import com.example.galleryapplication.enumerators._LAYOUT;
+import com.example.galleryapplication.interfaces.IOnBackPressed;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -24,9 +26,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ViewAllGridFragment extends Fragment {
+public class ViewAllGridFragment extends Fragment implements IOnBackPressed {
 
-    private GridView gridView;
+    private RecyclerView recyclerView;
 
     public ViewAllGridFragment() {
 
@@ -37,7 +39,7 @@ public class ViewAllGridFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.Q)
+    @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
@@ -49,14 +51,14 @@ public class ViewAllGridFragment extends Fragment {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.Q)
+    @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
-        gridView = requireView().findViewById(R.id.viewAll_Grid_GridView);
+        this.recyclerView = view.findViewById(R.id.recyclerView);
         loadAllImage(view);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.Q)
+    @RequiresApi(api = Build.VERSION_CODES.R)
     private void loadAllImage(View thisView) {
         HashMap<String, ArrayList<MediaFile>> dictMediaFiles =
                 ((GalleryViewActivity)requireActivity()).getMediaCollections();
@@ -66,20 +68,20 @@ public class ViewAllGridFragment extends Fragment {
             mediaEntries.addAll(item.getValue());
         }
 
-        gridView.setAdapter(new MediaAdapter(
-                thisView.getContext(),
-                R.layout.fragment_viewall_grid_item,
-                mediaEntries
-        ));
-
-        gridView.setOnItemClickListener(
-                (parent, view, position, id) -> {
-                    CharSequence realMsg = "Image " + id + "is clicked";
-                    Toast.makeText(view.getContext(), realMsg, Toast.LENGTH_SHORT).show();
-                    ((GalleryViewActivity)requireActivity()).TransitionViewDetail(mediaEntries.get(position));
-                }
+        MediaFileAdapter mediaFileAdapter =
+                new MediaFileAdapter(
+                        thisView.getContext(),
+                        mediaEntries,
+                        _LAYOUT._GRID
+                );
+        this.recyclerView.setAdapter(mediaFileAdapter);
+        this.recyclerView.setLayoutManager(
+                new GridLayoutManager(thisView.getContext(), 4)
         );
     }
 
-
+    @Override
+    public boolean onBackPressed() {
+        return false;
+    }
 }

@@ -1,5 +1,6 @@
-package com.example.galleryapplication;
+package com.example.galleryapplication.classes;
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -49,6 +50,7 @@ public class MediaFile {
     }
 
     public static String MillisecondToDateString(long millis){
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
         return formatter.format(new Date(millis));
     }

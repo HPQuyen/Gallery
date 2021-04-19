@@ -1,4 +1,4 @@
-package com.example.galleryapplication;
+package com.example.galleryapplication.activities;
 
 
 
@@ -16,7 +16,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 
 import android.media.ExifInterface;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,15 +29,13 @@ import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 
 
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.MaterialToolbar;
+import com.example.galleryapplication.fragments.subviews.details.DetailsInformationFragment;
+import com.example.galleryapplication.classes.MediaFile;
+import com.example.galleryapplication.R;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -83,7 +80,7 @@ public class PhotoDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_photo_detail);
+        setContentView(R.layout.activity_details_photo);
         Init();
     }
     private void Init(){
@@ -117,15 +114,15 @@ public class PhotoDetailActivity extends AppCompatActivity {
 //            return true;
 //        });
 
-        topToolbar = getSupportActionBar();
-        topToolbar.setDisplayShowTitleEnabled(false);
+        // topToolbar = getSupportActionBar();
+        // topToolbar.setDisplayShowTitleEnabled(false);
         //bottomToolbar = findViewById(R.id.bottom_toolbar_layout);
 
         Intent intent = getIntent();
         Bitmap selectedImageBitmap = MediaFile.GetBitMap(intent.getStringExtra(MediaFile.FILE_PATH));
         photoDetailPreview = findViewById(R.id.photoDetailPreview);
         photoDetailPreview.setImageBitmap(selectedImageBitmap);
-        photoDetailPreview.setOnClickListener(this::ToggleToolbars);
+        // photoDetailPreview.setOnClickListener(this::ToggleToolbars);
         selectedImage = Uri.fromFile(new File(intent.getStringExtra(MediaFile.FILE_PATH)));
         imageExif = UriToExifInterface(selectedImage);
     }
@@ -231,7 +228,7 @@ public class PhotoDetailActivity extends AppCompatActivity {
     private void OnClickInfoDetail(){
         if(getSupportFragmentManager().findFragmentById(R.id.info_detail_fragment_view) == null){
             FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction().setReorderingAllowed(true).add(R.id.info_detail_fragment_view, InfoDetail.newInstance("0","2"), null);
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction().setReorderingAllowed(true).add(R.id.info_detail_fragment_view, DetailsInformationFragment.newInstance("0","2"), null);
             fragmentTransaction.commit();
         }
     }
