@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">GalleryApplication</string>
     <string name="content_description">TODO</string>
+    <string name="cancel_btn">Cancel</string>
+    <string name="delete_btn">Delete</string>
+
     <!--    #region Activity Default    -->
     <string name="title_default_1">Photos &amp; Videos</string>
     <string name="title_albums_1">Albums</string>
@@ -30,6 +33,23 @@
     <string name="share_btn_2">Share image</string>
     <string name="delete_btn_2">Delete image</string>
     <string name="more_option_btn_2">More Options</string>
+
+    <string name="edit_btn_2">Edit</string>
+    <string name="rotateR_btn_2">Rotate Right</string>
+    <string name="rotateL_btn_2">Rotate Left</string>
+
+    <string name="info_datetime_label_2">Datetime</string>
+    <string name="info_detail_label_2">Detail</string>
+    <string name="info_resolution_label_2">Resolution</string>
+    <string name="info_file_size_label_2">File size</string>
+    <string name="info_album_label_2">Album</string>
+    <string name="info_path_label_2">Path</string>
+
+
+    <string name="title_delete_confirm">Are you sure?</string>
+    <string name="sub_text_delete_confirm">Temporarily delete the item into Trash now?\n(Or Permanently delete the item)</string>
+    <string name="title_delete_success">Delete successfully</string>
+    <string name="title_delete_failed">Delete action has been canceled</string>
     <!--    #endregion    -->
 
     <string name="tv_photocamera_pick_6">Photo</string>

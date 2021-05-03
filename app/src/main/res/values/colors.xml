@@ -18,4 +18,5 @@
     <color name="colorVariant_1_sub">#126e82</color>
     <color name="colorVariant_2_sub">#51c4d3</color>
     <color name="colorOnPrimary_sub">#d8e3e7</color>
+    <color name="color_divider">#ECECEC</color>
 </resources>

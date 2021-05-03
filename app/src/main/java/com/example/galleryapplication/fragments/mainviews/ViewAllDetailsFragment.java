@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import com.example.galleryapplication.R;
 import com.example.galleryapplication.activities.GalleryViewActivity;
 import com.example.galleryapplication.adapters.MediaFileAdapter;
+import com.example.galleryapplication.classes.DataHandler;
 import com.example.galleryapplication.classes.MediaFile;
 import com.example.galleryapplication.enumerators._LAYOUT;
 import com.example.galleryapplication.interfaces.IOnBackPressed;
@@ -59,13 +60,7 @@ public class ViewAllDetailsFragment extends Fragment implements IOnBackPressed {
 
     @RequiresApi(api = Build.VERSION_CODES.R)
     private void loadAllImage(View thisView) {
-        HashMap<String, ArrayList<MediaFile>> dictMediaFiles =
-                ((GalleryViewActivity)requireActivity()).getMediaCollections();
-
-        ArrayList<MediaFile> mediaEntries = new ArrayList<>();
-        for (Map.Entry<String, ArrayList<MediaFile>> item : dictMediaFiles.entrySet()) {
-            mediaEntries.addAll(item.getValue());
-        }
+        ArrayList<MediaFile> mediaEntries = DataHandler.GetListMediaFiles();
 
         MediaFileAdapter mediaFileAdapter =
                 new MediaFileAdapter(

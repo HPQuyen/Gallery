@@ -211,9 +211,9 @@ public class MediaFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     ((ViewHolder_Details)holder).getImageOverlay().setVisibility(View.GONE);
                 }
 
-                ((ViewHolder_Details)holder).getMediaName().setText(MediaFile.FILE_ID);
-                ((ViewHolder_Details)holder).getMediaDate().setText(MediaFile.FILE_DATE);
-                ((ViewHolder_Details)holder).getMediaSize().setText(MediaFile.FILE_SIZE);
+                ((ViewHolder_Details)holder).getMediaName().setText(mediaFile.fileUrl);
+                ((ViewHolder_Details)holder).getMediaDate().setText(mediaFile.datetime);
+                ((ViewHolder_Details)holder).getMediaSize().setText(mediaFile.fileSize);
 
                 ((ViewHolder_Details)holder).getConstraintLayout().setOnClickListener(
                         v -> ((GalleryViewActivity) this.context

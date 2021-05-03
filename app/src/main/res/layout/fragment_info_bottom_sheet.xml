@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/info_bottom_sheet_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bottom_sheet_background"
+    android:orientation="vertical">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/info_datetime_label_2"
+        app:startIconDrawable="@drawable/ic_baseline_date_range_32"
+        app:startIconContentDescription="@string/content_description">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/info_datetime_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="15/04/2000 09:12:03"
+            android:focusable="false"
+            android:editable="false"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/color_divider" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/info_resolution_label_2"
+        app:startIconDrawable="@drawable/ic_baseline_high_quality_32"
+        app:startIconContentDescription="@string/content_description">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/info_resolution_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1920 x 1080"
+            android:focusable="false"
+            android:editable="false"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/info_file_size_label_2"
+        app:startIconDrawable="@drawable/ic_baseline_sd_storage_32"
+        app:startIconContentDescription="@string/content_description">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/info_file_size_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="75 MB"
+            android:focusable="false"
+            android:editable="false"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/info_album_label_2"
+        app:startIconDrawable="@drawable/ic_baseline_photo_album_32"
+        app:startIconContentDescription="@string/content_description">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/info_album_name_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Album Name"
+            android:focusable="false"
+            android:editable="false"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/info_path_label_2"
+        app:startIconDrawable="@drawable/ic_baseline_source_32"
+        app:startIconContentDescription="@string/content_description">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/info_file_path_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="/storage/emulated/0/DCIM/Camera/photo.jpg"
+            android:focusable="false"
+            android:editable="false"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+
+</LinearLayout>
