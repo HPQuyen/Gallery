@@ -23,11 +23,11 @@ public class VideoDetailActivity extends AppCompatActivity {
     private String fileId;
     private String filePath;
     private String fileAlbumName;
+    private String fileSize = "100MB";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TurnOffTitle();
         setContentView(R.layout.activity_details_video);
 
         if(savedInstanceState != null){
@@ -75,12 +75,6 @@ public class VideoDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void TurnOffTitle(){
-        requestWindowFeature(Window.FEATURE_NO_TITLE); //will hide the title
-        getSupportActionBar().hide(); // hide the title bar
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
-    }
 
     @Override
     protected void onPause() {

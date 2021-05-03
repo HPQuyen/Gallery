@@ -33,6 +33,7 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.example.galleryapplication.R;
+import com.example.galleryapplication.classes.MediaFile;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.File;
