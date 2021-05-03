@@ -59,6 +59,7 @@
                 android:maxLines="1"
                 android:textSize="16sp"
                 android:textStyle="bold"
+                android:textColor="@color/colorPrimary_sub"
                 tools:ignore="NestedWeights" />
 
             <TextView
@@ -69,6 +70,7 @@
                 android:ellipsize="end"
                 android:gravity="bottom"
                 android:maxLines="1"
+                android:textColor="@color/colorVariant_1_sub"
                 android:textSize="13sp" />
 
             <TextView
@@ -79,6 +81,7 @@
                 android:ellipsize="end"
                 android:gravity="bottom"
                 android:maxLines="1"
+                android:textColor="@color/colorVariant_1_sub"
                 android:textSize="13sp" />
         </LinearLayout>
     </LinearLayout>

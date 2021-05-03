@@ -6,12 +6,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,29 +25,39 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.PreferenceManager;
 
+import com.example.galleryapplication.R;
+import com.example.galleryapplication.classes.App;
+import com.example.galleryapplication.classes.Constants;
+import com.example.galleryapplication.classes.MediaFile;
+import com.example.galleryapplication.enumerators._LAYOUT;
+import com.example.galleryapplication.enumerators._VIEW;
 import com.example.galleryapplication.classes.DataHandler;
 import com.example.galleryapplication.fragments.mainviews.AlbumFragment;
-import com.example.galleryapplication.classes.MediaFile;
-import com.example.galleryapplication.R;
 import com.example.galleryapplication.fragments.mainviews.ViewAllDateFragment;
 import com.example.galleryapplication.fragments.mainviews.ViewAllDetailsFragment;
 import com.example.galleryapplication.fragments.mainviews.ViewAllGridFragment;
-import com.example.galleryapplication.enumerators._LAYOUT;
-import com.example.galleryapplication.enumerators._VIEW;
 import com.example.galleryapplication.interfaces.IOnBackPressed;
+import com.example.galleryapplication.utils.LanguageHandler;
+import com.example.galleryapplication.utils.SharedPrefs;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Locale;
 
 import ly.img.android.pesdk.ui.utils.PermissionRequest;
 
-public class GalleryViewActivity extends AppCompatActivity implements PermissionRequest.Response {
+public class GalleryViewActivity extends AppCompatActivity
+        implements PermissionRequest.Response {
 
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 987;
 
@@ -66,16 +78,44 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_galleryview);
-        
-        if (!checkPermission(this))
-            return;
-        init();
+        // Dark mode setup
+        Boolean isInDarkMode =
+                SharedPrefs.getInstance().get(SharedPrefs.DARKTHEME, Boolean.class);
 
+        if (isInDarkMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
+        else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
+        // Language setup
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
+        LanguageHandler.loadLocale(this);
+
+        // Layout setup
+        setContentView(R.layout.activity_main_galleryview);
+
+        // Check Permission
+        if (checkPermission(this)) init();
+
+        // Get all media files
+        dictMediaFiles = new HashMap<>();
+        getAllMediaFiles(dictMediaFiles);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.R)
-    @SuppressLint({"NonConstantResourceId"})
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.RequestCode.SETTINGS_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                recreate();
+            }
+        }
+    }
+
+    @SuppressLint({"NonConstantResourceId", "ResourceAsColor"})
     private void init() {
 
         DataHandler.LoadAllMediaFiles(this);
@@ -128,6 +168,10 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
 
                             mainTitle.setText(R.string.title_albums_1);
                             break;
+
+                        case R.id.fragItems_Favorite:
+                            // TODO
+                            break;
                     }
                     return true;
                 }
@@ -143,9 +187,28 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
         switch (mainView) {
             case _ALL:
                 inflater.inflate(R.menu.actionbar_viewall_menu, menu);
+
+                switch (this.mainLayout) {
+                    case _DATE:
+                        menu.findItem(R.id.ViewDropDown_ViewAll)
+                                .setIcon(R.drawable.ic_griddate_layout);
+                        break;
+                    case _DETAILS:
+                        menu.findItem(R.id.ViewDropDown_ViewAll)
+                                .setIcon(R.drawable.ic_details_layout);
+                        break;
+                    case _GRID:
+                    default:
+                        menu.findItem(R.id.ViewDropDown_ViewAll)
+                                .setIcon(R.drawable.ic_gridonly_layout);
+                }
+
                 return true;
             case _ALBUMS:
                 inflater.inflate(R.menu.actionbar_album_menu, menu);
+                return true;
+            case _FAVORITE:
+                // TODO
                 return true;
         }
 
@@ -160,6 +223,7 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
                 if (mainLayout == _LAYOUT._DATE) break;
                 mainLayout = _LAYOUT._DATE;
 
+                invalidateOptionsMenu();
                 setCurrentFragment(viewAllDateFragment);
 
                 return true;
@@ -168,6 +232,7 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
                 if (mainLayout == _LAYOUT._GRID) break;
                 mainLayout = _LAYOUT._GRID;
 
+                invalidateOptionsMenu();
                 setCurrentFragment(viewAllGridFragment);
 
                 return true;
@@ -176,6 +241,7 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
                 if (mainLayout == _LAYOUT._DETAILS) break;
                 mainLayout = _LAYOUT._DETAILS;
 
+                invalidateOptionsMenu();
                 setCurrentFragment(viewAllDetailsFragment);
 
                 return true;
@@ -189,7 +255,7 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
 
     @Override
     public void onBackPressed() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_FrameLayout);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_Settings_FrameLayout);
         if (!(fragment instanceof IOnBackPressed) || !((IOnBackPressed) fragment).onBackPressed()) {
             super.onBackPressed();
         }
@@ -197,7 +263,7 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
 
     private void setCurrentFragment (Fragment fragment) {
         FragmentTransaction fragTransaction = getSupportFragmentManager().beginTransaction();
-        fragTransaction.replace(R.id.fragment_FrameLayout, fragment);
+        fragTransaction.replace(R.id.fragment_Settings_FrameLayout, fragment);
         // fragTransaction.addToBackStack(null);
         fragTransaction.commit();
     }
@@ -206,7 +272,7 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
         Intent intent = new Intent(
                 GalleryViewActivity.this, SettingsActivity.class
         );
-        startActivity(intent);
+        startActivityForResult(intent, Constants.RequestCode.SETTINGS_REQUEST_CODE);
     }
 
     @Override
@@ -296,9 +362,5 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
         intent.putExtra(MediaFile.FILE_MEDIA_TYPE, mediaFile.mediaType);
         intent.putExtra(MediaFile.FILE_FAVOURITE, mediaFile.isFavourite);
         startActivity(intent);
-    }
-
-    public _LAYOUT getMainLayout() {
-        return this.mainLayout;
     }
 }

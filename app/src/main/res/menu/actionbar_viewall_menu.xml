@@ -2,9 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
+    <!-- "Slideshow" -->
+    <item
+        android:id="@+id/Slideshow_ViewAll"
+        android:title="@string/actionbar_slideshow_1"
+        android:icon="@drawable/ic_slideshow"
+        app:showAsAction="ifRoom" />
+
     <item
         android:id="@+id/ViewDropDown_ViewAll"
         android:title="@string/actionbar_title_layout_1"
+        android:icon="@drawable/ic_gridonly_layout"
         app:showAsAction="ifRoom">
         <menu>
             <!-- "Grid-Only layout" -->
@@ -34,13 +43,8 @@
     <item
         android:id="@+id/Settings_ViewAll"
         android:title="@string/actionbar_settings_1"
+        android:icon="@drawable/ic_settings"
         android:onClick="settings"
-        app:showAsAction="never" />
-
-    <!-- "Slideshow" -->
-    <item
-        android:id="@+id/Slideshow_ViewAll"
-        android:title="@string/actionbar_slideshow_1"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
 
 </menu>

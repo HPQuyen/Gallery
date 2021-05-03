@@ -8,4 +8,9 @@
         android:id="@+id/fragItems_Albums"
         android:title="@string/navbar_album_1"
         android:icon="@drawable/ic_album_view" />
+
+    <item
+        android:id="@+id/fragItems_Favorite"
+        android:title="@string/navbar_favorite_1"
+        android:icon="@drawable/ic_favorite_star" />
 </menu>

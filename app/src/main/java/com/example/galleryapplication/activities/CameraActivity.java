@@ -233,8 +233,6 @@ public class CameraActivity extends AppCompatActivity {
                     Log.d("Nothing", currentPhotoPath);
                     Log.d("Nothing", String.valueOf(photo.getWidth()));
                     Log.d("Nothing", String.valueOf(photo.getHeight()));
-                    if (MediaFile.SaveImage(this, photo, "Camera"))
-                        Log.d("Nothing", "Save image success");
                 }
             } else if (requestCode == VIDEO_CAMERA_REQUEST) {
                 Uri videoUri = data.getData();

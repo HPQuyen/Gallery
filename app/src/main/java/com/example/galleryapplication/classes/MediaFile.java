@@ -24,6 +24,8 @@ import androidx.core.content.FileProvider;
 import com.example.galleryapplication.BuildConfig;
 import com.example.galleryapplication.R;
 
+import com.example.galleryapplication.R;
+
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
