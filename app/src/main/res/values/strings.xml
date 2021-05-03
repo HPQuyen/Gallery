@@ -1,4 +1,6 @@
-<resources>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:locale="es" >
     <string name="app_name">GalleryApplication</string>
     <string name="content_description">TODO</string>
     <string name="cancel_btn">Cancel</string>
@@ -16,17 +18,23 @@
     <string name="actionbar_settings_1">Settings</string>
     <string name="actionbar_slideshow_1">Slideshow</string>
 
-    <string name="actionbar_addnewalbum_layout_1">Add new album</string>
+    <string name="actionbar_addnewalbum_layout_1" tools:ignore="Typos">Add new album</string>
 
     <string name="navbar_viewall_1">View All</string>
     <string name="navbar_album_1">Albums</string>
+    <string name="navbar_favorite_1">Favorite</string>
 
-    <string name="image_desc_1" />
+    <string name="image_desc_1" >Image</string>
+
+    <string name="settings_dark_theme_1">Dark Theme</string>
+
+    <string name="settings_language_1">Language</string>
+    <string name="settings_language_summary_1">Choose language to display in application</string>
     <!--    #endregion    -->
 
     <!--    #region Activity Photo Detail    -->
     <string name="info_dropdown_item_2">Info</string>
-    <string name="copy_dropdown_item_2">Copy To...</string>
+    <string name="copy_dropdown_item_2">Copy To…</string>
     <string name="set_picture_as_dropdown_item_2">Set picture as</string>
 
     <string name="back_btn_2">Back</string>
@@ -54,4 +62,12 @@
 
     <string name="tv_photocamera_pick_6">Photo</string>
     <string name="tv_videocamera_pick_6">Video</string>
+
+    <!--untranslatable-->
+    <string name="language_english" translatable="false">English</string>
+    <string name="language_vietnamese" translatable="false">Tiếng Việt</string>
+
+    <string name="language_english_code" translatable="false">en</string>
+    <string name="language_vietnamese_code" translatable="false">vi</string>
+
 </resources>

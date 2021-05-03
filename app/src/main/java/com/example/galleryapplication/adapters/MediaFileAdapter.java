@@ -20,7 +20,6 @@ import com.example.galleryapplication.R;
 import com.example.galleryapplication.activities.GalleryViewActivity;
 import com.example.galleryapplication.classes.MediaFile;
 import com.example.galleryapplication.enumerators._LAYOUT;
-import com.example.galleryapplication.enumerators._VIEW;
 
 import java.util.List;
 

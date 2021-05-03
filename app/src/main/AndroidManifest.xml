@@ -19,12 +19,15 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
-        android:fullBackupContent="false"
+        android:name=".classes.App"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/DefaultAppTheme">
+        android:theme="@style/DefaultAppTheme"
+        android:fullBackupContent="false"
+        android:allowBackup="false"
+        tools:replace="android:allowBackup" >
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -36,14 +39,18 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <activity
+            android:name=".activities.CameraActivity" />
 
+        <activity
+            android:name=".activities.VideoDetailActivity" />
 
-        <activity android:name=".activities.CameraActivity" />
-        <activity android:name=".activities.VideoDetailActivity" />
-        <activity android:name=".activities.PhotoDetailActivity" />
+        <activity
+            android:name=".activities.PhotoDetailActivity" />
+
         <activity
             android:name=".activities.GalleryViewActivity"
-            android:label="@string/title_default_1">
+            android:label="@string/title_default_1" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -63,6 +70,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.galleryapplication.activities.GalleryViewActivity" />
         </activity>
+
     </application>
 
 </manifest>

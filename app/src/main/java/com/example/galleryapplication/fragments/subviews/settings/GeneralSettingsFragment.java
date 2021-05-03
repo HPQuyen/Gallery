@@ -1,66 +1,93 @@
 package com.example.galleryapplication.fragments.subviews.settings;
 
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Log;
 
-import androidx.fragment.app.Fragment;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.preference.ListPreference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
+import androidx.preference.SwitchPreferenceCompat;
 
 import com.example.galleryapplication.R;
+import com.example.galleryapplication.classes.App;
+import com.example.galleryapplication.classes.Constants;
+import com.example.galleryapplication.utils.LanguageHandler;
+import com.example.galleryapplication.utils.SharedPrefs;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link GeneralSettingsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class GeneralSettingsFragment extends Fragment {
+import java.util.Locale;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class GeneralSettingsFragment extends PreferenceFragmentCompat
+implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    SwitchPreferenceCompat darkThemeSwitchPreference;
+    ListPreference languageListPreference;
 
-    public GeneralSettingsFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment GeneralSettingsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static GeneralSettingsFragment newInstance(String param1, String param2) {
-        GeneralSettingsFragment fragment = new GeneralSettingsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    @Override
+    public void onResume() {
+        super.onResume();
+        getPreferenceManager()
+                .getSharedPreferences()
+                .registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    public void onPause() {
+        super.onPause();
+        getPreferenceManager()
+                .getSharedPreferences()
+                .unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+    @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        setPreferencesFromResource(R.xml.preferences, rootKey);
+
+        darkThemeSwitchPreference = findPreference("theme_dark");
+        languageListPreference = findPreference("language");
+
+        if (darkThemeSwitchPreference != null) {
+            darkThemeSwitchPreference.setVisible(true);
+        }
+
+        if (languageListPreference != null) {
+            languageListPreference.setVisible(true);
+
+            languageListPreference.setOnPreferenceChangeListener((preference, newValue) -> {
+
+                preference.setSummaryProvider(ListPreference.SimpleSummaryProvider.getInstance());
+
+                return true;
+            });
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings_general, container, false);
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(SharedPrefs.DARKTHEME)) {
+            Boolean isInDarkMode =
+                    SharedPrefs.getInstance().get(SharedPrefs.DARKTHEME, Boolean.class);
+
+            if (isInDarkMode) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            }
+            else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+        }
+        else if (key.equals(SharedPrefs.LANGUAGE)) {
+            String languageCode =
+                    SharedPrefs.getInstance().get(SharedPrefs.LANGUAGE, String.class);
+
+            LanguageHandler.changeLanguage(requireActivity(), languageCode);
+        }
+        requireActivity().recreate();
     }
 }
