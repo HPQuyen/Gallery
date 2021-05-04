@@ -6,14 +6,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,7 +22,6 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -35,30 +30,21 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.PreferenceManager;
 
 import com.example.galleryapplication.R;
-import com.example.galleryapplication.classes.App;
 import com.example.galleryapplication.classes.Constants;
+import com.example.galleryapplication.classes.DataHandler;
 import com.example.galleryapplication.classes.MediaFile;
+import com.example.galleryapplication.classes.Observer;
 import com.example.galleryapplication.enumerators._LAYOUT;
 import com.example.galleryapplication.enumerators._VIEW;
-import com.bumptech.glide.Glide;
-import com.example.galleryapplication.classes.DataHandler;
-import com.example.galleryapplication.classes.Observer;
 import com.example.galleryapplication.fragments.mainviews.AlbumFragment;
 import com.example.galleryapplication.fragments.mainviews.ViewAllDateFragment;
 import com.example.galleryapplication.fragments.mainviews.ViewAllDetailsFragment;
 import com.example.galleryapplication.fragments.mainviews.ViewAllGridFragment;
-import com.example.galleryapplication.enumerators._LAYOUT;
-import com.example.galleryapplication.enumerators._VIEW;
 import com.example.galleryapplication.interfaces.IAction;
 import com.example.galleryapplication.interfaces.IOnBackPressed;
 import com.example.galleryapplication.utils.LanguageHandler;
 import com.example.galleryapplication.utils.SharedPrefs;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Locale;
 
 import ly.img.android.pesdk.ui.utils.PermissionRequest;
 
@@ -108,21 +94,10 @@ public class GalleryViewActivity extends AppCompatActivity
             return;
         init();
 
-        // Get all media files
-        dictMediaFiles = new HashMap<>();
-        getAllMediaFiles(dictMediaFiles);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Constants.RequestCode.SETTINGS_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                recreate();
-            }
-        }
-    }
 
+    @RequiresApi(api = Build.VERSION_CODES.R)
     @SuppressLint({"NonConstantResourceId", "ResourceAsColor"})
     private void init() {
 
@@ -370,6 +345,7 @@ public class GalleryViewActivity extends AppCompatActivity
 
         startActivityForResult(intent, VIEW_DETAIL_REQUEST_CODE);
     }
+
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -387,6 +363,10 @@ public class GalleryViewActivity extends AppCompatActivity
                         }
                         Observer.RemoveEvent(Observer.ObserverCode.TRIGGER_GLIDE_UPDATE);
                     }
+                    break;
+
+                case Constants.RequestCode.SETTINGS_REQUEST_CODE:
+                    recreate();
                     break;
             }
         }
