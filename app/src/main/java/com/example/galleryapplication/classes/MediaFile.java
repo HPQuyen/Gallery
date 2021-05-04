@@ -15,13 +15,11 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.FileProvider;
 
-import com.example.galleryapplication.BuildConfig;
 import com.example.galleryapplication.R;
 
 import com.example.galleryapplication.R;
@@ -31,24 +29,24 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 
 public class MediaFile {
     public static final String FILE_ID = "file_id";
     public static final String FILE_PATH = "file_path";
-    public static final String FILE_ALBUM_NAME = "file_album_name";
+    public static final String FILE_FOLDER_NAME = "file_album_name";
     public static final String FILE_DATE = "file_date";
     public static final String FILE_RESOLUTION = "file_resolution";
     public static final String FILE_SIZE = "file_size";
     public static final String FILE_FAVOURITE = "file_favourite";
     public static final String FILE_MEDIA_TYPE = "file_media_type";
+    public static final String VIEW_HOLDER_POSITION = "view_holder_position";
 
     public static final int THUMBNAIL_SIZE_STANDARD = 256;
     public static final int THUMBNAIL_SIZE_SMALL = 128;
@@ -56,20 +54,20 @@ public class MediaFile {
     public String id;
     public int mediaType;
     public String fileUrl;
-    public String albumName;
+    public String folderName;
     public String datetime;
     public String fileSize;
     public String resolution;
     public boolean isFavourite;
 
-    public MediaFile(String id, int mediaType, String fileUrl, String datetime, String fileSize, String resolution, String albumName, boolean isFavourite){
+    public MediaFile(String id, int mediaType, String fileUrl, String datetime, String fileSize, String resolution, String folderName, boolean isFavourite){
         this.id = id;
         this.mediaType = mediaType;
         this.fileUrl = fileUrl;
         this.datetime = datetime;
         this.fileSize = fileSize;
         this.resolution = resolution;
-        this.albumName = albumName;
+        this.folderName = folderName;
         this.isFavourite = isFavourite;
     }
 
@@ -184,22 +182,23 @@ public class MediaFile {
 
     public static boolean DeleteMediaFile(@NonNull final Context context, String filePath) {
         // Set up the projection (we only need the ID)
-        String[] projection = {MediaStore.Images.Media._ID};
+        String[] projection = { MediaStore.Files.FileColumns.DATA, MediaStore.Files.FileColumns._ID};
         boolean isSuccess;
         // Match on the file path
-        String selection = MediaStore.Images.Media.DATA + " = ?";
+        String selection = MediaStore.Files.FileColumns.DATA + " = ?";
         String[] selectionArgs = new String[]{filePath};
 
 
         // Query for the ID of the media matching the file path
-        Uri queryUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        Uri queryUri = MediaStore.Files.getContentUri("external");
         ContentResolver contentResolver = context.getContentResolver();
         Cursor c = contentResolver.query(queryUri, projection, selection, selectionArgs, null);
         if (c.moveToFirst()) {
             // We found the ID. Deleting the item via the content provider will also remove the file
-            long id = c.getLong(c.getColumnIndexOrThrow(MediaStore.Images.Media._ID));
-            Uri deleteUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id);
+            long id = c.getLong(c.getColumnIndexOrThrow(MediaStore.Files.FileColumns._ID));
+            Uri deleteUri = ContentUris.withAppendedId(MediaStore.Files.getContentUri("external"), id);
             contentResolver.delete(deleteUri, null, null);
+            DataHandler.DeleteMediaFile(String.valueOf(id));
             isSuccess = true;
         } else {
             // File not found in media store DB
@@ -224,7 +223,18 @@ public class MediaFile {
                 fOut.flush();
                 fOut.close();
             }else{
-
+                file = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), File.separator +"share.mp4");
+                FileOutputStream fOut = new FileOutputStream(file);
+                FileInputStream fIn = new FileInputStream(new File(mediaFile.fileUrl));
+                // Copy the bits from instream to outstream
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = fIn.read(buf)) > 0) {
+                    fOut.write(buf, 0, len);
+                }
+                fIn.close();
+                fOut.flush();
+                fOut.close();
             }
             file.setReadable(true, false);
             final Intent intent = new Intent(android.content.Intent.ACTION_SEND);
@@ -240,6 +250,7 @@ public class MediaFile {
         }
     }
 
+    @SuppressLint("SetWorldReadable")
     public static Uri GetUriContentFromImageFile(@NonNull Context context, MediaFile mediaFile, String fileName) throws IOException {
         File file = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), File.separator + fileName);
         FileOutputStream fOut = new FileOutputStream(file);

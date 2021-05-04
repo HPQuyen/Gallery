@@ -40,17 +40,23 @@ import com.example.galleryapplication.classes.Constants;
 import com.example.galleryapplication.classes.MediaFile;
 import com.example.galleryapplication.enumerators._LAYOUT;
 import com.example.galleryapplication.enumerators._VIEW;
+import com.bumptech.glide.Glide;
 import com.example.galleryapplication.classes.DataHandler;
+import com.example.galleryapplication.classes.Observer;
 import com.example.galleryapplication.fragments.mainviews.AlbumFragment;
 import com.example.galleryapplication.fragments.mainviews.ViewAllDateFragment;
 import com.example.galleryapplication.fragments.mainviews.ViewAllDetailsFragment;
 import com.example.galleryapplication.fragments.mainviews.ViewAllGridFragment;
+import com.example.galleryapplication.enumerators._LAYOUT;
+import com.example.galleryapplication.enumerators._VIEW;
+import com.example.galleryapplication.interfaces.IAction;
 import com.example.galleryapplication.interfaces.IOnBackPressed;
 import com.example.galleryapplication.utils.LanguageHandler;
 import com.example.galleryapplication.utils.SharedPrefs;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -60,6 +66,7 @@ public class GalleryViewActivity extends AppCompatActivity
         implements PermissionRequest.Response {
 
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 987;
+    private static final int VIEW_DETAIL_REQUEST_CODE = 9998;
 
     private TextView mainTitle;
     private Menu optionsMenuActionBar;
@@ -97,8 +104,9 @@ public class GalleryViewActivity extends AppCompatActivity
         // Layout setup
         setContentView(R.layout.activity_main_galleryview);
 
-        // Check Permission
-        if (checkPermission(this)) init();
+        if (!checkPermission(this))
+            return;
+        init();
 
         // Get all media files
         dictMediaFiles = new HashMap<>();
@@ -341,26 +349,47 @@ public class GalleryViewActivity extends AppCompatActivity
     // *******************        Public methods for Fragments         *****************
     // *********************************************************************************
     @RequiresApi(api = Build.VERSION_CODES.R)
-    public void TransitionViewDetail(MediaFile mediaFile){
-        Intent imageDetailIntent, videoDetailIntent;
+    public void TransitionViewDetail(MediaFile mediaFile, IAction updateGlideAction){
+        Observer.AddEventListener(Observer.ObserverCode.TRIGGER_GLIDE_UPDATE, updateGlideAction);
         Intent intent;
         if(mediaFile.mediaType == MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE){
             Log.d("Nothing","This is image");
-            imageDetailIntent = new Intent(this, PhotoDetailActivity.class);
-            intent = imageDetailIntent;
+            intent = new Intent(this, PhotoDetailActivity.class);
         }else{
             Log.d("Nothing","This is video");
-            videoDetailIntent = new Intent(this, VideoDetailActivity.class);
-            intent = videoDetailIntent;
+            intent = new Intent(this, VideoDetailActivity.class);
         }
         intent.putExtra(MediaFile.FILE_ID, mediaFile.id);
         intent.putExtra(MediaFile.FILE_PATH, mediaFile.fileUrl);
-        intent.putExtra(MediaFile.FILE_ALBUM_NAME, mediaFile.albumName);
+        intent.putExtra(MediaFile.FILE_FOLDER_NAME, mediaFile.folderName);
         intent.putExtra(MediaFile.FILE_DATE, mediaFile.datetime);
         intent.putExtra(MediaFile.FILE_RESOLUTION, mediaFile.resolution);
         intent.putExtra(MediaFile.FILE_SIZE, mediaFile.fileSize);
         intent.putExtra(MediaFile.FILE_MEDIA_TYPE, mediaFile.mediaType);
         intent.putExtra(MediaFile.FILE_FAVOURITE, mediaFile.isFavourite);
-        startActivity(intent);
+
+        startActivityForResult(intent, VIEW_DETAIL_REQUEST_CODE);
     }
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK){
+            switch (requestCode){
+                case VIEW_DETAIL_REQUEST_CODE:
+                    if(data != null){
+                        if(data.getBooleanExtra("CHANGE", false))
+                        {
+                            DataHandler.UpdateMediaFiles(this);
+                            Observer.Invoke(Observer.ObserverCode.TRIGGER_GLIDE_UPDATE);
+                            Observer.Invoke(Observer.ObserverCode.TRIGGER_ADAPTER_CHANGE);
+                            Log.d("Nothing","Invoke event");
+                        }
+                        Observer.RemoveEvent(Observer.ObserverCode.TRIGGER_GLIDE_UPDATE);
+                    }
+                    break;
+            }
+        }
+    }
+
 }

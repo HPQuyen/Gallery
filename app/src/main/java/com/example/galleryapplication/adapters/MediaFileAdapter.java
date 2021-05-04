@@ -3,6 +3,7 @@ package com.example.galleryapplication.adapters;
 import android.content.Context;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.signature.ObjectKey;
 import com.example.galleryapplication.R;
 import com.example.galleryapplication.activities.GalleryViewActivity;
 import com.example.galleryapplication.classes.MediaFile;
@@ -164,11 +167,10 @@ public class MediaFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         final int viewType = getItemViewType(position);
-
         switch (viewType) {
             case 0:
+                Log.d("Nothing", "Position: " + position);
                 MediaFile mediaFile = this.mediaFiles.get(position);
-
                 Glide
                         .with(this.context)
                         .load(mediaFile.fileUrl)
@@ -186,9 +188,17 @@ public class MediaFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 }
 
                 ((ViewHolder_Grid)holder).getConstraintLayout().setOnClickListener(
-                        v -> ((GalleryViewActivity) this.context
-                        ).TransitionViewDetail(mediaFile));
-
+                        v -> {
+                            ((GalleryViewActivity) this.context).TransitionViewDetail(mediaFile, () -> {
+                                Glide
+                                        .with(this.context)
+                                        .load(mediaFile.fileUrl)
+                                        .signature(new ObjectKey(String.valueOf(System.currentTimeMillis())))
+                                        .into(((ViewHolder_Grid)holder).getImageView());
+                                Log.d("Nothing", "Update Glide fileUrl: " + mediaFile.fileUrl);
+                            });
+                            Log.d("Nothing", "Click fileUrl: " + mediaFile.fileUrl);
+                        });
                 break;
             case 1:
             case 2:
@@ -216,9 +226,15 @@ public class MediaFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                 ((ViewHolder_Details)holder).getConstraintLayout().setOnClickListener(
                         v -> ((GalleryViewActivity) this.context
-                        ).TransitionViewDetail(mediaFile));
+                        ).TransitionViewDetail(mediaFile, () -> {
+                            Glide.with(context)
+                                    .load(mediaFile.fileUrl)
+                                    .signature(new ObjectKey(String.valueOf(System.currentTimeMillis())))
+                                    .into(((ViewHolder_Details)holder).getImageView());
+                        }));
 
                 break;
+
         }
     }
 
@@ -227,5 +243,6 @@ public class MediaFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public int getItemCount() {
         return this.mediaFiles.size();
     }
+
 
 }

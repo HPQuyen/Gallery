@@ -17,6 +17,7 @@ import com.example.galleryapplication.activities.GalleryViewActivity;
 import com.example.galleryapplication.adapters.MediaFileAdapter;
 import com.example.galleryapplication.classes.DataHandler;
 import com.example.galleryapplication.classes.MediaFile;
+import com.example.galleryapplication.classes.Observer;
 import com.example.galleryapplication.enumerators._LAYOUT;
 import com.example.galleryapplication.interfaces.IOnBackPressed;
 
@@ -66,6 +67,7 @@ public class ViewAllDetailsFragment extends Fragment implements IOnBackPressed {
                         mediaEntries,
                         _LAYOUT._DETAILS
                 );
+        Observer.AddEventListener(Observer.ObserverCode.TRIGGER_ADAPTER_CHANGE, mediaFileAdapter::notifyDataSetChanged);
         this.recyclerView.setAdapter(mediaFileAdapter);
         this.recyclerView.setLayoutManager(
                 new LinearLayoutManager(
