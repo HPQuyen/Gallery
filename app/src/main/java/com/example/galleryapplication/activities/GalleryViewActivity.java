@@ -66,7 +66,6 @@ public class GalleryViewActivity extends AppCompatActivity
 
     private Fragment albumFragment;
 
-
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,10 +89,8 @@ public class GalleryViewActivity extends AppCompatActivity
         // Layout setup
         setContentView(R.layout.activity_main_galleryview);
 
-        if (!checkPermission(this))
-            return;
-        init();
-
+        // Check Permission
+        if (checkPermission(this)) init();
     }
 
 

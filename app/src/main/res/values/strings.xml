@@ -25,6 +25,8 @@
     <string name="navbar_album_1">Albums</string>
     <string name="navbar_favorite_1">Favorite</string>
 
+    <string name="griddate_layout_date_1">01/01/2021</string>
+
     <string name="image_desc_1" >Image</string>
 
     <string name="settings_dark_theme_1">Dark Theme</string>
