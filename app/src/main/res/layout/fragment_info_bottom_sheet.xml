@@ -69,12 +69,12 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/info_album_label_2"
+        android:hint="@string/info_folder_label_2"
         app:startIconDrawable="@drawable/ic_baseline_photo_album_32"
         app:startIconContentDescription="@string/content_description">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/info_album_name_tv"
+            android:id="@+id/info_folder_name_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Album Name"

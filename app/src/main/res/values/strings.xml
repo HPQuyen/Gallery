@@ -5,6 +5,7 @@
     <string name="content_description">TODO</string>
     <string name="cancel_btn">Cancel</string>
     <string name="delete_btn">Delete</string>
+    <string name="ok_btn">OK</string>
 
     <!--    #region Activity Default    -->
     <string name="title_default_1">Photos &amp; Videos</string>
@@ -50,14 +51,16 @@
     <string name="info_detail_label_2">Detail</string>
     <string name="info_resolution_label_2">Resolution</string>
     <string name="info_file_size_label_2">File size</string>
-    <string name="info_album_label_2">Album</string>
+    <string name="info_folder_label_2">Folder</string>
     <string name="info_path_label_2">Path</string>
 
 
     <string name="title_delete_confirm">Are you sure?</string>
     <string name="sub_text_delete_confirm">Temporarily delete the item into Trash now?\n(Or Permanently delete the item)</string>
     <string name="title_delete_success">Delete successfully</string>
-    <string name="title_delete_failed">Delete action has been canceled</string>
+    <string name="title_delete_cancel">Delete action has been canceled</string>
+    <string name="title_add_to_favourite">Add to favourite successfully</string>
+    <string name="title_remove_from_favourite">Remove from favourite successfully</string>
     <!--    #endregion    -->
 
     <string name="tv_photocamera_pick_6">Photo</string>
@@ -70,4 +73,6 @@
     <string name="language_english_code" translatable="false">en</string>
     <string name="language_vietnamese_code" translatable="false">vi</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

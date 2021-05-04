@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,23 +16,26 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.time.chrono.MinguoEra;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 public class DataHandler {
 
     public static final String STORE_FILE_NAME = "store_file_name";
     public static final String FAVOURITE_FILE_KEY = "favourite_file_key";
+    public static final String ALBUM_NAME_FILE_KEY = "album_name_file_key";
     public static final int ONE = 1;
     public static final int ALL = Integer.MAX_VALUE;
 
     private static ArrayList<MediaFile> mediaFileArrayList = new ArrayList<>();
-    private static ArrayList<String> albumNameArrayList = new ArrayList<>( Arrays.asList("Favourite") );
+    private static ArrayList<String> folderNameArrayList = new ArrayList<>( );
     private static ArrayList<String> dateArrayList = new ArrayList<>();
     private static HashSet<String> mediaFileHashSet = new HashSet<>();
-    private static ArrayList<String> favouriteIdArrayList = new ArrayList<>( Arrays.asList("1618672930968") );
-
+    private static ArrayList<String> favouriteIdArrayList = new ArrayList<>();
+    private static HashMap<String, ArrayList<String>> listAlbum = new HashMap<>();
 
     // *********************************************************************************
     // **************************  GET DATA IN MOBILE DEVICES  *************************
@@ -63,13 +65,14 @@ public class DataHandler {
         @SuppressLint("Recycle")
         Cursor resultSet = context.getContentResolver().query(queryUri, projections, selection, selectionArgs, sortOrder);
         if(resultSet != null){
+            LoadAlbum(context);
             LoadFavouriteMediaFiles(context);
             while (resultSet.moveToNext()){
                 String albumName = resultSet.getString(
                         resultSet.getColumnIndex(MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME)
                 );
-                if(!albumNameArrayList.contains(albumName)){
-                    albumNameArrayList.add(albumName);
+                if(!folderNameArrayList.contains(albumName)){
+                    folderNameArrayList.add(albumName);
                 }
                 // Get epochtime in seconds
                 long epochTime = resultSet.getLong(
@@ -128,8 +131,8 @@ public class DataHandler {
                 String albumName = resultSet.getString(
                         resultSet.getColumnIndex(MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME)
                 );
-                if(!albumNameArrayList.contains(albumName)){
-                    albumNameArrayList.add(albumName);
+                if(!folderNameArrayList.contains(albumName)){
+                    folderNameArrayList.add(albumName);
                 }
                 // Get epochtime in seconds
                 long epochTime = resultSet.getLong(
@@ -137,7 +140,7 @@ public class DataHandler {
                 );
                 String date = MediaFile.SecondsToDateString(epochTime);
                 if(!dateArrayList.contains(date)){
-                    dateArrayList.add(date);
+                    dateArrayList.add(0, date);
                 }
 
                 int mediaType = resultSet.getInt(resultSet.getColumnIndex(MediaStore.Files.FileColumns.MEDIA_TYPE));
@@ -149,7 +152,7 @@ public class DataHandler {
                 }
 
                 assert mediaFileArrayList != null;
-                mediaFileArrayList.add(new MediaFile(id, mediaType, fileUrl, MediaFile.SecondsToDatetimeString(epochTime), MediaFile.FormatFileSize(fileSize), resolution, albumName, favouriteIdArrayList.contains(id)));
+                mediaFileArrayList.add(0, new MediaFile(id, mediaType, fileUrl, MediaFile.SecondsToDatetimeString(epochTime), MediaFile.FormatFileSize(fileSize), resolution, albumName, favouriteIdArrayList.contains(id)));
                 mediaFileHashSet.add(id);
                 break;
             }
@@ -163,20 +166,40 @@ public class DataHandler {
         return mediaFileArrayList;
     }
 
-    // Get array list album name
-    public static ArrayList<String> GetListAlbumName() { return albumNameArrayList; }
+    // Get array list folder name
+    public static ArrayList<String> GetListFolderName() { return folderNameArrayList; }
 
     // Get array list date array list
     public static ArrayList<String> GetListDate() { return dateArrayList; }
 
     /*
-    Get array list media files group by album name.
-    <param>
-        NUMBER_OF_FILE: ONE or ALL
-    </param>
+        Get array list album.
+        <return>
+            Return null if no album was created.
+        </return>
+     */
+    public static ArrayList<String> GetListAlbumName() {
+        if(listAlbum.size() == 0)
+            return null;
+        ArrayList<String> albumName = new ArrayList<>();
+        for(Map.Entry<String, ArrayList<String>> item : listAlbum.entrySet()){
+            albumName.add(item.getKey());
+        }
+        return albumName;
+    }
+
+
+    /*
+        Get array list media files group by folder name.
+        <param>
+            NUMBER_OF_FILE: ONE or ALL
+        </param>
+        <return>
+            Return null if no media file found.
+        </return>
      */
     @RequiresApi(api = Build.VERSION_CODES.Q)
-    public static ArrayList<MediaFile> GetMediaFilesByAlbum(@NonNull Context context, String albumName, int NUMBER_OF_FILE){
+    public static ArrayList<MediaFile> GetMediaFilesByFolder(@NonNull Context context, String folderName, int NUMBER_OF_FILE){
         ArrayList<MediaFile> mediaFileArrayList;
         Uri queryUri = MediaStore.Files.getContentUri("external");
         String[] projections = new String[]{
@@ -190,21 +213,12 @@ public class DataHandler {
                 MediaStore.Files.FileColumns.HEIGHT,
                 MediaStore.Files.FileColumns.WIDTH };
 
-        String selection = null;
-        String []selectionArgs = null;
-
-        if(albumName.equals("Favourite")){
-            selection = MediaStore.Files.FileColumns.MEDIA_TYPE + " = ?" + " OR " + MediaStore.Files.FileColumns.MEDIA_TYPE + " = ?";
-            selectionArgs = new String[]{
-                    String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
-                    String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)};
-        }else{
-            selection = MediaStore.Files.FileColumns.MEDIA_TYPE + " = ?" + " OR " + MediaStore.Files.FileColumns.MEDIA_TYPE + " = ?" + " AND " + MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME + " = ?";
-            selectionArgs = new String[]{
-                    String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
-                    String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO),
-                    albumName };
-        }
+        String selection = MediaStore.Files.FileColumns.MEDIA_TYPE + " = ?" + " AND " + MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME + " = ?" + " OR " + MediaStore.Files.FileColumns.MEDIA_TYPE + " = ?" + " AND " + MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME + " = ?";;
+        String []selectionArgs = new String[]{
+                String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
+                folderName,
+                String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO),
+                folderName };
         String sortOrder = MediaStore.Files.FileColumns.DATE_ADDED + " DESC";
 
         @SuppressLint("Recycle")
@@ -213,9 +227,6 @@ public class DataHandler {
             mediaFileArrayList = new ArrayList<>();
             while (resultSet.moveToNext()){
                 String id = resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns._ID));
-                if(albumName.equals("Favourite") && !favouriteIdArrayList.contains(id)){
-                    continue;
-                }
                 // Get epochtime in seconds
                 long epochTime = resultSet.getLong(resultSet.getColumnIndex(MediaStore.Files.FileColumns.DATE_ADDED));
                 int mediaType = resultSet.getInt(resultSet.getColumnIndex(MediaStore.Files.FileColumns.MEDIA_TYPE));
@@ -225,11 +236,11 @@ public class DataHandler {
                 if(resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.HEIGHT)) != null && resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.WIDTH)) != null){
                     resolution = resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.HEIGHT)) + " x " + resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.WIDTH));
                 }
-                mediaFileArrayList.add(new MediaFile(id, mediaType, fileUrl, MediaFile.SecondsToDatetimeString(epochTime), MediaFile.FormatFileSize(fileSize), resolution, albumName, favouriteIdArrayList.contains(id)));
+                mediaFileArrayList.add(new MediaFile(id, mediaType, fileUrl, MediaFile.SecondsToDatetimeString(epochTime), MediaFile.FormatFileSize(fileSize), resolution, folderName, favouriteIdArrayList.contains(id)));
                 if(NUMBER_OF_FILE == ONE)
                     break;
             }
-            return mediaFileArrayList;
+            return mediaFileArrayList.size() == 0 ? null : mediaFileArrayList;
         }
         Toast.makeText(context,"No such file", Toast.LENGTH_LONG).show();
         return null;
@@ -288,6 +299,66 @@ public class DataHandler {
 
     }
 
+    /*
+        Get array list media files group by album name.
+        <param>
+            NUMBER_OF_FILE: ONE or ALL
+        </param>
+        <return>
+            Return null if no media file found.
+        </return>
+     */
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    public static ArrayList<MediaFile> GetMediaFileByAlbum(@NonNull Context context, String albumName, int NUMBER_OF_FILE){
+        ArrayList<MediaFile> mediaFileArrayList;
+        Uri queryUri = MediaStore.Files.getContentUri("external");
+        String[] projections = new String[]{
+                MediaStore.Files.FileColumns._ID,
+                MediaStore.Files.FileColumns.BUCKET_ID,
+                MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME,
+                MediaStore.Files.FileColumns.DATA,
+                MediaStore.Files.FileColumns.DATE_ADDED,
+                MediaStore.Files.FileColumns.MEDIA_TYPE,
+                MediaStore.Files.FileColumns.SIZE,
+                MediaStore.Files.FileColumns.HEIGHT,
+                MediaStore.Files.FileColumns.WIDTH };
+
+        String selection = MediaStore.Files.FileColumns.MEDIA_TYPE + " = ?" + " OR " + MediaStore.Files.FileColumns.MEDIA_TYPE + " = ?";
+        String []selectionArgs = new String[]{
+                String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
+                String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)};
+        String sortOrder = MediaStore.Files.FileColumns.DATE_ADDED + " DESC";
+
+        @SuppressLint("Recycle")
+        Cursor resultSet = context.getContentResolver().query(queryUri, projections, selection, selectionArgs, sortOrder);
+        if(resultSet != null){
+            mediaFileArrayList = new ArrayList<>();
+            while (resultSet.moveToNext()){
+                String id = resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns._ID));
+                if(albumName.equals("Favourite") && !favouriteIdArrayList.contains(id)){
+                    continue;
+                }
+                if(!listAlbum.get(albumName).contains(id))
+                    continue;
+                // Get epochtime in seconds
+                long epochTime = resultSet.getLong(resultSet.getColumnIndex(MediaStore.Files.FileColumns.DATE_ADDED));
+                int mediaType = resultSet.getInt(resultSet.getColumnIndex(MediaStore.Files.FileColumns.MEDIA_TYPE));
+                String fileUrl = resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.DATA));
+                long fileSize = resultSet.getLong(resultSet.getColumnIndex(MediaStore.Files.FileColumns.SIZE));
+                String resolution = "Undefined";
+                if(resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.HEIGHT)) != null && resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.WIDTH)) != null){
+                    resolution = resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.HEIGHT)) + " x " + resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.WIDTH));
+                }
+                String folderName = resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME));
+                mediaFileArrayList.add(new MediaFile(id, mediaType, fileUrl, MediaFile.SecondsToDatetimeString(epochTime), MediaFile.FormatFileSize(fileSize), resolution, folderName, favouriteIdArrayList.contains(id)));
+                if(NUMBER_OF_FILE == ONE)
+                    break;
+            }
+            return mediaFileArrayList.size() == 0 ? null : mediaFileArrayList;
+        }
+        Toast.makeText(context,"No such file", Toast.LENGTH_LONG).show();
+        return null;
+    }
 
     public static void AddToFavourite(@NonNull Context context, String id){
         if(!favouriteIdArrayList.contains(id)){
@@ -314,6 +385,75 @@ public class DataHandler {
             SaveFavouriteMediaFiles(context);
         }
     }
+
+    public static void DeleteMediaFile(String id){
+        for (int i = 0; i < mediaFileArrayList.size(); i++) {
+            if(mediaFileArrayList.get(i).id.equals(id)){
+                mediaFileArrayList.remove(i);
+                break;
+            }
+        }
+    }
+
+    /*
+        Add a new album.
+        <param>
+            albumName: Name of album
+            listImage: Array list image that user pick
+        </param>
+        <return>
+            Return true if add successfully
+            Return false if album exist already.
+        </return>
+     */
+    public static boolean AddNewAlbum(@NonNull Context context, String albumName, ArrayList<String> listImage){
+        if(listAlbum.containsKey(albumName))
+            return false;
+        listAlbum.put(albumName, listImage);
+        SaveAlbum(context);
+        return true;
+    }
+
+    /*
+        Update list image to existed album.
+        <param>
+            albumName: Name of album
+            listImage: Array list image that user pick
+        </param>
+        <return>
+            Return true if update successfully
+            Return false if album doest not exist
+        </return>
+     */
+    public static boolean UpdateAlbum(@NonNull Context context, String albumName, ArrayList<String> listImage){
+        if(listAlbum.containsKey(albumName))
+            return false;
+        for (String s : listImage) {
+            listAlbum.get(albumName).add(s);
+        }
+        SaveAlbum(context);
+        return true;
+    }
+
+    /*
+        Remove album.
+        <param>
+            albumName: Name of album
+        </param>
+        <return>
+            Return true if update successfully
+            Return false if album doest not exist
+        </return>
+     */
+    public static boolean RemoveAlbum(@NonNull Context context, String albumName){
+        if(listAlbum.containsKey(albumName))
+            return false;
+        listAlbum.clear();
+        SaveAlbum(context);
+        return true;
+    }
+
+
     //#region Private Methods
 
     //Load array list media files group by favourite. Call once when LoadAllMediaFiles
@@ -332,6 +472,25 @@ public class DataHandler {
         Gson gson = new Gson();
         String json = gson.toJson(favouriteIdArrayList);
         editor.putString(FAVOURITE_FILE_KEY, json);
+        editor.apply();
+    }
+
+    //Load list album. Call once when LoadAllMediaFiles
+    private static void LoadAlbum(@NonNull Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(STORE_FILE_NAME, Context.MODE_PRIVATE);
+        String json = sharedPreferences.getString(ALBUM_NAME_FILE_KEY, null);
+        if(json != null){
+            Type type = new TypeToken<HashMap<String,ArrayList<String>>>(){}.getType();
+            Gson gson = new Gson();
+            listAlbum = gson.fromJson(json, type);
+        }
+    }
+    private static void SaveAlbum(@NonNull Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(STORE_FILE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(listAlbum);
+        editor.putString(ALBUM_NAME_FILE_KEY, json);
         editor.apply();
     }
     //#endregion
