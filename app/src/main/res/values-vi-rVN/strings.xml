@@ -76,4 +76,6 @@
     <string name="album_name_empty_error_warning_1">Tên album không thể bỏ trống</string>
     <string name="album_name_duplicate_error_warning_1">Tên album đã tồn tại</string>
     <string name="album_image_empty_error_warning_1">Ít nhất cần có 1 file được chọn</string>
+    <string name="title_favorite_1">Mục yêu thích</string>
+    <string name="navbar_camera_1">Máy ảnh</string>
 </resources>

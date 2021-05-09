@@ -28,6 +28,7 @@
         android:supportsRtl="true"
         android:theme="@style/DefaultAppTheme"
         tools:replace="android:allowBackup">
+        <activity android:name=".activities.AlbumDetailActivity"></activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"

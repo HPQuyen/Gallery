@@ -87,4 +87,6 @@
     <string name="album_name_empty_error_warning_1">Album\'s name cannot be empty</string>
     <string name="album_name_duplicate_error_warning_1">Album\'s name has already existed</string>
     <string name="album_image_empty_error_warning_1">At least ONE file should be chosen</string>
+    <string name="title_favorite_1">Favorite</string>
+    <string name="navbar_camera_1">Camera</string>
 </resources>
