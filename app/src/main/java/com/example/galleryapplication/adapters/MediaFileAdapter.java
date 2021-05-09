@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +19,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.signature.ObjectKey;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.example.galleryapplication.R;
 import com.example.galleryapplication.activities.ViewDetailActivity;
-import com.example.galleryapplication.activities.VideoDetailActivity;
 import com.example.galleryapplication.classes.Constants;
 import com.example.galleryapplication.classes.MediaFile;
 import com.example.galleryapplication.classes.Observer;
@@ -44,6 +43,7 @@ public class MediaFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private static long lastTimeClick = 0;
     private static final long MAX_DURATION = 2000;
+
     /**
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder_Grid).
@@ -165,7 +165,6 @@ public class MediaFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         this.mediaFiles = mediaFiles;
         this.layout = layout;
         this.viewDetailMode = viewDetailMode;
-
     }
 
     // Create new views (invoked by the layout manager)
@@ -224,26 +223,24 @@ public class MediaFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         .apply(new RequestOptions()
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .signature(new ObjectKey(mediaFile.lastTimeModified)))
-                        .into(((ViewHolder_Grid)holder).getImageView());
+                        .into(((ViewHolder_Grid) holder).getImageView());
 
                 if (mediaFile.mediaType == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) {
-                    ((ViewHolder_Grid)holder).getImageOverlay().setVisibility(View.VISIBLE);
+                    ((ViewHolder_Grid) holder).getImageOverlay().setVisibility(View.VISIBLE);
                     Glide
                             .with(this.context)
                             .load(R.drawable.ic_play_video)
-                            .into(((ViewHolder_Grid)holder).getImageOverlay());
+                            .into(((ViewHolder_Grid) holder).getImageOverlay());
                 } else {
-                    ((ViewHolder_Grid)holder).getImageOverlay().setVisibility(View.GONE);
+                    ((ViewHolder_Grid) holder).getImageOverlay().setVisibility(View.GONE);
                 }
 
-                ((ViewHolder_Grid)holder).getConstraintLayout().setOnClickListener(v -> {
+                ((ViewHolder_Grid) holder).getConstraintLayout().setOnClickListener(v -> {
                     long currentTime = System.currentTimeMillis();
-                    if(currentTime - lastTimeClick <= MAX_DURATION)
+                    if (currentTime - lastTimeClick <= MAX_DURATION)
                         return;
                     lastTimeClick = currentTime;
-                    YoYo.with(Techniques.BounceIn).onEnd(a -> {
-                        TransitionViewDetail(mediaFile, position);
-                    }).duration(300).playOn(v);
+                    YoYo.with(Techniques.BounceIn).onEnd(a -> TransitionViewDetail(mediaFile, position)).duration(300).playOn(v);
                 });
                 break;
             case 1:
@@ -253,23 +250,21 @@ public class MediaFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         .with(this.context)
                         .load(mediaFile.fileUrl)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .into(((ViewHolder_DateGrid)holder).getImageView());
+                        .into(((ViewHolder_DateGrid) holder).getImageView());
 
                 if (mediaFile.mediaType == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) {
-                    ((ViewHolder_DateGrid)holder).getImageOverlay().setVisibility(View.VISIBLE);
+                    ((ViewHolder_DateGrid) holder).getImageOverlay().setVisibility(View.VISIBLE);
                     Glide
                             .with(this.context)
                             .load(R.drawable.ic_play_video)
-                            .into(((ViewHolder_DateGrid)holder).getImageOverlay());
+                            .into(((ViewHolder_DateGrid) holder).getImageOverlay());
                 } else {
-                    ((ViewHolder_DateGrid)holder).getImageOverlay().setVisibility(View.GONE);
+                    ((ViewHolder_DateGrid) holder).getImageOverlay().setVisibility(View.GONE);
                 }
 
-                ((ViewHolder_DateGrid)holder).getConstraintLayout().setOnClickListener(
-                        v -> ((GalleryViewActivity) this.context
-                        ).TransitionViewDetail(mediaFile, () -> {
-
-                        }));
+                ((ViewHolder_DateGrid) holder).getConstraintLayout().setOnClickListener(
+                        v -> {
+                        });
 
                 break;
             case 2:
@@ -279,34 +274,30 @@ public class MediaFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         .with(this.context)
                         .load(mediaFile.fileUrl)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .into(((ViewHolder_Details)holder).getImageView());
+                        .into(((ViewHolder_Details) holder).getImageView());
 
                 if (mediaFile.mediaType == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) {
-                    ((ViewHolder_Details)holder).getImageOverlay().setVisibility(View.VISIBLE);
+                    ((ViewHolder_Details) holder).getImageOverlay().setVisibility(View.VISIBLE);
                     Glide
                             .with(this.context)
                             .load(R.drawable.ic_play_video)
-                            .into(((ViewHolder_Details)holder).getImageOverlay());
+                            .into(((ViewHolder_Details) holder).getImageOverlay());
                 } else {
-                    ((ViewHolder_Details)holder).getImageOverlay().setVisibility(View.GONE);
+                    ((ViewHolder_Details) holder).getImageOverlay().setVisibility(View.GONE);
                 }
 
-                ((ViewHolder_Details)holder).getMediaName().setText(mediaFile.fileUrl);
-                ((ViewHolder_Details)holder).getMediaDate().setText(mediaFile.datetime);
-                ((ViewHolder_Details)holder).getMediaSize().setText(mediaFile.fileSize);
+                ((ViewHolder_Details) holder).getMediaName().setText(mediaFile.fileUrl);
+                ((ViewHolder_Details) holder).getMediaDate().setText(mediaFile.datetime);
+                ((ViewHolder_Details) holder).getMediaSize().setText(mediaFile.fileSize);
 
-                ((ViewHolder_Details)holder).getConstraintLayout().setOnClickListener(
+                ((ViewHolder_Details) holder).getConstraintLayout().setOnClickListener(
                         v -> {
                             long currentTime = System.currentTimeMillis();
-                            if(currentTime - lastTimeClick <= MAX_DURATION)
+                            if (currentTime - lastTimeClick <= MAX_DURATION)
                                 return;
                             lastTimeClick = currentTime;
-                            Observer.AddEventListener(Observer.ObserverCode.TRIGGER_GLIDE_UPDATE, () -> {
-                                mediaFile.lastTimeModified = System.currentTimeMillis();
-                            });
-                            YoYo.with(Techniques.BounceIn).onEnd(a -> {
-                                TransitionViewDetail(mediaFile, position);
-                            }).duration(300).playOn(v);
+                            Observer.AddEventListener(Observer.ObserverCode.TRIGGER_GLIDE_UPDATE, () -> mediaFile.lastTimeModified = System.currentTimeMillis());
+                            YoYo.with(Techniques.BounceIn).onEnd(a -> TransitionViewDetail(mediaFile, position)).duration(300).playOn(v);
                         });
 
                 break;
@@ -322,7 +313,7 @@ public class MediaFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 
     @RequiresApi(api = Build.VERSION_CODES.R)
-    private void TransitionViewDetail(MediaFile mediaFile,int position){
+    private void TransitionViewDetail(MediaFile mediaFile, int position) {
         Intent intent = new Intent(this.context, ViewDetailActivity.class);
         intent.putExtra(MediaFile.FILE_ADAPTER_POSITION, position);
         intent.putExtra(MediaFile.FILE_VIEW_MODE, viewDetailMode);

@@ -177,6 +177,7 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
                         case R.id.fragItems_Camera:
                             // TODO
 
+                            item.setCheckable(false);
                             break;
                     }
                     return true;
@@ -421,6 +422,20 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
         }
     }
 
+    // *********************************************************************************
+    // *******************        Public methods for Fragments         *****************
+    // *********************************************************************************
+    public void TransitionAlbumFragment(String albumName) {
+        Intent intent = new Intent(
+                GalleryViewActivity.this, AlbumDetailActivity.class
+        );
+
+        intent.putExtra("LAYOUT", albumLayout);
+        intent.putExtra("ALBUM_NAME", albumName);
+
+        startActivityForResult(intent, Constants.RequestCode.ALBUM_DETAIL_REQUEST_CODE);
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -453,6 +468,8 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
                                 );
                         Observer.Invoke(Observer.ObserverCode.TRIGGER_ADAPTER_CHANGE);
                     }
+                    break;
+                case Constants.RequestCode.ALBUM_DETAIL_REQUEST_CODE:
                     break;
             }
         }
