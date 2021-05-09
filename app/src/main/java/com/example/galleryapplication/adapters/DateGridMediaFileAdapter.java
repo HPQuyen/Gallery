@@ -17,6 +17,7 @@ import com.example.galleryapplication.R;
 import com.example.galleryapplication.classes.DataHandler;
 import com.example.galleryapplication.classes.MediaFile;
 import com.example.galleryapplication.classes.Observer;
+import com.example.galleryapplication.enumerators.VIEW_DETAIL_MODE;
 import com.example.galleryapplication.enumerators._LAYOUT;
 
 import java.util.ArrayList;
@@ -93,7 +94,8 @@ public class DateGridMediaFileAdapter extends RecyclerView.Adapter<RecyclerView.
                 new MediaFileAdapter(
                         ((ViewHolder) holder).getRecyclerView().getContext(),
                         mediaFiles,
-                        _LAYOUT._DATE
+                        _LAYOUT._DATE,
+                        VIEW_DETAIL_MODE.NORMAL
                 );
 
         Observer.AddEventListener(

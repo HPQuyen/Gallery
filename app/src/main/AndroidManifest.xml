@@ -43,12 +43,12 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".activities.AlbumDetailActivity"></activity>
+        <activity android:name=".activities.AlbumDetailActivity" />
         <activity android:name=".activities.IncognitoFolderActivity" />
         <activity android:name=".activities.PickFolderActivity" />
         <activity android:name=".activities.CameraActivity" />
         <activity android:name=".activities.VideoDetailActivity" />
-        <activity android:name=".activities.PhotoDetailActivity" />
+        <activity android:name=".activities.ViewDetailActivity" />
         <activity android:name=".activities.CreateAlbumActivity" />
         <activity android:name=".activities.PhotoSelectActivity" />
         <activity
