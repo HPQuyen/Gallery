@@ -1,28 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
     android:theme="@style/DefaultAppTheme"
-    tools:context=".activities.PhotoDetailActivity">
+    tools:context=".activities.IncognitoFolderActivity">
 
 
-    <ImageView
-        android:id="@+id/photoDetailPreview"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:contentDescription="@string/content_description"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager_slider"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Circular progress indicator -->
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progress_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
@@ -37,7 +44,7 @@
             android:id="@+id/bottom_navigation_view"
             style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             app:labelVisibilityMode="auto"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -63,38 +70,6 @@
             android:layout_marginRight="10dp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/favourite_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="bottom|end"
-            android:layout_marginBottom="8dp"
-            android:contentDescription="@string/content_description"
-            android:visibility="invisible"
-            app:backgroundTint="@color/colorVariant_1_sub"
-            app:layout_constraintBottom_toTopOf="@+id/fab_menu"
-            app:layout_constraintEnd_toEndOf="@+id/fab_menu"
-            app:srcCompat="@drawable/ic_baseline_favorite_border_24" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/share_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="bottom|end"
-            android:layout_marginBottom="10dp"
-            android:contentDescription="@string/content_description"
-            android:visibility="invisible"
-            app:backgroundTint="@color/colorVariant_1_sub"
-            app:layout_constraintBottom_toTopOf="@+id/favourite_fab"
-            app:layout_constraintEnd_toEndOf="@+id/favourite_fab"
-            app:srcCompat="@drawable/ic_baseline_share_24" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/delete_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -106,12 +81,12 @@
             android:contentDescription="@string/content_description"
             android:visibility="invisible"
             app:backgroundTint="@color/colorVariant_1_sub"
-            app:layout_constraintBottom_toTopOf="@+id/share_fab"
-            app:layout_constraintEnd_toEndOf="@+id/share_fab"
+            app:layout_constraintBottom_toTopOf="@+id/fab_menu"
+            app:layout_constraintEnd_toEndOf="@+id/fab_menu"
             app:srcCompat="@drawable/ic_baseline_delete_24" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/more_fab"
+            android:id="@+id/info_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -124,22 +99,37 @@
             app:backgroundTint="@color/colorVariant_1_sub"
             app:layout_constraintBottom_toTopOf="@+id/delete_fab"
             app:layout_constraintEnd_toEndOf="@+id/delete_fab"
-            app:srcCompat="@drawable/ic_baseline_more_vert_24" />
+            app:srcCompat="@drawable/ic_baseline_info_24" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/reveal_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="10dp"
+            android:contentDescription="@string/content_description"
+            android:visibility="invisible"
+            app:backgroundTint="@color/colorVariant_1_sub"
+            app:layout_constraintBottom_toTopOf="@+id/info_fab"
+            app:layout_constraintEnd_toEndOf="@+id/info_fab"
+            app:srcCompat="@drawable/ic_baseline_drive_file_move_rtl_24" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
     <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/info_detail_fragment_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/photoDetailPreview">
+        android:id="@+id/info_detail_fragment_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/view_pager_slide_show">
 
-            </androidx.fragment.app.FragmentContainerView>
+    </androidx.fragment.app.FragmentContainerView>
 
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

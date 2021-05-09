@@ -29,7 +29,7 @@
             <ImageView
                 android:id="@+id/image_card"
                 android:layout_width="match_parent"
-                android:layout_height="194dp"
+                android:layout_height="150dp"
                 android:contentDescription="@string/content_description"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/_28195615_136128921308288_9046592716708631099_n" />

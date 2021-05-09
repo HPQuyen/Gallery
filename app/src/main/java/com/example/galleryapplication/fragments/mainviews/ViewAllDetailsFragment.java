@@ -18,6 +18,7 @@ import com.example.galleryapplication.adapters.MediaFileAdapter;
 import com.example.galleryapplication.classes.DataHandler;
 import com.example.galleryapplication.classes.MediaFile;
 import com.example.galleryapplication.classes.Observer;
+import com.example.galleryapplication.enumerators.VIEW_DETAIL_MODE;
 import com.example.galleryapplication.enumerators._LAYOUT;
 import com.example.galleryapplication.interfaces.IOnBackPressed;
 
@@ -60,12 +61,13 @@ public class ViewAllDetailsFragment extends Fragment implements IOnBackPressed {
     @RequiresApi(api = Build.VERSION_CODES.R)
     private void loadAllImage(View thisView) {
         ArrayList<MediaFile> mediaEntries = DataHandler.GetListMediaFiles();
-
+        Observer.SubscribeCurrentMediaFiles(mediaEntries);
         MediaFileAdapter mediaFileAdapter =
                 new MediaFileAdapter(
                         thisView.getContext(),
                         mediaEntries,
-                        _LAYOUT._DETAILS
+                        _LAYOUT._DETAILS,
+                        VIEW_DETAIL_MODE.NORMAL
                 );
 
         Observer.AddEventListener(

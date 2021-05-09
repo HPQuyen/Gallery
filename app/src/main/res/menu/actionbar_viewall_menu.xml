@@ -8,6 +8,7 @@
         android:id="@+id/Slideshow_ViewAll"
         android:title="@string/actionbar_slideshow_1"
         android:icon="@drawable/ic_slideshow"
+        android:onClick="OnClickSlideshow"
         app:showAsAction="ifRoom" />
 
     <item
