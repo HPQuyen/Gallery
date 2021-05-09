@@ -477,9 +477,9 @@ public class DataHandler {
         </return>
      */
     public static boolean RemoveAlbum(@NonNull Context context, String albumName){
-        if(albumHashMap.containsKey(albumName))
+        if(!albumHashMap.containsKey(albumName))
             return false;
-        albumHashMap.clear();
+        albumHashMap.remove(albumName);
         SaveAlbum(context);
         return true;
     }

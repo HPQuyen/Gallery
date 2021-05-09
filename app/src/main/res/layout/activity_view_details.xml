@@ -115,7 +115,7 @@
             app:backgroundTint="@color/colorVariant_1_sub"
             app:layout_constraintBottom_toTopOf="@+id/share_fab"
             app:layout_constraintEnd_toEndOf="@+id/share_fab"
-            app:srcCompat="@drawable/ic_baseline_delete_24" />
+            app:srcCompat="@drawable/ic_delete" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/more_fab"

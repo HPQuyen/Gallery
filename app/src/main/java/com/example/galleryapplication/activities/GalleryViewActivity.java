@@ -104,7 +104,6 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
 
         new Thread(() -> DataHandler.LoadAllMediaFiles(this)).start();
 
-
         toolbar = findViewById(R.id.main_Toolbar);
         setSupportActionBar(toolbar);
 
@@ -312,6 +311,12 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // TODO: Save necessary stuffs into SharePreference
+    }
+
     private void setCurrentFragment (Fragment fragment) {
         FragmentTransaction fragTransaction = getSupportFragmentManager().beginTransaction();
         fragTransaction.replace(R.id.fragment_Settings_FrameLayout, fragment);
@@ -420,7 +425,7 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
     // *********************************************************************************
     // *******************        Public methods for Fragments         *****************
     // *********************************************************************************
-    public void TransitionAlbumFragment(String albumName) {
+    public void TransitionAlbumDetail(String albumName) {
         Intent intent = new Intent(
                 GalleryViewActivity.this, AlbumDetailActivity.class
         );
@@ -465,6 +470,13 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
                     }
                     break;
                 case Constants.RequestCode.ALBUM_DETAIL_REQUEST_CODE:
+                    if (data != null) {
+                        this.albumLayout = (_LAYOUT) data.getSerializableExtra("LAYOUT");
+
+                        if (data.getBooleanExtra("IS_CHANGED", false)) {
+                            Observer.Invoke(Observer.ObserverCode.TRIGGER_ADAPTER_CHANGE);
+                        }
+                    }
                     break;
             }
         }
