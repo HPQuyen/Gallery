@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.signature.ObjectKey;
 import com.example.galleryapplication.R;
 import com.example.galleryapplication.activities.GalleryViewActivity;
@@ -52,6 +51,36 @@ public class MediaFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             this.imageView = view.findViewById(R.id.itemGridImageView);
             this.imageOverlay = view.findViewById(R.id.itemGridOverlay);
+        }
+
+        public ConstraintLayout getConstraintLayout() {
+            return constraintLayout;
+        }
+
+        public ImageView getImageView() {
+            return this.imageView;
+        }
+
+        public ImageView getImageOverlay() {
+            return this.imageOverlay;
+        }
+    }
+
+    public static class ViewHolder_DateGrid extends RecyclerView.ViewHolder {
+
+        private final ConstraintLayout constraintLayout;
+
+        private final ImageView imageView;
+        private final ImageView imageOverlay;
+
+        @RequiresApi(api = Build.VERSION_CODES.R)
+        public ViewHolder_DateGrid(View view) {
+            super(view);
+
+            this.constraintLayout = view.findViewById(R.id.itemGridDateConstraintLayout);
+
+            this.imageView = view.findViewById(R.id.itemGridDateImageView);
+            this.imageOverlay = view.findViewById(R.id.itemGridDateOverlay);
         }
 
         public ConstraintLayout getConstraintLayout() {
@@ -134,17 +163,22 @@ public class MediaFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         LayoutInflater inflater = LayoutInflater.from(this.context);
 
         switch (viewType) {
+            default:
+            case 0:
+                View gridView =
+                        inflater.inflate(R.layout.fragment_viewall_grid_item, parent, false);
+
+                return new ViewHolder_Grid(gridView);
+            case 1:
+                View dateView =
+                        inflater.inflate(R.layout.fragment_viewall_date_item_children, parent, false);
+
+                return new ViewHolder_DateGrid(dateView);
             case 2:
                 View listView =
                         inflater.inflate(R.layout.fragment_viewall_details_item, parent, false);
 
                 return new ViewHolder_Details(listView);
-            case 0:
-            default:
-                View gridView =
-                        inflater.inflate(R.layout.fragment_viewall_grid_item, parent, false);
-
-                return new ViewHolder_Grid(gridView);
         }
 
     }
@@ -152,13 +186,13 @@ public class MediaFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public int getItemViewType(int position) {
         switch (this.layout) {
+            default:
+            case _GRID:
+                return 0;
             case _DATE:
                 return 1;
             case _DETAILS:
                 return 2;
-            case _GRID:
-            default:
-                return 0;
         }
     }
 
@@ -201,6 +235,29 @@ public class MediaFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         });
                 break;
             case 1:
+                mediaFile = this.mediaFiles.get(position);
+
+                Glide
+                        .with(this.context)
+                        .load(mediaFile.fileUrl)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(((ViewHolder_DateGrid)holder).getImageView());
+
+                if (mediaFile.mediaType == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) {
+                    ((ViewHolder_DateGrid)holder).getImageOverlay().setVisibility(View.VISIBLE);
+                    Glide
+                            .with(this.context)
+                            .load(R.drawable.ic_play_video)
+                            .into(((ViewHolder_DateGrid)holder).getImageOverlay());
+                } else {
+                    ((ViewHolder_DateGrid)holder).getImageOverlay().setVisibility(View.GONE);
+                }
+
+                ((ViewHolder_DateGrid)holder).getConstraintLayout().setOnClickListener(
+                        v -> ((GalleryViewActivity) this.context
+                        ).TransitionViewDetail(mediaFile, () -> {}));
+
+                break;
             case 2:
                 mediaFile = this.mediaFiles.get(position);
 

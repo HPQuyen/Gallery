@@ -7,13 +7,15 @@
         android:id="@+id/AddNewAlbum_ViewAlbums"
         android:title="@string/actionbar_addnewalbum_layout_1"
         android:icon="@drawable/ic_add"
+        android:onClick="addAlbum"
         app:showAsAction="ifRoom" />
 
     <!-- "Settings" -->
     <item
         android:id="@+id/Settings_ViewAll"
         android:title="@string/actionbar_settings_1"
+        android:icon="@drawable/ic_settings"
         android:onClick="settings"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
 
 </menu>

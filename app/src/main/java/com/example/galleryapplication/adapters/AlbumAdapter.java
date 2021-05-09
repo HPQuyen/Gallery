@@ -2,89 +2,133 @@ package com.example.galleryapplication.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.signature.ObjectKey;
 import com.example.galleryapplication.R;
 import com.example.galleryapplication.classes.DataHandler;
-import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.chip.Chip;
+import com.example.galleryapplication.classes.MediaFile;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-public class AlbumAdapter extends ArrayAdapter<String> {
 
-    private Context context;
-    private List<String> listAlbum;
-    private MaterialCardView prevCardView;
-    private List<String> listImageCoverUrl = new ArrayList<>();
-    private int position = -1;
-    @RequiresApi(api = Build.VERSION_CODES.Q)
-    public AlbumAdapter(@NonNull Context context, @NonNull List<String> objects) {
-        super(context, R.layout.album_card_item, objects);
-        this.listAlbum = objects;
-        this.context = context;
-        for (String album : listAlbum) {
-            listImageCoverUrl.add(DataHandler.GetMediaFilesByFolder(context, album, DataHandler.ONE).get(0).fileUrl);
+public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    private final Context context;
+    private List<String> albums;
+
+    /**
+     * Provide a reference to the type of views that you are using
+     * (custom ViewHolder_Grid).
+     */
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+
+        private final ConstraintLayout constraintLayout;
+
+        private final ImageView albumImage;
+        private final TextView albumName;
+        private final TextView albumMembersNumber;
+
+        public ViewHolder(View view) {
+            super(view);
+
+            this.constraintLayout = view.findViewById(R.id.albumItemConstraintLayout);
+
+            this.albumImage = view.findViewById(R.id.imageView);
+            this.albumName = view.findViewById(R.id.albumName);
+            this.albumMembersNumber = view.findViewById(R.id.albumMembersNumber);
+        }
+
+        public ConstraintLayout getConstraintLayout() {
+            return constraintLayout;
+        }
+
+        public ImageView getAlbumImage() {
+            return this.albumImage;
+        }
+
+        public TextView getAlbumName() {
+            return this.albumName;
+        }
+
+        public TextView getAlbumMembersNumber() {
+            return this.albumMembersNumber;
         }
     }
 
+    /**
+     * Initialize the dataset of the Adapter.
+     */
+    public AlbumAdapter(Context context, List<String> albumList) {
+        this.context = context;
+        this.albums = albumList;
+    }
+
+    public void SetNewListAlbum(List<String> albumList){
+        this.albums = albumList;
+    }
+
+    // Create new views (invoked by the layout manager)
+    @NotNull
     @Override
-    public int getCount() {
-        return listAlbum.size();
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(this.context);
+        View dateView =
+                inflater.inflate(R.layout.fragment_album_item, parent, false);
+        return new ViewHolder(dateView);
     }
 
-    @Override
-    public String getItem(int position) {
-        return listAlbum.get(position);
-    }
-
-    public long getItemId(int position) {
-        return position;
-    }
-
+    // Replace the contents of a view (invoked by the layout manager)
+    @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.Q)
-    @SuppressLint("ViewHolder")
-    @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        LayoutInflater layoutInflater = LayoutInflater.from(context);
-        convertView = layoutInflater.inflate(R.layout.album_card_item, parent, false);
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        ((ViewHolder) holder).getAlbumName().setText(this.albums.get(position));
 
-        // Set event for click card
-        MaterialCardView cardView = convertView.findViewById(R.id.card);
-        cardView.setOnClickListener(view -> {
-            if(cardView.isChecked())
-                return;
-            cardView.setChecked(true);
-            if(prevCardView != null)
-                prevCardView.setChecked(false);
-            prevCardView = cardView;
-            this.position = position;
-        });
+        // Get photo
+        ArrayList<MediaFile> mediaFiles = DataHandler.GetMediaFileByAlbum(
+                this.context,
+                this.albums.get(position),
+                DataHandler.ONE
+        );
 
-        Chip albumName = convertView.findViewById(R.id.album_name_chip);
-        albumName.setText(listAlbum.get(position));
-        ImageView imageView = convertView.findViewById(R.id.image_card);
+        assert mediaFiles != null;
         Glide
                 .with(context)
-                .load(listImageCoverUrl.get(position))
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(imageView);
-        return convertView;
+                .load(mediaFiles.get(0).fileUrl)
+                .signature(new ObjectKey(System.currentTimeMillis()))
+                .into(((ViewHolder) holder).getAlbumImage());
+
+        // Get photos
+        mediaFiles = DataHandler.GetMediaFileByAlbum(
+                this.context,
+                this.albums.get(position),
+                DataHandler.ALL
+        );
+
+        assert mediaFiles != null;
+        ((ViewHolder) holder).getAlbumMembersNumber().setText(mediaFiles.size() + " photo(s)");
     }
 
-    public String GetAlbumPicked(){
-        return position == -1 ? null : listAlbum.get(this.position);
+    // Return the size of your dataset (invoked by the layout manager)
+    @Override
+    public int getItemCount() {
+        return this.albums.size();
     }
+
 }
+

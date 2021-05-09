@@ -66,7 +66,6 @@ public class GalleryViewActivity extends AppCompatActivity
 
     private Fragment albumFragment;
 
-
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,10 +89,8 @@ public class GalleryViewActivity extends AppCompatActivity
         // Layout setup
         setContentView(R.layout.activity_main_galleryview);
 
-        if (!checkPermission(this))
-            return;
-        init();
-
+        // Check Permission
+        if (checkPermission(this)) init();
     }
 
 
@@ -251,6 +248,15 @@ public class GalleryViewActivity extends AppCompatActivity
         fragTransaction.commit();
     }
 
+    public void addAlbum(MenuItem item) {
+        Intent intent = new Intent(
+                GalleryViewActivity.this, CreateAlbumActivity.class
+        );
+        startActivityForResult(intent, Constants.RequestCode.CREATE_ALBUM_REQUEST_CODE);
+
+        // DataHandler.AddNewAlbum(this, )
+    }
+
     public void settings(MenuItem item) {
         Intent intent = new Intent(
                 GalleryViewActivity.this, SettingsActivity.class
@@ -258,6 +264,9 @@ public class GalleryViewActivity extends AppCompatActivity
         startActivityForResult(intent, Constants.RequestCode.SETTINGS_REQUEST_CODE);
     }
 
+    // *********************************************************************************
+    // ***************************        PERMISSION         ***************************
+    // *********************************************************************************
     @Override
     public void permissionGranted() {
         // TODO: The Permission was granted by the user.
@@ -270,9 +279,6 @@ public class GalleryViewActivity extends AppCompatActivity
 
     }
 
-    // *********************************************************************************
-    // ***************************        PERMISSION         ***************************
-    // *********************************************************************************
     // Important permission request for Android 6.0 and above, don't forget to add this!
     public boolean checkPermission(final Context context) {
         int currentAPIVersion = Build.VERSION.SDK_INT;
@@ -350,16 +356,15 @@ public class GalleryViewActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK){
-            switch (requestCode){
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
                 case VIEW_DETAIL_REQUEST_CODE:
-                    if(data != null){
-                        if(data.getBooleanExtra("CHANGE", false))
-                        {
+                    if (data != null) {
+                        if (data.getBooleanExtra("CHANGE", false)) {
                             DataHandler.UpdateMediaFiles(this);
                             Observer.Invoke(Observer.ObserverCode.TRIGGER_GLIDE_UPDATE);
                             Observer.Invoke(Observer.ObserverCode.TRIGGER_ADAPTER_CHANGE);
-                            Log.d("Nothing","Invoke event");
+                            Log.d("Nothing", "Invoke event");
                         }
                         Observer.RemoveEvent(Observer.ObserverCode.TRIGGER_GLIDE_UPDATE);
                     }
@@ -367,6 +372,18 @@ public class GalleryViewActivity extends AppCompatActivity
 
                 case Constants.RequestCode.SETTINGS_REQUEST_CODE:
                     recreate();
+                    break;
+
+                case Constants.RequestCode.CREATE_ALBUM_REQUEST_CODE:
+                    if (data != null) {
+                        DataHandler.AddNewAlbum(
+                                this,
+                                data.getExtras().getString("ALBUM_NAME"),
+                                data.getExtras()
+                                        .getStringArrayList("SELECTED_MEDIA")
+                                );
+                        Observer.Invoke(Observer.ObserverCode.TRIGGER_ADAPTER_CHANGE);
+                    }
                     break;
             }
         }

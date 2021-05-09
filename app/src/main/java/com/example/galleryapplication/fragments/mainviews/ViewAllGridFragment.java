@@ -2,6 +2,9 @@ package com.example.galleryapplication.fragments.mainviews;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -26,9 +29,6 @@ import com.example.galleryapplication.interfaces.IOnBackPressed;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.zip.DataFormatException;
 
 public class ViewAllGridFragment extends Fragment implements IOnBackPressed {
 
@@ -43,7 +43,6 @@ public class ViewAllGridFragment extends Fragment implements IOnBackPressed {
         super.onCreate(savedInstanceState);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
@@ -62,9 +61,7 @@ public class ViewAllGridFragment extends Fragment implements IOnBackPressed {
         loadAllImage(view);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.R)
     private void loadAllImage(View thisView) {
-
         ArrayList<MediaFile> mediaEntries = DataHandler.GetListMediaFiles();
 
         MediaFileAdapter mediaFileAdapter =
