@@ -19,6 +19,7 @@ import com.example.galleryapplication.adapters.DateGridMediaFileAdapter;
 import com.example.galleryapplication.adapters.MediaFileAdapter;
 import com.example.galleryapplication.classes.DataHandler;
 import com.example.galleryapplication.classes.MediaFile;
+import com.example.galleryapplication.classes.Observer;
 import com.example.galleryapplication.enumerators._LAYOUT;
 import com.example.galleryapplication.interfaces.IOnBackPressed;
 
@@ -64,6 +65,12 @@ public class ViewAllDateFragment extends Fragment implements IOnBackPressed {
                         thisView.getContext(),
                         listDate
                 );
+
+        Observer.AddEventListener(
+                Observer.ObserverCode.TRIGGER_ADAPTER_CHANGE,
+                dateGridMediaFileAdapter::notifyDataSetChanged
+        );
+
         this.recyclerView.setAdapter(dateGridMediaFileAdapter);
         this.recyclerView.setLayoutManager(
                 new LinearLayoutManager(

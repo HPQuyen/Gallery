@@ -13,4 +13,9 @@
         android:id="@+id/fragItems_Favorite"
         android:title="@string/navbar_favorite_1"
         android:icon="@drawable/ic_favorite_star" />
+
+    <item
+        android:id="@+id/fragItems_Camera"
+        android:title="@string/navbar_camera_1"
+        android:icon="@drawable/ic_camera" />
 </menu>

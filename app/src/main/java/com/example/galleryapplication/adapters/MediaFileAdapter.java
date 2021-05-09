@@ -21,6 +21,7 @@ import com.bumptech.glide.signature.ObjectKey;
 import com.example.galleryapplication.R;
 import com.example.galleryapplication.activities.GalleryViewActivity;
 import com.example.galleryapplication.classes.MediaFile;
+import com.example.galleryapplication.classes.Observer;
 import com.example.galleryapplication.enumerators._LAYOUT;
 
 import java.util.List;
@@ -255,7 +256,9 @@ public class MediaFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                 ((ViewHolder_DateGrid)holder).getConstraintLayout().setOnClickListener(
                         v -> ((GalleryViewActivity) this.context
-                        ).TransitionViewDetail(mediaFile, () -> {}));
+                        ).TransitionViewDetail(mediaFile, () -> {
+
+                        }));
 
                 break;
             case 2:

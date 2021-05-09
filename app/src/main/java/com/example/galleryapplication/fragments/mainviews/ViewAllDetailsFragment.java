@@ -67,7 +67,12 @@ public class ViewAllDetailsFragment extends Fragment implements IOnBackPressed {
                         mediaEntries,
                         _LAYOUT._DETAILS
                 );
-        Observer.AddEventListener(Observer.ObserverCode.TRIGGER_ADAPTER_CHANGE, mediaFileAdapter::notifyDataSetChanged);
+
+        Observer.AddEventListener(
+                Observer.ObserverCode.TRIGGER_ADAPTER_CHANGE,
+                mediaFileAdapter::notifyDataSetChanged
+        );
+
         this.recyclerView.setAdapter(mediaFileAdapter);
         this.recyclerView.setLayoutManager(
                 new LinearLayoutManager(

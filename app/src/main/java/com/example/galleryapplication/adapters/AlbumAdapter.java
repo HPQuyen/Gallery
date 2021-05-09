@@ -2,7 +2,6 @@ package com.example.galleryapplication.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.ObjectKey;
 import com.example.galleryapplication.R;
+import com.example.galleryapplication.activities.GalleryViewActivity;
 import com.example.galleryapplication.classes.DataHandler;
 import com.example.galleryapplication.classes.MediaFile;
 
@@ -122,6 +122,12 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         assert mediaFiles != null;
         ((ViewHolder) holder).getAlbumMembersNumber().setText(mediaFiles.size() + " photo(s)");
+
+        ((ViewHolder) holder).getConstraintLayout().setOnClickListener(v ->
+                ((GalleryViewActivity) this.context).TransitionAlbumFragment(
+                        this.albums.get(position)
+                )
+        );
     }
 
     // Return the size of your dataset (invoked by the layout manager)

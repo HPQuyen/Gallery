@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <!-- "Slideshow" -->
+    <item
+        android:id="@+id/Slideshow_Favorite"
+        android:title="@string/actionbar_slideshow_1"
+        android:icon="@drawable/ic_slideshow"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/ViewDropDown_Favorite"
+        android:title="@string/actionbar_title_layout_1"
+        android:icon="@drawable/ic_gridonly_layout"
+        app:showAsAction="ifRoom">
+        <menu>
+            <!-- "Grid-Only layout" -->
+            <item
+                android:id="@+id/GridOnly_Favorite"
+                android:title="@string/actionbar_gridonly_layout_1"
+                android:icon="@drawable/ic_gridonly_layout"
+                app:showAsAction="ifRoom" />
+
+            <!-- "Grid-Date layout" -->
+            <item
+                android:id="@+id/GridDate_Favorite"
+                android:title="@string/actionbar_griddate_layout_1"
+                android:icon="@drawable/ic_griddate_layout"
+                app:showAsAction="ifRoom" />
+
+            <!-- "Details List layout" -->
+            <item
+                android:id="@+id/DetailsList_Favorite"
+                android:title="@string/actionbar_details_layout_1"
+                android:icon="@drawable/ic_details_layout"
+                app:showAsAction="ifRoom" />
+        </menu>
+    </item>
+
+    <!-- "Settings" -->
+    <item
+        android:id="@+id/Settings_Favorite"
+        android:title="@string/actionbar_settings_1"
+        android:icon="@drawable/ic_settings"
+        android:onClick="settings"
+        app:showAsAction="ifRoom" />
+
+</menu>

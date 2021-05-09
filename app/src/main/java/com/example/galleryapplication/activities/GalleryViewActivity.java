@@ -60,6 +60,9 @@ public class GalleryViewActivity extends AppCompatActivity
     private _LAYOUT mainLayout = _LAYOUT._GRID;
     private _VIEW mainView = _VIEW._ALL;
 
+    private _LAYOUT albumLayout = _LAYOUT._GRID;
+    private _LAYOUT favoriteLayout = _LAYOUT._GRID;
+
     private Fragment viewAllGridFragment;
     private Fragment viewAllDateFragment;
     private Fragment viewAllDetailsFragment;
@@ -150,7 +153,27 @@ public class GalleryViewActivity extends AppCompatActivity
                             break;
 
                         case R.id.fragItems_Favorite:
+                            mainView = _VIEW._FAVORITE;
+                            invalidateOptionsMenu();
+
+                            switch (favoriteLayout) {
+                                case _GRID:
+                                    // TODO
+                                    break;
+                                case _DATE:
+                                    // TODO
+                                    break;
+                                case _DETAILS:
+                                    // TODO
+                                    break;
+                            }
+
+                            mainTitle.setText(R.string.title_favorite_1);
+                            break;
+
+                        case R.id.fragItems_Camera:
                             // TODO
+
                             break;
                     }
                     return true;
@@ -188,7 +211,23 @@ public class GalleryViewActivity extends AppCompatActivity
                 inflater.inflate(R.menu.actionbar_album_menu, menu);
                 return true;
             case _FAVORITE:
-                // TODO
+                inflater.inflate(R.menu.actionbar_favorite_menu, menu);
+
+                switch (this.favoriteLayout) {
+                    case _DATE:
+                        menu.findItem(R.id.ViewDropDown_Favorite)
+                                .setIcon(R.drawable.ic_griddate_layout);
+                        break;
+                    case _DETAILS:
+                        menu.findItem(R.id.ViewDropDown_Favorite)
+                                .setIcon(R.drawable.ic_details_layout);
+                        break;
+                    case _GRID:
+                    default:
+                        menu.findItem(R.id.ViewDropDown_Favorite)
+                                .setIcon(R.drawable.ic_gridonly_layout);
+                }
+
                 return true;
         }
 
@@ -199,6 +238,7 @@ public class GalleryViewActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            /* ************************* View All ************************* */
             case R.id.GridDate_ViewAll:
                 if (mainLayout == _LAYOUT._DATE) break;
                 mainLayout = _LAYOUT._DATE;
@@ -223,6 +263,34 @@ public class GalleryViewActivity extends AppCompatActivity
 
                 invalidateOptionsMenu();
                 setCurrentFragment(viewAllDetailsFragment);
+
+                return true;
+
+            /* ************************* Favorite ************************* */
+            case R.id.GridDate_Favorite:
+                if (favoriteLayout == _LAYOUT._DATE) break;
+                favoriteLayout = _LAYOUT._DATE;
+
+                invalidateOptionsMenu();
+                // TODO
+
+                return true;
+
+            case R.id.GridOnly_Favorite:
+                if (favoriteLayout == _LAYOUT._GRID) break;
+                favoriteLayout = _LAYOUT._GRID;
+
+                invalidateOptionsMenu();
+                // TODO
+
+                return true;
+
+            case R.id.DetailsList_Favorite:
+                if (favoriteLayout == _LAYOUT._DETAILS) break;
+                favoriteLayout = _LAYOUT._DETAILS;
+
+                invalidateOptionsMenu();
+                // TODO
 
                 return true;
 
@@ -330,14 +398,14 @@ public class GalleryViewActivity extends AppCompatActivity
     // *******************        Public methods for Fragments         *****************
     // *********************************************************************************
     @RequiresApi(api = Build.VERSION_CODES.R)
-    public void TransitionViewDetail(MediaFile mediaFile, IAction updateGlideAction){
+    public void TransitionViewDetail(MediaFile mediaFile, IAction updateGlideAction) {
         Observer.AddEventListener(Observer.ObserverCode.TRIGGER_GLIDE_UPDATE, updateGlideAction);
         Intent intent;
-        if(mediaFile.mediaType == MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE){
-            Log.d("Nothing","This is image");
+        if (mediaFile.mediaType == MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE) {
+            Log.d("Nothing", "This is image");
             intent = new Intent(this, PhotoDetailActivity.class);
-        }else{
-            Log.d("Nothing","This is video");
+        } else {
+            Log.d("Nothing", "This is video");
             intent = new Intent(this, VideoDetailActivity.class);
         }
         intent.putExtra(MediaFile.FILE_ID, mediaFile.id);
@@ -350,6 +418,10 @@ public class GalleryViewActivity extends AppCompatActivity
         intent.putExtra(MediaFile.FILE_FAVOURITE, mediaFile.isFavourite);
 
         startActivityForResult(intent, VIEW_DETAIL_REQUEST_CODE);
+    }
+
+    public void TransitionAlbumFragment(String albumName) {
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)

@@ -71,7 +71,11 @@ public class ViewAllGridFragment extends Fragment implements IOnBackPressed {
                         _LAYOUT._GRID
                 );
 
-        Observer.AddEventListener(Observer.ObserverCode.TRIGGER_ADAPTER_CHANGE, mediaFileAdapter::notifyDataSetChanged);
+        Observer.AddEventListener(
+                Observer.ObserverCode.TRIGGER_ADAPTER_CHANGE,
+                mediaFileAdapter::notifyDataSetChanged
+        );
+
         this.recyclerView.setAdapter(mediaFileAdapter);
         this.recyclerView.setLayoutManager(
                 new GridLayoutManager(thisView.getContext(), 4)
