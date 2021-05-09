@@ -24,6 +24,7 @@ import com.bumptech.glide.signature.ObjectKey;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.example.galleryapplication.R;
+import com.example.galleryapplication.activities.GalleryViewActivity;
 import com.example.galleryapplication.activities.ViewDetailActivity;
 import com.example.galleryapplication.classes.Constants;
 import com.example.galleryapplication.classes.MediaFile;
@@ -262,8 +263,18 @@ public class MediaFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     ((ViewHolder_DateGrid) holder).getImageOverlay().setVisibility(View.GONE);
                 }
 
-                ((ViewHolder_DateGrid) holder).getConstraintLayout().setOnClickListener(
+                ((ViewHolder_DateGrid)holder).getConstraintLayout().setOnClickListener(
                         v -> {
+                            long currentTime = System.currentTimeMillis();
+                            if(currentTime - lastTimeClick <= MAX_DURATION)
+                                return;
+                            lastTimeClick = currentTime;
+                            Observer.AddEventListener(Observer.ObserverCode.TRIGGER_GLIDE_UPDATE, () -> {
+                                mediaFile.lastTimeModified = System.currentTimeMillis();
+                            });
+                            YoYo.with(Techniques.BounceIn).onEnd(a -> {
+                                TransitionViewDetail(position);
+                            }).duration(300).playOn(v);
                         });
 
                 break;
@@ -313,7 +324,7 @@ public class MediaFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 
     @RequiresApi(api = Build.VERSION_CODES.R)
-    private void TransitionViewDetail(MediaFile mediaFile, int position) {
+    private void TransitionViewDetail(int position){
         Intent intent = new Intent(this.context, ViewDetailActivity.class);
         intent.putExtra(MediaFile.FILE_ADAPTER_POSITION, position);
         intent.putExtra(MediaFile.FILE_VIEW_MODE, viewDetailMode);

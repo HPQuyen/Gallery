@@ -124,9 +124,9 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         ((ViewHolder) holder).getAlbumMembersNumber().setText(mediaFiles.size() + " photo(s)");
 
         ((ViewHolder) holder).getConstraintLayout().setOnClickListener(v ->
-                ((GalleryViewActivity) this.context).TransitionAlbumFragment(
-                        this.albums.get(position)
-                )
+            ((GalleryViewActivity) this.context).TransitionAlbumFragment(
+                    this.albums.get(position)
+            )
         );
     }
 

@@ -36,12 +36,14 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.jacknkiarie.signinui.models.SignInUI;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @SuppressLint("IntentReset")
 public class IncognitoFolderActivity extends AppCompatActivity {
 
     private ConstraintLayout newPinCodeForm;
-    private CircularProgressIndicator progressIndicator;
+    private Intent photoSelectIntent;
+
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,11 +123,19 @@ public class IncognitoFolderActivity extends AppCompatActivity {
 
         ExtendedFloatingActionButton addFab = findViewById(R.id.add_fab);
         addFab.setOnClickListener(v -> {
-            Intent intent = new Intent();
-            intent.setType("*/*");
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(intent, "Select Picture"), Constants.RequestCode.PICK_IMAGES_REQUEST_CODE);
+            Intent intent =
+                    new Intent(this, PhotoSelectActivity.class);
+
+            if (photoSelectIntent != null && photoSelectIntent.getExtras() != null) {
+                // TODO: PutExtras to new Intent
+                intent.putStringArrayListExtra(
+                        "SELECTED_MEDIA",
+                        photoSelectIntent.getExtras()
+                                .getStringArrayList("SELECTED_MEDIA")
+                );
+            }
+
+            startActivityForResult(intent, Constants.RequestCode.PHOTO_SELECT_REQUEST_CODE);
         });
 
         recyclerView = findViewById(R.id.recycler_view);
@@ -172,13 +182,19 @@ public class IncognitoFolderActivity extends AppCompatActivity {
                         SetUpUi();
                     }
                     break;
-                case Constants.RequestCode.PICK_IMAGES_REQUEST_CODE:
-                    if(data != null && data.getClipData() != null){
-                        ClipData mClipData = data.getClipData();
+                case Constants.RequestCode.PHOTO_SELECT_REQUEST_CODE:
+                    photoSelectIntent = data;
 
+                    if (photoSelectIntent != null && photoSelectIntent.getExtras() != null) {
+                        // TODO: PutExtras to TextView
+                        List<String> mediaFileId = photoSelectIntent.getExtras()
+                                .getStringArrayList("SELECTED_MEDIA");
+                        if(mediaFileId == null)
+                            return;
                         new Thread(() -> {
-                            for (int i = 0; i < mClipData.getItemCount(); i++){
-                                MediaFile mediaFile = DataHandler.GetMediaFileById(this, DataHandler.GetMediaFileByUri(this, mClipData.getItemAt(i).getUri()).id);
+                            for (int i = 0; i < mediaFileId.size(); i++){
+
+                                MediaFile mediaFile = DataHandler.GetMediaFileById(this, mediaFileId.get(i));
                                 MediaFile.HideMediaFile(this, mediaFile, (isSuccess)->{
                                     runOnUiThread(()->{
                                         if(isSuccess){

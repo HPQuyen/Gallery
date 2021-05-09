@@ -20,6 +20,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -473,9 +474,11 @@ public class DataHandler {
         if(albumHashMap.size() == 0)
             return;
         for (Map.Entry<String, ArrayList<String>> albumItem : albumHashMap.entrySet()) {
-            for (int i1 = 0; i1 < albumItem.getValue().size(); i1++) {
-                if(albumItem.getValue().get(i1).equals(id)){
-                    albumItem.getValue().remove(i1);
+            Iterator<String> i = albumItem.getValue().iterator();
+            while (i.hasNext()){
+                String mediaFileId = i.next();
+                if(mediaFileId.equals(id)){
+                    i.remove();
                 }
             }
         }
