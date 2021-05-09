@@ -1,5 +1,6 @@
 package com.example.galleryapplication.fragments.subviews.settings;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -11,11 +12,13 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.ListPreference;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreferenceCompat;
 
 import com.example.galleryapplication.R;
+import com.example.galleryapplication.activities.IncognitoFolderActivity;
 import com.example.galleryapplication.classes.App;
 import com.example.galleryapplication.classes.Constants;
 import com.example.galleryapplication.utils.LanguageHandler;
@@ -28,6 +31,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     SwitchPreferenceCompat darkThemeSwitchPreference;
     ListPreference languageListPreference;
+    Preference incognitoFolderPreference;
 
     @Override
     public void onResume() {
@@ -52,6 +56,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 
         darkThemeSwitchPreference = findPreference("theme_dark");
         languageListPreference = findPreference("language");
+        incognitoFolderPreference = findPreference("incognito");
 
         if (darkThemeSwitchPreference != null) {
             darkThemeSwitchPreference.setVisible(true);
@@ -67,6 +72,14 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
                 return true;
             });
         }
+
+        if(incognitoFolderPreference != null){
+            incognitoFolderPreference.setOnPreferenceClickListener(preference -> {
+                startActivityForResult(preference.getIntent(), Constants.RequestCode.INCOGNITO_FOLDER_REQUEST_CODE);
+                return true;
+            });
+        }
+
     }
 
     @Override

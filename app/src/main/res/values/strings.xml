@@ -7,6 +7,10 @@
     <string name="next_btn">Next</string>
     <string name="add_fab">Add</string>
     <string name="title_action_cancel">Action has been canceled</string>
+    <string name="title_basic_setting">Basic Settings</string>
+    <string name="title_other">Other</string>
+    <string name="msg_save_file_success">Save file successfully</string>
+    <string name="msg_save_file_failed">Save file failed</string>
 
     <!--    #region Activity Default    -->
     <string name="title_default_1">Photos &amp; Videos</string>
@@ -83,7 +87,8 @@
     <string name="msg_remove_from_incognito_success">Remove from incognito successfully</string>
     <string name="msg_remove_from_incognito_failed">Remove from incognito failed</string>
 
-    <string name="msg_copy_media_file_success">Copy file successfully</string>
+
+    <string name="title_incognito">Incognito Folder</string>
     <!--    #endregion-->
 
     <string name="tv_photocamera_pick_6">Photo</string>

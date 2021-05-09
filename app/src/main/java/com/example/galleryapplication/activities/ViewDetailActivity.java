@@ -589,11 +589,11 @@ public class ViewDetailActivity extends AppCompatActivity {
                         if(selectedMediaFile.mediaType == MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE &&
                                 MediaFile.SaveImage(this, MediaFile.GetBitMap(selectedMediaFile.fileUrl), folderName)){
                             isChange = true;
-                            Snackbar.make(findViewById(R.id.view_pager_slider), R.string.msg_copy_media_file_success, Snackbar.LENGTH_SHORT);
+                            Snackbar.make(findViewById(R.id.view_pager_slider), R.string.msg_save_file_success, Snackbar.LENGTH_SHORT);
                         } else if(selectedMediaFile.mediaType == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO &&
                                 MediaFile.SaveVideo(this, selectedMediaFile, folderName, viewDetailMode)){
                             isChange = true;
-                            Snackbar.make(findViewById(R.id.view_pager_slider), R.string.msg_copy_media_file_success, Snackbar.LENGTH_SHORT);
+                            Snackbar.make(findViewById(R.id.view_pager_slider), R.string.msg_save_file_success, Snackbar.LENGTH_SHORT);
                         }
 
                     }

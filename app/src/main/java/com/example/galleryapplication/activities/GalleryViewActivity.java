@@ -345,18 +345,13 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
     }
 
     public void OnClickSlideshow(MenuItem item){
-//        FragmentTransaction fragTransaction = getSupportFragmentManager().beginTransaction();
-//        fragTransaction.replace(R.id.fragment_Settings_FrameLayout, slideshowFragment);
-//        fragTransaction.addToBackStack(null);
-//        fragTransaction.commit();
-        startActivityForResult(new Intent(this, IncognitoFolderActivity.class), Constants.RequestCode.INCOGNITO_FOLDER_REQUEST_CODE);
+        FragmentTransaction fragTransaction = getSupportFragmentManager().beginTransaction();
+        fragTransaction.replace(R.id.fragment_Settings_FrameLayout, slideshowFragment);
+        fragTransaction.addToBackStack(null);
+        fragTransaction.commit();
     }
 
-    public void OnClickIncognitoFolder(){
-        startActivityForResult(new Intent(this, IncognitoFolderActivity.class), Constants.RequestCode.INCOGNITO_FOLDER_REQUEST_CODE);
-    }
-
-    public void OnClickCamera(){
+    public void OnClickCamera(MenuItem item){
         startActivityForResult(new Intent(this, CameraActivity.class), Constants.RequestCode.CAMERA_REQUEST_CODE);
     }
     //#endregion

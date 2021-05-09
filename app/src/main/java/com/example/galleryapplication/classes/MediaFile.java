@@ -74,8 +74,9 @@ public class MediaFile {
     public boolean isFavourite;
     public String location;
     public long lastTimeModified;
+    public String date;
 
-    public MediaFile(String id, int mediaType, String fileUrl, String datetime, String fileSize, String resolution, String folderName, boolean isFavourite,long lastTimeModified){
+    public MediaFile(String id, int mediaType, String fileUrl, String datetime, String fileSize, String resolution, String folderName, boolean isFavourite,long lastTimeModified, String date){
         this.id = id;
         this.mediaType = mediaType;
         this.fileUrl = fileUrl;
@@ -85,9 +86,10 @@ public class MediaFile {
         this.folderName = folderName;
         this.isFavourite = isFavourite;
         this.lastTimeModified = lastTimeModified;
+        this.date = date;
     }
     public MediaFile Clone(){
-        return new MediaFile(id, mediaType, fileUrl, datetime, fileSize, resolution, folderName, isFavourite, lastTimeModified);
+        return new MediaFile(id, mediaType, fileUrl, datetime, fileSize, resolution, folderName, isFavourite, lastTimeModified, date);
     }
 
     public static String SecondsToDateString(long seconds){
