@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.example.galleryapplication.classes.MediaFile;
 import com.example.galleryapplication.R;
 import com.example.galleryapplication.activities.GalleryViewActivity;
 import com.example.galleryapplication.classes.Observer;
+import com.example.galleryapplication.enumerators.VIEW_DETAIL_MODE;
 import com.example.galleryapplication.enumerators._LAYOUT;
 import com.example.galleryapplication.interfaces.IOnBackPressed;
 
@@ -58,17 +60,19 @@ public class ViewAllGridFragment extends Fragment implements IOnBackPressed {
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         this.recyclerView = view.findViewById(R.id.recyclerView);
+        Log.d("Nothing", "on create view grid fragment");
         loadAllImage(view);
     }
 
     private void loadAllImage(View thisView) {
         ArrayList<MediaFile> mediaEntries = DataHandler.GetListMediaFiles();
-
+        Observer.SubscribeCurrentMediaFiles(mediaEntries);
         MediaFileAdapter mediaFileAdapter =
                 new MediaFileAdapter(
                         thisView.getContext(),
                         mediaEntries,
-                        _LAYOUT._GRID
+                        _LAYOUT._GRID,
+                        VIEW_DETAIL_MODE.NORMAL
                 );
 
         Observer.AddEventListener(

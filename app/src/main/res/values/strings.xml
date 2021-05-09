@@ -4,6 +4,9 @@
     <string name="cancel_btn">Cancel</string>
     <string name="delete_btn">Delete</string>
     <string name="ok_btn">OK</string>
+    <string name="next_btn">Next</string>
+    <string name="add_fab">Add</string>
+    <string name="title_action_cancel">Action has been canceled</string>
 
     <!--    #region Activity Default    -->
     <string name="title_default_1">Photos &amp; Videos</string>
@@ -60,10 +63,28 @@
     <string name="title_delete_confirm">Are you sure?</string>
     <string name="sub_text_delete_confirm">Temporarily delete the item into Trash now?\n(Or Permanently delete the item)</string>
     <string name="title_delete_success">Delete successfully</string>
-    <string name="title_delete_cancel">Delete action has been canceled</string>
     <string name="title_add_to_favourite">Add to favourite successfully</string>
     <string name="title_remove_from_favourite">Remove from favourite successfully</string>
     <!--    #endregion    -->
+
+    <!--    #region Incognito Folder Activity-->
+    <string name="title_new_pin_code_form">Set up pin code</string>
+    <string name="label_pin_code_et">Pin code</string>
+    <string name="label_confirm_pin_code_et">Confirm pin code</string>
+
+    <string name="err_msg_pin_code_lenth">Pin code requires at least 6 digits</string>
+    <string name="err_msg_pin_code_not_match">Confirm pin code does not match</string>
+    <string name="err_msg_pin_code_incorrect">Pin code is not correct</string>
+
+    <string name="err_msg_hide_file_failed">Move to incognito folder failed</string>
+    <string name="err_msg_hide_file_success">Move to incognito folder success</string>
+
+    <string name="sub_text_remove_from_incognito">Remove this item from incognito folder</string>
+    <string name="msg_remove_from_incognito_success">Remove from incognito successfully</string>
+    <string name="msg_remove_from_incognito_failed">Remove from incognito failed</string>
+
+    <string name="msg_copy_media_file_success">Copy file successfully</string>
+    <!--    #endregion-->
 
     <string name="tv_photocamera_pick_6">Photo</string>
     <string name="tv_videocamera_pick_6">Video</string>

@@ -21,6 +21,7 @@
 
         <item name="android:textColorPrimary">@color/colorPrimary_sub</item>
         <item name="android:textColorSecondary">@color/colorVariant_1_sub</item>
+
     </style>
 
     <style name="MoreSettings">
@@ -30,5 +31,8 @@
     <style name="ItemTextAppearance">
         <item name="android:textColor">@color/colorOnPrimary_main</item>
     </style>
+
+
+
 
 </resources>

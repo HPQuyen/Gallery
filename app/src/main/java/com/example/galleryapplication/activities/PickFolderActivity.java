@@ -20,7 +20,7 @@ public class PickFolderActivity extends AppCompatActivity {
 
     //#region Fields
     private ListView listView = null;
-    private FolderAdapter albumAdapter = null;
+    private FolderAdapter folderAdapter = null;
     //#endregion
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
@@ -35,8 +35,8 @@ public class PickFolderActivity extends AppCompatActivity {
         listView = findViewById(R.id.list_album_view);
 
         // Create an adapter class
-        albumAdapter = new FolderAdapter(this, DataHandler.GetListFolderName());
-        listView.setAdapter(albumAdapter);
+        folderAdapter = new FolderAdapter(this, DataHandler.GetListFolderName());
+        listView.setAdapter(folderAdapter);
     }
 
     private int RESULT_CODE;
@@ -53,10 +53,10 @@ public class PickFolderActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Intent returnIntent = new Intent();
-        if(RESULT_CODE == Activity.RESULT_CANCELED || albumAdapter.GetAlbumPicked() == null){
+        if(RESULT_CODE == Activity.RESULT_CANCELED || folderAdapter.GetAlbumPicked() == null){
             setResult(Activity.RESULT_CANCELED, null);
         }else{
-            returnIntent.putExtra(MediaFile.FILE_FOLDER_NAME, albumAdapter.GetAlbumPicked());
+            returnIntent.putExtra(MediaFile.FILE_FOLDER_NAME, folderAdapter.GetAlbumPicked());
             setResult(Activity.RESULT_OK, returnIntent);
         }
         super.onBackPressed();
