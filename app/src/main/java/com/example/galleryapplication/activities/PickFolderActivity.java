@@ -12,7 +12,7 @@ import android.view.WindowManager;
 import android.widget.ListView;
 
 import com.example.galleryapplication.R;
-import com.example.galleryapplication.adapters.AlbumAdapter;
+import com.example.galleryapplication.adapters.FolderAdapter;
 import com.example.galleryapplication.classes.DataHandler;
 import com.example.galleryapplication.classes.MediaFile;
 
@@ -20,7 +20,7 @@ public class PickFolderActivity extends AppCompatActivity {
 
     //#region Fields
     private ListView listView = null;
-    private AlbumAdapter albumAdapter = null;
+    private FolderAdapter albumAdapter = null;
     //#endregion
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
@@ -35,7 +35,7 @@ public class PickFolderActivity extends AppCompatActivity {
         listView = findViewById(R.id.list_album_view);
 
         // Create an adapter class
-        albumAdapter = new AlbumAdapter(this, DataHandler.GetListFolderName());
+        albumAdapter = new FolderAdapter(this, DataHandler.GetListFolderName());
         listView.setAdapter(albumAdapter);
     }
 

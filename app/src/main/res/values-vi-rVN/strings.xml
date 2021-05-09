@@ -59,4 +59,21 @@
 
     <string name="tv_photocamera_pick_6">Ảnh</string>
     <string name="tv_videocamera_pick_6">Video</string>
+    <string name="ok_btn">OK</string>
+    <string name="album_name_1">Tên hình ảnh</string>
+    <string name="album_members_number_1">1 ảnh</string>
+    <string name="info_folder_label_2">Thư mục</string>
+    <string name="title_delete_cancel">Thao tác xóa đã bị hủy</string>
+    <string name="title_add_to_favourite">Thêm vào danh mục yêu thích thành công</string>
+    <string name="title_remove_from_favourite">Xóa khỏi danh mục yêu thích thành công</string>
+    <string name="title_default_v.2_1">Thêm album mới</string>
+    <string name="add_album_save_1">Lưu</string>
+    <string name="album_name_add_album_1">Tên album</string>
+    <string name="album_name_create_error_1">Không thể bỏ trống trường này</string>
+    <string name="add_photo_to_album_1">Thêm ảnh</string>
+    <string name="choose_photos_title_1">Chọn ảnh</string>
+    <string name="number_photo_selected_add_album_1">" được chọn"</string>
+    <string name="album_name_empty_error_warning_1">Tên album không thể bỏ trống</string>
+    <string name="album_name_duplicate_error_warning_1">Tên album đã tồn tại</string>
+    <string name="album_image_empty_error_warning_1">Ít nhất cần có 1 file được chọn</string>
 </resources>

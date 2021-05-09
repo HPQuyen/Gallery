@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.signature.ObjectKey;
 import com.example.galleryapplication.R;
 import com.example.galleryapplication.activities.GalleryViewActivity;
@@ -256,7 +255,7 @@ public class MediaFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                 ((ViewHolder_DateGrid)holder).getConstraintLayout().setOnClickListener(
                         v -> ((GalleryViewActivity) this.context
-                        ).TransitionViewDetail(mediaFile));
+                        ).TransitionViewDetail(mediaFile, () -> {}));
 
                 break;
             case 2:

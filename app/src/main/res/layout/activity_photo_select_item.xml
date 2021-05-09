@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemGridSelectPhotosConstraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/itemGridSelectPhotosImageView"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:contentDescription="@string/image_desc_1"
+        android:padding="1dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageView
+        android:id="@+id/itemGridSelectPhotosOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:contentDescription="@string/image_desc_1"
+        android:padding="1dp"
+        android:scaleType="center"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/itemGridSelectPhotosImageView"/>
+
+    <CheckBox
+        android:id="@+id/itemGridSelectPhotosCheckbox"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:gravity="center"
+        android:checked="false"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

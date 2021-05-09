@@ -20,6 +20,7 @@ import java.time.chrono.MinguoEra;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 public class DataHandler {
@@ -30,10 +31,10 @@ public class DataHandler {
     public static final int ONE = 1;
     public static final int ALL = Integer.MAX_VALUE;
 
-    private static ArrayList<MediaFile> mediaFileArrayList = new ArrayList<>();
-    private static ArrayList<String> folderNameArrayList = new ArrayList<>( );
-    private static ArrayList<String> dateArrayList = new ArrayList<>();
-    private static HashSet<String> mediaFileHashSet = new HashSet<>();
+    private static final ArrayList<MediaFile> mediaFileArrayList = new ArrayList<>();
+    private static final ArrayList<String> folderNameArrayList = new ArrayList<>( );
+    private static final ArrayList<String> dateArrayList = new ArrayList<>();
+    private static final HashSet<String> mediaFileHashSet = new HashSet<>();
     private static ArrayList<String> favouriteIdArrayList = new ArrayList<>();
     private static HashMap<String, ArrayList<String>> listAlbum = new HashMap<>();
 
@@ -189,14 +190,11 @@ public class DataHandler {
     }
 
 
-    /*
-        Get array list media files group by folder name.
-        <param>
-            NUMBER_OF_FILE: ONE or ALL
-        </param>
-        <return>
-            Return null if no media file found.
-        </return>
+    /**
+     *   Get array list media files group by folder name.
+     *
+     *   @param NUMBER_OF_FILE ONE or ALL
+     *   @return               Return null if no media file found.
      */
     @RequiresApi(api = Build.VERSION_CODES.Q)
     public static ArrayList<MediaFile> GetMediaFilesByFolder(@NonNull Context context, String folderName, int NUMBER_OF_FILE){
@@ -213,7 +211,7 @@ public class DataHandler {
                 MediaStore.Files.FileColumns.HEIGHT,
                 MediaStore.Files.FileColumns.WIDTH };
 
-        String selection = MediaStore.Files.FileColumns.MEDIA_TYPE + " = ?" + " AND " + MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME + " = ?" + " OR " + MediaStore.Files.FileColumns.MEDIA_TYPE + " = ?" + " AND " + MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME + " = ?";;
+        String selection = MediaStore.Files.FileColumns.MEDIA_TYPE + " = ?" + " AND " + MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME + " = ?" + " OR " + MediaStore.Files.FileColumns.MEDIA_TYPE + " = ?" + " AND " + MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME + " = ?";
         String []selectionArgs = new String[]{
                 String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
                 folderName,

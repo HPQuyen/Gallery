@@ -1,66 +1,82 @@
 package com.example.galleryapplication.fragments.mainviews;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.galleryapplication.R;
+import com.example.galleryapplication.adapters.AlbumAdapter;
+import com.example.galleryapplication.classes.DataHandler;
+import com.example.galleryapplication.classes.Observer;
+import com.example.galleryapplication.interfaces.IOnBackPressed;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AlbumFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class AlbumFragment extends Fragment {
+import org.jetbrains.annotations.NotNull;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+import java.util.ArrayList;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class AlbumFragment extends Fragment implements IOnBackPressed {
+
+    private RecyclerView recyclerView;
 
     public AlbumFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AlbumFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AlbumFragment newInstance(String param1, String param2) {
-        AlbumFragment fragment = new AlbumFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(
+                R.layout.fragment_album, container, false
+        );
+    }
+
+    @Override
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
+        this.recyclerView = view.findViewById(R.id.albumRecyclerView);
+        loadAllAlbum(view);
+    }
+
+    private void loadAllAlbum(View thisView) {
+        ArrayList<String> albums = DataHandler.GetListAlbumName();
+
+        if (albums != null) {
+            AlbumAdapter albumAdapter =
+                    new AlbumAdapter(
+                            thisView.getContext(),
+                            albums
+                    );
+
+            Observer.AddEventListener(
+                    Observer.ObserverCode.TRIGGER_ADAPTER_CHANGE, () -> {
+                        albumAdapter.SetNewListAlbum(DataHandler.GetListAlbumName());
+                        albumAdapter.notifyDataSetChanged();
+                    }
+            );
+
+            this.recyclerView.setAdapter(albumAdapter);
+            this.recyclerView.setLayoutManager(
+                    new GridLayoutManager(
+                            thisView.getContext(), 2
+                    )
+            );
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_album, container, false);
+    public boolean onBackPressed() {
+        return false;
     }
 }

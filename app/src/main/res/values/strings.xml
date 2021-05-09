@@ -1,6 +1,4 @@
-<resources
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:locale="es" >
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="es">
     <string name="app_name">GalleryApplication</string>
     <string name="content_description">TODO</string>
     <string name="cancel_btn">Cancel</string>
@@ -27,7 +25,9 @@
 
     <string name="griddate_layout_date_1">01/01/2021</string>
 
-    <string name="image_desc_1" >Image</string>
+    <string name="image_desc_1">Image</string>
+    <string name="album_name_1">Image Name</string>
+    <string name="album_members_number_1">1 Photo(s)</string>
 
     <string name="settings_dark_theme_1">Dark Theme</string>
 
@@ -77,4 +77,14 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_default_v.2_1">Add new album</string>
+    <string name="add_album_save_1">Save</string>
+    <string name="album_name_add_album_1">Album name</string>
+    <string name="album_name_create_error_1">This field cannot be empty</string>
+    <string name="add_photo_to_album_1">Add photo(s)</string>
+    <string name="choose_photos_title_1">Choose photo(s)</string>
+    <string name="number_photo_selected_add_album_1">" selected"</string>
+    <string name="album_name_empty_error_warning_1">Album\'s name cannot be empty</string>
+    <string name="album_name_duplicate_error_warning_1">Album\'s name has already existed</string>
+    <string name="album_image_empty_error_warning_1">At least ONE file should be chosen</string>
 </resources>
