@@ -1,20 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
-    xmlns:app="http://schemas.android.com/apk/res-auto" >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <SwitchPreferenceCompat
-        app:key="theme_dark"
-        app:title="@string/settings_dark_theme_1"
-        app:defaultValue="false"
-        app:isPreferenceVisible="false" />
+    <PreferenceCategory
+        android:title="@string/title_basic_setting">
+        <SwitchPreferenceCompat
+            app:key="theme_dark"
+            app:title="@string/settings_dark_theme_1"
+            app:defaultValue="false"
+            app:isPreferenceVisible="false" />
 
-    <ListPreference
-        app:key="language"
-        app:title="@string/settings_language_1"
-        app:entries="@array/language_names"
-        app:entryValues="@array/language_codes"
-        app:defaultValue="@string/language_english_code"
-        app:useSimpleSummaryProvider="true"
-        app:isPreferenceVisible="false"/>
+        <ListPreference
+            app:key="language"
+            app:title="@string/settings_language_1"
+            app:entries="@array/language_names"
+            app:entryValues="@array/language_codes"
+            app:defaultValue="@string/language_english_code"
+            app:useSimpleSummaryProvider="true"
+            app:isPreferenceVisible="false"/>
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
+        android:title="@string/title_other">
+        <Preference
+            app:key="incognito"
+            app:title="@string/title_incognito">
+            <intent
+                android:action="com.example.galleryapplication.activities.IncognitoFolderActivity" />
+        </Preference>
+    </PreferenceCategory>
 
 </PreferenceScreen>

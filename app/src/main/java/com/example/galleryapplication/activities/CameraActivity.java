@@ -9,7 +9,6 @@ import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -35,6 +34,7 @@ import android.widget.VideoView;
 import com.example.galleryapplication.R;
 import com.example.galleryapplication.classes.MediaFile;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.io.IOException;
@@ -76,29 +76,9 @@ public class CameraActivity extends AppCompatActivity {
         Init();
     }
 
-//    private void InitializePlayer(Uri videoUri){
-//        videoView.setVideoURI(videoUri);
-//        videoView.setOnPreparedListener(mp -> {
-//            videoView.seekTo(1);
-//        });
-//    }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void Init(){
-        //        photo_camera_layout = findViewById(R.id.photo_camera_layout);
-//        imageView = (ImageView)this.findViewById(R.id.image_view_preview);
-//        photo_camera_layout.setVisibility(View.GONE);
-//
-//        video_camera_layout = findViewById(R.id.video_camera_layout);
-//        videoView = findViewById(R.id.video_view_preview);
-//        MediaController videoController = new MediaController(this);
-//        videoController.setAnchorView(videoView);
-//        videoView.setMediaController(videoController);
-//        videoView.setOnCompletionListener(mediaPlayer -> {
-//            videoView.seekTo(1);
-//        });
-//        video_camera_layout.setVisibility(View.GONE);
-
 
         final Item[] items = new Item[] {
                 new Item(getString(R.string.tv_photocamera_pick_6), R.drawable.ic_baseline_photo_camera_24),
@@ -230,14 +210,14 @@ public class CameraActivity extends AppCompatActivity {
                 File imgFile = new File(currentPhotoPath);
                 if (imgFile.exists()) {
                     Bitmap photo = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    Log.d("Nothing", currentPhotoPath);
-                    Log.d("Nothing", String.valueOf(photo.getWidth()));
-                    Log.d("Nothing", String.valueOf(photo.getHeight()));
+                    if(MediaFile.SaveImage(this, photo, "Photo & Video")){
+                        Snackbar.make(this, findViewById(R.id.constraintLayout), getString(R.string.msg_save_file_success), Snackbar.LENGTH_SHORT);
+                    }else {
+                        Snackbar.make(this, findViewById(R.id.constraintLayout), getString(R.string.msg_save_file_failed), Snackbar.LENGTH_SHORT);
+                    }
                 }
             } else if (requestCode == VIDEO_CAMERA_REQUEST) {
                 Uri videoUri = data.getData();
-//                InitializePlayer(videoUri);
-//                video_camera_layout.setVisibility(View.VISIBLE);
 
             }
         }
@@ -273,6 +253,9 @@ public class CameraActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("CHANGE", true);
+        setResult(Activity.RESULT_OK, returnIntent);
         super.onBackPressed();
     }
 }

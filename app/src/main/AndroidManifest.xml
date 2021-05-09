@@ -44,7 +44,14 @@
         </provider>
 
         <activity android:name=".activities.AlbumDetailActivity" />
-        <activity android:name=".activities.IncognitoFolderActivity" />
+        <activity
+            android:name=".activities.IncognitoFolderActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="com.example.galleryapplication.activities.IncognitoFolderActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name=".activities.PickFolderActivity" />
         <activity android:name=".activities.CameraActivity" />
         <activity android:name=".activities.VideoDetailActivity" />

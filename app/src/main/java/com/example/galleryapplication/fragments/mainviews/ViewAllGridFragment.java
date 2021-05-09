@@ -60,7 +60,6 @@ public class ViewAllGridFragment extends Fragment implements IOnBackPressed {
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         this.recyclerView = view.findViewById(R.id.recyclerView);
-        Log.d("Nothing", "on create view grid fragment");
         loadAllImage(view);
     }
 

@@ -93,7 +93,7 @@ public class DataHandler {
                     resolution = resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.HEIGHT)) + " x " + resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.WIDTH));
                 }
 
-                MediaFile mediaFile = new MediaFile(id, mediaType, fileUrl, MediaFile.SecondsToDatetimeString(epochTime), MediaFile.FormatFileSize(fileSize), resolution, albumName, favouriteIdArrayList.contains(id), System.currentTimeMillis());
+                MediaFile mediaFile = new MediaFile(id, mediaType, fileUrl, MediaFile.SecondsToDatetimeString(epochTime), MediaFile.FormatFileSize(fileSize), resolution, albumName, favouriteIdArrayList.contains(id), System.currentTimeMillis(), date);
                 mediaFileArrayList.add(mediaFile);
                 mediaFileHashSet.add(id);
             }
@@ -152,7 +152,7 @@ public class DataHandler {
                     resolution = resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.HEIGHT)) + " x " + resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.WIDTH));
                 }
 
-                mediaFileArrayList.add(0, new MediaFile(id, mediaType, fileUrl, MediaFile.SecondsToDatetimeString(epochTime), MediaFile.FormatFileSize(fileSize), resolution, albumName, favouriteIdArrayList.contains(id), System.currentTimeMillis()));
+                mediaFileArrayList.add(0, new MediaFile(id, mediaType, fileUrl, MediaFile.SecondsToDatetimeString(epochTime), MediaFile.FormatFileSize(fileSize), resolution, albumName, favouriteIdArrayList.contains(id), System.currentTimeMillis(), date));
                 mediaFileHashSet.add(id);
                 break;
             }
@@ -169,11 +169,11 @@ public class DataHandler {
     // Get array list folder name
     public static ArrayList<String> GetListFolderName() { return folderNameArrayList; }
 
-    // Get array list date array list
+    // Get array list date
     public static ArrayList<String> GetListDate() { return dateArrayList; }
 
+    // Get array list incognito media file
     public static ArrayList<MediaFile> GetListIncognitoFile() { return incognitoFileArrayList; }
-
     /*
         Get array list album.
         <return>
@@ -195,7 +195,7 @@ public class DataHandler {
      *   Get array list media files group by folder name.
      *
      *   @param NUMBER_OF_FILE ONE or ALL
-     *   @return               Return null if no media file found.
+     *   @return Return null if no media file found.
      */
     @RequiresApi(api = Build.VERSION_CODES.Q)
     public static ArrayList<MediaFile> GetMediaFilesByFolder(@NonNull Context context, String folderName, int NUMBER_OF_FILE){
@@ -235,7 +235,7 @@ public class DataHandler {
                 if(resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.HEIGHT)) != null && resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.WIDTH)) != null){
                     resolution = resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.HEIGHT)) + " x " + resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.WIDTH));
                 }
-                mediaFileArrayList.add(new MediaFile(id, mediaType, fileUrl, MediaFile.SecondsToDatetimeString(epochTime), MediaFile.FormatFileSize(fileSize), resolution, folderName, favouriteIdArrayList.contains(id), System.currentTimeMillis()));
+                mediaFileArrayList.add(new MediaFile(id, mediaType, fileUrl, MediaFile.SecondsToDatetimeString(epochTime), MediaFile.FormatFileSize(fileSize), resolution, folderName, favouriteIdArrayList.contains(id), System.currentTimeMillis(), null));
                 if(NUMBER_OF_FILE == ONE)
                     break;
             }
@@ -245,118 +245,85 @@ public class DataHandler {
         return null;
     }
 
-    // Get array list media files group by date.
+    /**
+     *   Get array list media files group by date.
+     *
+     *   @return Return null if date is not found.
+     */
     @RequiresApi(api = Build.VERSION_CODES.Q)
     public static ArrayList<MediaFile> GetMediaFilesByDate(@NonNull Context context, String date){
-        ArrayList<MediaFile> mediaFileArrayList;
-        Uri queryUri = MediaStore.Files.getContentUri("external");
-        String[] projections = new String[]{
-                MediaStore.Files.FileColumns._ID,
-                MediaStore.Files.FileColumns.BUCKET_ID,
-                MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME,
-                MediaStore.Files.FileColumns.DATA,
-                MediaStore.Files.FileColumns.DATE_ADDED,
-                MediaStore.Files.FileColumns.MEDIA_TYPE,
-                MediaStore.Files.FileColumns.SIZE,
-                MediaStore.Files.FileColumns.HEIGHT,
-                MediaStore.Files.FileColumns.WIDTH };
-
-        String selection = MediaStore.Files.FileColumns.MEDIA_TYPE + " = ?" + " OR " + MediaStore.Files.FileColumns.MEDIA_TYPE + " = ?";
-        String []selectionArgs = new String[]{
-                String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
-                String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) };
-        String sortOrder = MediaStore.Files.FileColumns.DATE_ADDED + " DESC";
-        @SuppressLint("Recycle")
-        Cursor resultSet = context.getContentResolver().query(queryUri, projections, selection, selectionArgs, sortOrder);
-        if(resultSet != null){
-            mediaFileArrayList = new ArrayList<>();
-            while (resultSet.moveToNext()){
-                // Get epochtime in seconds
-                long epochTime = resultSet.getLong(
-                        resultSet.getColumnIndex(MediaStore.Files.FileColumns.DATE_ADDED)
-                );
-                if(!date.equals(MediaFile.SecondsToDateString(epochTime))){
-                    continue;
-                }
-                String albumName = resultSet.getString(
-                        resultSet.getColumnIndex(MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME)
-                );
-                String id = resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns._ID));
-                int mediaType = resultSet.getInt(resultSet.getColumnIndex(MediaStore.Files.FileColumns.MEDIA_TYPE));
-                String fileUrl = resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.DATA));
-                long fileSize = resultSet.getLong(resultSet.getColumnIndex(MediaStore.Files.FileColumns.SIZE));
-                String resolution = "Undefined";
-                if(resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.HEIGHT)) != null && resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.WIDTH)) != null){
-                    resolution = resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.HEIGHT)) + " x " + resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.WIDTH));
-                }
-                mediaFileArrayList.add(new MediaFile(id, mediaType, fileUrl, MediaFile.SecondsToDatetimeString(epochTime), MediaFile.FormatFileSize(fileSize), resolution, albumName, favouriteIdArrayList.contains(id), System.currentTimeMillis()));
+        if(!dateArrayList.contains(date))
+            return null;
+        ArrayList<MediaFile> mediaFileList = new ArrayList<>();
+        for (int i = 0; i < mediaFileArrayList.size(); i++) {
+            if(mediaFileArrayList.get(i).date.equals(date)){
+                mediaFileList.add(mediaFileArrayList.get(i));
             }
-            return mediaFileArrayList;
         }
-        Toast.makeText(context,"No such file", Toast.LENGTH_LONG).show();
-        return null;
-
+        return mediaFileList;
     }
 
-    /*
-        Get array list media files group by album name.
-        <param>
-            NUMBER_OF_FILE: ONE or ALL
-        </param>
-        <return>
-            Return null if no media file found.
-        </return>
+
+    /**
+     *   Get array list date group by album.
+     *
+     *   @return    Return null if album is not found.
+     */
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    public static ArrayList<String> GetDateByAlbum(@NonNull Context context, String albumName){
+        if(!albumHashMap.containsKey(albumName))
+            return null;
+        ArrayList<String> mediaFileDate = new ArrayList<>();
+        ArrayList<String> mediaFileId = albumHashMap.get(albumName);
+        for (MediaFile mediaFile : mediaFileArrayList) {
+            if(mediaFileId.contains(mediaFile.id) && !mediaFileDate.contains(mediaFile.date)){
+                mediaFileDate.add(mediaFile.date);
+            }
+        }
+        return mediaFileDate;
+    }
+
+    /**
+     *   Get array list media files group by date and album.
+     *
+     *   @return    Return null if no date not found.
+     */
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    public static ArrayList<MediaFile> GetMediaFilesByAlbumDate(@NonNull Context context, String albumName, String date){
+        if(!albumHashMap.containsKey(albumName))
+            return null;
+        ArrayList<MediaFile> mediaFileList = new ArrayList<>();
+        ArrayList<String> mediaFileId = albumHashMap.get(albumName);
+        for (MediaFile mediaFile : mediaFileArrayList) {
+            if(mediaFileId.contains(mediaFile.id) && mediaFile.date.equals(date)){
+                mediaFileList.add(mediaFile);
+            }
+        }
+        return mediaFileList;
+    }
+
+    /**
+     *   Get array list media files group by folder name.
+     *
+     *   @param NUMBER_OF_FILE ONE or ALL
+     *   @return Return null if no album name file found.
      */
     @RequiresApi(api = Build.VERSION_CODES.Q)
     public static ArrayList<MediaFile> GetMediaFileByAlbum(@NonNull Context context, String albumName, int NUMBER_OF_FILE){
-        ArrayList<MediaFile> mediaFileArrayList;
-        Uri queryUri = MediaStore.Files.getContentUri("external");
-        String[] projections = new String[]{
-                MediaStore.Files.FileColumns._ID,
-                MediaStore.Files.FileColumns.BUCKET_ID,
-                MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME,
-                MediaStore.Files.FileColumns.DATA,
-                MediaStore.Files.FileColumns.DATE_ADDED,
-                MediaStore.Files.FileColumns.MEDIA_TYPE,
-                MediaStore.Files.FileColumns.SIZE,
-                MediaStore.Files.FileColumns.HEIGHT,
-                MediaStore.Files.FileColumns.WIDTH };
-
-        String selection = MediaStore.Files.FileColumns.MEDIA_TYPE + " = ?" + " OR " + MediaStore.Files.FileColumns.MEDIA_TYPE + " = ?";
-        String []selectionArgs = new String[]{
-                String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE),
-                String.valueOf(MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO)};
-        String sortOrder = MediaStore.Files.FileColumns.DATE_ADDED + " DESC";
-
-        @SuppressLint("Recycle")
-        Cursor resultSet = context.getContentResolver().query(queryUri, projections, selection, selectionArgs, sortOrder);
-        if(resultSet != null){
-            mediaFileArrayList = new ArrayList<>();
-            while (resultSet.moveToNext()){
-                String id = resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns._ID));
-                if(albumName.equals("Favourite") && !favouriteIdArrayList.contains(id)){
-                    continue;
+        if(!albumHashMap.containsKey(albumName))
+            return null;
+        ArrayList<MediaFile> mediaFileList = new ArrayList<>();
+        ArrayList<String> mediaFileId = albumHashMap.get(albumName);
+        for (int i = 0; i < mediaFileId.size(); i++) {
+            for (int i1 = 0; i1 < mediaFileArrayList.size(); i1++) {
+                if(mediaFileArrayList.get(i1).id.equals(mediaFileId.get(i))){
+                    mediaFileList.add(mediaFileArrayList.get(i1));
+                    if(NUMBER_OF_FILE == ONE)
+                        break;
                 }
-                if(!Objects.requireNonNull(albumHashMap.get(albumName)).contains(id))
-                    continue;
-                // Get epochtime in seconds
-                long epochTime = resultSet.getLong(resultSet.getColumnIndex(MediaStore.Files.FileColumns.DATE_ADDED));
-                int mediaType = resultSet.getInt(resultSet.getColumnIndex(MediaStore.Files.FileColumns.MEDIA_TYPE));
-                String fileUrl = resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.DATA));
-                long fileSize = resultSet.getLong(resultSet.getColumnIndex(MediaStore.Files.FileColumns.SIZE));
-                String resolution = "Undefined";
-                if(resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.HEIGHT)) != null && resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.WIDTH)) != null){
-                    resolution = resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.HEIGHT)) + " x " + resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.WIDTH));
-                }
-                String folderName = resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME));
-                mediaFileArrayList.add(new MediaFile(id, mediaType, fileUrl, MediaFile.SecondsToDatetimeString(epochTime), MediaFile.FormatFileSize(fileSize), resolution, folderName, favouriteIdArrayList.contains(id), System.currentTimeMillis()));
-                if(NUMBER_OF_FILE == ONE)
-                    break;
             }
-            return mediaFileArrayList.size() == 0 ? null : mediaFileArrayList;
         }
-        Toast.makeText(context,"No such file", Toast.LENGTH_LONG).show();
-        return null;
+        return mediaFileList;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
@@ -396,45 +363,7 @@ public class DataHandler {
                     resolution = resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.HEIGHT)) + " x " + resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.WIDTH));
                 }
                 String folderName = resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME));
-                mediaFile = new MediaFile(id, mediaType, fileUrl, MediaFile.SecondsToDatetimeString(epochTime), MediaFile.FormatFileSize(fileSize), resolution, folderName, favouriteIdArrayList.contains(id), System.currentTimeMillis());
-            }
-            return mediaFile;
-        }
-        Toast.makeText(context,"No such file", Toast.LENGTH_LONG).show();
-        return null;
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.Q)
-    public static MediaFile GetMediaFileByUri(@NonNull Context context, Uri uri){
-        MediaFile mediaFile = null;
-        String[] projections = new String[]{
-                MediaStore.Files.FileColumns._ID,
-                MediaStore.Files.FileColumns.BUCKET_ID,
-                MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME,
-                MediaStore.Files.FileColumns.DATA,
-                MediaStore.Files.FileColumns.DATE_ADDED,
-                MediaStore.Files.FileColumns.MEDIA_TYPE,
-                MediaStore.Files.FileColumns.SIZE,
-                MediaStore.Files.FileColumns.HEIGHT,
-                MediaStore.Files.FileColumns.WIDTH };
-
-        String sortOrder = MediaStore.Files.FileColumns.DATE_ADDED + " DESC";
-        @SuppressLint("Recycle")
-        Cursor resultSet = context.getContentResolver().query(uri, projections, null, null, sortOrder);
-        if(resultSet != null){
-            if (resultSet.moveToNext()){
-                // Get epochtime in seconds
-                String id = resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns._ID));
-                long epochTime = resultSet.getLong(resultSet.getColumnIndex(MediaStore.Files.FileColumns.DATE_ADDED));
-                int mediaType = resultSet.getInt(resultSet.getColumnIndex(MediaStore.Files.FileColumns.MEDIA_TYPE));
-                String fileUrl = resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.DATA));
-                long fileSize = resultSet.getLong(resultSet.getColumnIndex(MediaStore.Files.FileColumns.SIZE));
-                String resolution = "Undefined";
-                if(resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.HEIGHT)) != null && resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.WIDTH)) != null){
-                    resolution = resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.HEIGHT)) + " x " + resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.WIDTH));
-                }
-                String folderName = resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME));
-                mediaFile = new MediaFile(id, mediaType, fileUrl, MediaFile.SecondsToDatetimeString(epochTime), MediaFile.FormatFileSize(fileSize), resolution, folderName, favouriteIdArrayList.contains(id), System.currentTimeMillis());
+                mediaFile = new MediaFile(id, mediaType, fileUrl, MediaFile.SecondsToDatetimeString(epochTime), MediaFile.FormatFileSize(fileSize), resolution, folderName, favouriteIdArrayList.contains(id), System.currentTimeMillis(), MediaFile.SecondsToDateString(epochTime));
             }
             return mediaFile;
         }
@@ -552,6 +481,13 @@ public class DataHandler {
             return false;
         albumHashMap.clear();
         SaveAlbum(context);
+        return true;
+    }
+
+    public static boolean RenameAlbum(@NonNull Context context, String albumName, String replaceName){
+        if(!albumHashMap.containsKey(albumName) || albumHashMap.containsKey(replaceName))
+            return false;
+        albumHashMap.put(albumName, albumHashMap.remove(albumName));
         return true;
     }
 

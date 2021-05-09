@@ -66,6 +66,7 @@ public class ViewAllDateFragment extends Fragment implements IOnBackPressed {
                         listDate
                 );
 
+
         Observer.AddEventListener(
                 Observer.ObserverCode.TRIGGER_ADAPTER_CHANGE,
                 dateGridMediaFileAdapter::notifyDataSetChanged
@@ -74,8 +75,7 @@ public class ViewAllDateFragment extends Fragment implements IOnBackPressed {
         this.recyclerView.setAdapter(dateGridMediaFileAdapter);
         this.recyclerView.setLayoutManager(
                 new LinearLayoutManager(
-                        thisView.getContext(), LinearLayoutManager.VERTICAL, false
-                )
+                        thisView.getContext(), LinearLayoutManager.VERTICAL, false)
         );
     }
 
