@@ -19,6 +19,7 @@ import com.example.galleryapplication.classes.MediaFile;
 import com.example.galleryapplication.classes.Observer;
 import com.example.galleryapplication.enumerators.VIEW_DETAIL_MODE;
 import com.example.galleryapplication.enumerators._LAYOUT;
+import com.example.galleryapplication.enumerators._VIEW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,8 @@ public class DateGridMediaFileAdapter extends RecyclerView.Adapter<RecyclerView.
 
     private final Context context;
     private List<String> dateList;
+    private final String albumName;
+    private final _VIEW mode;
 
 
     /**
@@ -65,9 +68,16 @@ public class DateGridMediaFileAdapter extends RecyclerView.Adapter<RecyclerView.
     /**
      * Initialize the dataset of the Adapter.
      */
-    public DateGridMediaFileAdapter(Context context, List<String> dateList) {
+    public DateGridMediaFileAdapter(
+            Context context,
+            List<String> dateList,
+            String albumName,
+            _VIEW mode
+    ) {
         this.context = context;
         this.dateList = dateList;
+        this.albumName = albumName;
+        this.mode = mode;
     }
 
     public void UpdateNewListDate(ArrayList<String> dateList){
@@ -93,7 +103,22 @@ public class DateGridMediaFileAdapter extends RecyclerView.Adapter<RecyclerView.
 
         ((ViewHolder) holder).getTextView().setText(date);
 
-        ArrayList<MediaFile> mediaFiles = DataHandler.GetMediaFilesByDate(this.context, date);
+        ArrayList<MediaFile> mediaFiles;
+        switch (mode) {
+            case _ALL:
+                mediaFiles =  DataHandler.GetMediaFilesByDate(this.context, date);
+                break;
+            case _ALBUMS:
+                mediaFiles = DataHandler.GetMediaFilesByAlbumDate(this.context, albumName, date);
+                break;
+            case _FAVORITE:
+                mediaFiles =  DataHandler.GetMediaFileByFavouriteDate(date);
+                break;
+            default:
+                mediaFiles = new ArrayList<>();
+                break;
+        }
+
 
         MediaFileAdapter mediaFileAdapter =
                 new MediaFileAdapter(

@@ -1,6 +1,5 @@
 package com.example.galleryapplication.utils;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
@@ -11,6 +10,10 @@ public class SharedPrefs {
 
     public static final String LANGUAGE = "language";
     public static final String DARKTHEME = "theme_dark";
+
+    public static final String VIEWALLLAYOUT = "viewall_layout";
+    public static final String ALBUMLAYOUT = "album_layout";
+    public static final String FAVORITELAYOUT = "favorite_layout";
 
     private static SharedPrefs instance;
     private final SharedPreferences sharedPreferences;

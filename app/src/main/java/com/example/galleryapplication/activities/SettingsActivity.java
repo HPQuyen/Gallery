@@ -2,7 +2,6 @@ package com.example.galleryapplication.activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -14,7 +13,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.galleryapplication.R;
 import com.example.galleryapplication.fragments.subviews.settings.GeneralSettingsFragment;
-import com.example.galleryapplication.utils.SharedPrefs;
 
 public class SettingsActivity extends AppCompatActivity {
 

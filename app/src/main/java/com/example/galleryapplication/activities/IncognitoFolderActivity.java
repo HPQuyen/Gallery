@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.ClipData;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,20 +21,16 @@ import com.example.galleryapplication.adapters.MediaFileAdapter;
 import com.example.galleryapplication.classes.Constants;
 import com.example.galleryapplication.classes.DataHandler;
 import com.example.galleryapplication.classes.MediaFile;
-import com.example.galleryapplication.classes.Observer;
 import com.example.galleryapplication.enumerators.VIEW_DETAIL_MODE;
 import com.example.galleryapplication.enumerators._LAYOUT;
 import com.example.galleryapplication.utils.SharedPrefs;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.jacknkiarie.signinui.models.SignInUI;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @SuppressLint("IntentReset")

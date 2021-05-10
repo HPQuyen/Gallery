@@ -1,45 +1,41 @@
-package com.example.galleryapplication.fragments.mainviews;
+package com.example.galleryapplication.fragments.subviews.favorite;
 
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.galleryapplication.R;
-import com.example.galleryapplication.adapters.DateGridMediaFileAdapter;
 import com.example.galleryapplication.adapters.MediaFileAdapter;
 import com.example.galleryapplication.classes.DataHandler;
 import com.example.galleryapplication.classes.MediaFile;
 import com.example.galleryapplication.classes.Observer;
+import com.example.galleryapplication.enumerators.VIEW_DETAIL_MODE;
 import com.example.galleryapplication.enumerators._LAYOUT;
-import com.example.galleryapplication.enumerators._VIEW;
 import com.example.galleryapplication.interfaces.IOnBackPressed;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class ViewAllDateFragment extends Fragment implements IOnBackPressed {
+public class FavoriteDetailsFragment extends Fragment implements IOnBackPressed {
 
     private RecyclerView recyclerView;
 
-    public ViewAllDateFragment() {
+    public FavoriteDetailsFragment() {
 
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -48,36 +44,40 @@ public class ViewAllDateFragment extends Fragment implements IOnBackPressed {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(
-                R.layout.fragment_viewall_date, container, false
+                R.layout.fragment_viewall_details, container, false
         );
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
-        this.recyclerView = view.findViewById(R.id.parentDateRecyclerView);
-        loadAllImage(view);
+        this.recyclerView = view.findViewById(R.id.recyclerView);
+        loadFavoriteImages(view);
     }
 
-    private void loadAllImage(View thisView) {
-        ArrayList<String> listDate = DataHandler.GetListDate();
+    @RequiresApi(api = Build.VERSION_CODES.R)
+    private void loadFavoriteImages(View thisView) {
+        ArrayList<MediaFile> mediaFiles = DataHandler.GetMediaFileByFavourite();
 
-        DateGridMediaFileAdapter dateGridMediaFileAdapter =
-                new DateGridMediaFileAdapter(
+        Observer.SubscribeCurrentMediaFiles(mediaFiles);
+        MediaFileAdapter mediaFileAdapter =
+                new MediaFileAdapter(
                         thisView.getContext(),
-                        listDate,
-                        null,
-                        _VIEW._ALL
+                        mediaFiles,
+                        _LAYOUT._DETAILS,
+                        VIEW_DETAIL_MODE.NORMAL
                 );
 
         Observer.AddEventListener(
                 Observer.ObserverCode.TRIGGER_ADAPTER_CHANGE,
-                dateGridMediaFileAdapter::notifyDataSetChanged
+                mediaFileAdapter::notifyDataSetChanged
         );
 
-        this.recyclerView.setAdapter(dateGridMediaFileAdapter);
+        this.recyclerView.setAdapter(mediaFileAdapter);
         this.recyclerView.setLayoutManager(
                 new LinearLayoutManager(
-                        thisView.getContext(), LinearLayoutManager.VERTICAL, false)
+                        thisView.getContext(), RecyclerView.VERTICAL, false
+                )
         );
     }
 
