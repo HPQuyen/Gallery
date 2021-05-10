@@ -43,6 +43,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <activity android:name=".activities.ModifyAlbumActivity" />
         <activity android:name=".activities.AlbumDetailActivity" />
         <activity
             android:name=".activities.IncognitoFolderActivity"

@@ -115,4 +115,11 @@
     <string name="album_image_empty_error_warning_1">At least ONE file should be chosen</string>
     <string name="title_favorite_1">Favorite</string>
     <string name="navbar_camera_1">Camera</string>
+    <string name="delete_album_1">Delete album</string>
+    <string name="delete_album_dialog_message_1">Are you certain to delete this album?</string>
+    <string name="delete_album_dialog_title_1">Delete album</string>
+    <string name="delete_album_ok_1">OK</string>
+    <string name="delete_album_cancel_1">Cancel</string>
+    <string name="modify_album_1">Modify album</string>
+    <string name="modify_photos_1">Modify photos</string>
 </resources>

@@ -272,7 +272,7 @@ public class DataHandler {
     @RequiresApi(api = Build.VERSION_CODES.Q)
     public static ArrayList<String> GetDateByAlbum(@NonNull Context context, String albumName){
         if(!albumHashMap.containsKey(albumName))
-            return null;
+            return new ArrayList<>();
         ArrayList<String> mediaFileDate = new ArrayList<>();
         ArrayList<String> mediaFileId = albumHashMap.get(albumName);
         for (MediaFile mediaFile : mediaFileArrayList) {
@@ -291,7 +291,7 @@ public class DataHandler {
     @RequiresApi(api = Build.VERSION_CODES.Q)
     public static ArrayList<MediaFile> GetMediaFilesByAlbumDate(@NonNull Context context, String albumName, String date){
         if(!albumHashMap.containsKey(albumName))
-            return null;
+            return new ArrayList<>();
         ArrayList<MediaFile> mediaFileList = new ArrayList<>();
         ArrayList<String> mediaFileId = albumHashMap.get(albumName);
         for (MediaFile mediaFile : mediaFileArrayList) {
@@ -411,6 +411,13 @@ public class DataHandler {
                 }
             }
         }
+        Iterator<Map.Entry<String, ArrayList<String>>> i = albumHashMap.entrySet().iterator();
+        while (i.hasNext()){
+            Map.Entry<String, ArrayList<String>> album = i.next();
+            if(album.getValue().size() <= 0){
+                i.remove();
+            }
+        }
         SaveAlbum(context);
     }
 
@@ -457,11 +464,9 @@ public class DataHandler {
         </return>
      */
     public static boolean UpdateAlbum(@NonNull Context context, String albumName, ArrayList<String> listImage){
-        if(albumHashMap.containsKey(albumName))
+        if(!albumHashMap.containsKey(albumName))
             return false;
-        for (String s : listImage) {
-            albumHashMap.get(albumName).add(s);
-        }
+        albumHashMap.put(albumName, listImage);
         SaveAlbum(context);
         return true;
     }
@@ -477,9 +482,9 @@ public class DataHandler {
         </return>
      */
     public static boolean RemoveAlbum(@NonNull Context context, String albumName){
-        if(albumHashMap.containsKey(albumName))
+        if(!albumHashMap.containsKey(albumName))
             return false;
-        albumHashMap.clear();
+        albumHashMap.remove(albumName);
         SaveAlbum(context);
         return true;
     }
@@ -487,7 +492,8 @@ public class DataHandler {
     public static boolean RenameAlbum(@NonNull Context context, String albumName, String replaceName){
         if(!albumHashMap.containsKey(albumName) || albumHashMap.containsKey(replaceName))
             return false;
-        albumHashMap.put(albumName, albumHashMap.remove(albumName));
+        albumHashMap.put(replaceName, albumHashMap.remove(albumName));
+        SaveAlbum(context);
         return true;
     }
 

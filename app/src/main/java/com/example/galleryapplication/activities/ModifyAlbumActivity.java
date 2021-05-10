@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +23,7 @@ import com.example.galleryapplication.classes.DataHandler;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-public class CreateAlbumActivity extends AppCompatActivity {
+public class ModifyAlbumActivity extends AppCompatActivity {
 
     private Menu optionsMenuActionBar;
 
@@ -30,6 +31,7 @@ public class CreateAlbumActivity extends AppCompatActivity {
     private TextInputLayout albumInputLayout;
     private TextInputEditText albumNameEditText;
 
+    private Bundle bundle = null;
     private Intent photoSelectIntent;
 
     @Override
@@ -50,8 +52,22 @@ public class CreateAlbumActivity extends AppCompatActivity {
         mainActionBar.setHomeAsUpIndicator(R.drawable.ic_back_to_previous);
         mainActionBar.setDisplayHomeAsUpEnabled(true);
 
+        TextView titleTextView = findViewById(R.id.modifyAlbumTitle);
+        titleTextView.setText(R.string.modify_album_1);
+
+        if (getIntent().getExtras() != null) {
+            bundle = getIntent().getExtras();
+        }
+
         albumInputLayout = findViewById(R.id.albumModifyNameInputLayout);
         albumNameEditText = findViewById(R.id.albumModifyNameEditText);
+
+        if (bundle != null) {
+            albumNameEditText.setText(bundle.getString("ALBUM_NAME"));
+        }
+
+        Button modifyButton = findViewById(R.id.buttonModifyPhotosToAlbum);
+        modifyButton.setText(R.string.modify_photos_1);
 
         albumNameEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -75,8 +91,17 @@ public class CreateAlbumActivity extends AppCompatActivity {
         });
 
         selectedTextView = findViewById(R.id.numberModifyPhotosToAlbum);
+
         String displayText = "0" + getString(R.string.number_photo_selected_add_album_1);
         selectedTextView.setText(displayText);
+
+        if (bundle != null) {
+            displayText =
+                    bundle.getStringArrayList("SELECTED_MEDIA").size()
+                            + getString(R.string.number_photo_selected_add_album_1);
+
+            selectedTextView.setText(displayText);
+        }
     }
 
     @Override
@@ -110,33 +135,27 @@ public class CreateAlbumActivity extends AppCompatActivity {
 
         if (albumName.length() == 0) {
             albumInputLayout.setError(getString(R.string.album_name_create_error_1));
-
-            return;
-        }
-        else {
-            if (DataHandler.GetListAlbumName() != null
-                    && DataHandler.GetListAlbumName().contains(albumName)
-            ) {
-                albumInputLayout.setError(getString(R.string.album_name_duplicate_error_warning_1));
+        } else if (!(bundle != null
+                && bundle.getString("ALBUM_NAME").equals(albumName))
+                && (DataHandler.GetListAlbumName() != null
+                && DataHandler.GetListAlbumName().contains(albumName))
+        ) {
+            albumInputLayout.setError(getString(R.string.album_name_duplicate_error_warning_1));
+        } else {
+            if (photoSelectIntent != null
+                    && photoSelectIntent.getExtras()
+                    .getStringArrayList("SELECTED_MEDIA").size() == 0) {
+                Toast.makeText(
+                        this,
+                        getString(R.string.album_image_empty_error_warning_1),
+                        Toast.LENGTH_SHORT
+                ).show();
 
                 return;
             }
+
+            backToPrevious(RESULT_OK);
         }
-
-        if (photoSelectIntent == null
-                || photoSelectIntent.getExtras() == null
-                || photoSelectIntent.getExtras()
-                    .getStringArrayList("SELECTED_MEDIA").size() == 0) {
-            Toast.makeText(
-                    this,
-                    getString(R.string.album_image_empty_error_warning_1),
-                    Toast.LENGTH_SHORT
-            ).show();
-
-            return;
-        }
-
-        backToPrevious(RESULT_OK);
     }
 
     @Override
@@ -162,7 +181,7 @@ public class CreateAlbumActivity extends AppCompatActivity {
 
     public void selectPhotos (View view) {
         Intent intent =
-                new Intent(CreateAlbumActivity.this, PhotoSelectActivity.class);
+                new Intent(ModifyAlbumActivity.this, PhotoSelectActivity.class);
 
         if (photoSelectIntent != null && photoSelectIntent.getExtras() != null) {
             // TODO: PutExtras to new Intent
@@ -170,6 +189,12 @@ public class CreateAlbumActivity extends AppCompatActivity {
                     "SELECTED_MEDIA",
                     photoSelectIntent.getExtras()
                             .getStringArrayList("SELECTED_MEDIA")
+            );
+        }
+        else {
+            intent.putStringArrayListExtra(
+                    "SELECTED_MEDIA",
+                    bundle.getStringArrayList("SELECTED_MEDIA")
             );
         }
 
@@ -187,8 +212,10 @@ public class CreateAlbumActivity extends AppCompatActivity {
 
             intent.putStringArrayListExtra(
                     "SELECTED_MEDIA",
-                    photoSelectIntent.getExtras()
-                            .getStringArrayList("SELECTED_MEDIA")
+                    (photoSelectIntent == null) ?
+                            bundle.getStringArrayList("SELECTED_MEDIA") :
+                            photoSelectIntent.getExtras()
+                                    .getStringArrayList("SELECTED_MEDIA")
             );
         }
 

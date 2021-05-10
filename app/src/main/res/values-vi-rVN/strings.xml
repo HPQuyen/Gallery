@@ -78,4 +78,11 @@
     <string name="album_image_empty_error_warning_1">Ít nhất cần có 1 file được chọn</string>
     <string name="title_favorite_1">Mục yêu thích</string>
     <string name="navbar_camera_1">Máy ảnh</string>
+    <string name="modify_album_1">Chỉnh sửa album</string>
+    <string name="delete_album_1">Xóa album</string>
+    <string name="delete_album_dialog_message_1">Bạn có chắc muốn xóa bộ sưu tập này chứ?</string>
+    <string name="delete_album_dialog_title_1">Xóa album</string>
+    <string name="delete_album_ok_1">OK</string>
+    <string name="delete_album_cancel_1">Hủy</string>
+    <string name="modify_photos_1">Thay đổi ảnh</string>
 </resources>

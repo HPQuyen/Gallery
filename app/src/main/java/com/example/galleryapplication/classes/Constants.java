@@ -21,6 +21,7 @@ public class Constants {
         public static final int CREATE_ALBUM_REQUEST_CODE = 1504;
         public static final int PHOTO_SELECT_REQUEST_CODE = 4051;
         public static final int ALBUM_DETAIL_REQUEST_CODE = 1307;
+        public static final int ALBUM_MODIFY_REQUEST_CODE = 7031;
     }
 
 }

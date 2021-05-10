@@ -12,7 +12,7 @@
         android:enabled="true" />
     <item
         android:id="@+id/edit_btn"
-        android:icon="@drawable/ic_baseline_edit_24"
+        android:icon="@drawable/ic_edit_album"
         android:title="@string/edit_btn_2"
         android:enabled="true" />
 </menu>

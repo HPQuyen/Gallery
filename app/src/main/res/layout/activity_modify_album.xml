@@ -9,7 +9,7 @@
     tools:context=".activities.CreateAlbumActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/addAlbumToolbar"
+        android:id="@+id/modifyAlbumToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
@@ -20,7 +20,7 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
-            android:id="@+id/addAlbumTitle"
+            android:id="@+id/modifyAlbumTitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@string/title_default_v.2_1"
@@ -38,7 +38,7 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/albumCreateNameInputLayout"
+            android:id="@+id/albumModifyNameInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="50dp"
@@ -49,10 +49,10 @@
             app:counterMaxLength="256"
             app:errorEnabled="true"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/buttonAddPhotosToAlbum">
+            app:layout_constraintBottom_toTopOf="@id/buttonModifyPhotosToAlbum">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/albumCreateNameEditText"
+                android:id="@+id/albumModifyNameEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
@@ -69,7 +69,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/buttonAddPhotosToAlbum"
+            android:id="@+id/buttonModifyPhotosToAlbum"
             android:layout_marginHorizontal="50dp"
             android:layout_marginTop="15dp"
             android:textSize="20sp"
@@ -85,14 +85,14 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/numberAddPhotosToAlbum"
+            android:id="@+id/numberModifyPhotosToAlbum"
             android:layout_marginHorizontal="50dp"
             android:layout_marginTop="15dp"
             android:textSize="20sp"
             android:textColor="@color/colorPrimary_main"
             android:text="@string/number_photo_selected_add_album_1"
             android:gravity="right"
-            app:layout_constraintTop_toBottomOf="@+id/buttonAddPhotosToAlbum"
+            app:layout_constraintTop_toBottomOf="@+id/buttonModifyPhotosToAlbum"
             tools:ignore="RtlHardcoded" />
 
 
