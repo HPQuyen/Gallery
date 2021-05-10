@@ -28,6 +28,7 @@ public class DateGridMediaFileAdapter extends RecyclerView.Adapter<RecyclerView.
     private final Context context;
     private List<String> dateList;
 
+
     /**
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder_Grid).

@@ -61,7 +61,7 @@ public class ViewAllDetailsFragment extends Fragment implements IOnBackPressed {
     @RequiresApi(api = Build.VERSION_CODES.R)
     private void loadAllImage(View thisView) {
         ArrayList<MediaFile> mediaEntries = DataHandler.GetListMediaFiles();
-        Observer.SubscribeCurrentMediaFiles(mediaEntries);
+        //Observer.SubscribeCurrentMediaFiles(mediaEntries);
         MediaFileAdapter mediaFileAdapter =
                 new MediaFileAdapter(
                         thisView.getContext(),

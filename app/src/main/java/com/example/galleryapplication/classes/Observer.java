@@ -47,7 +47,6 @@ public class Observer {
             localEventListener.get(eventCode).add(null);
         }
         localEventListener.get(eventCode).set(0, action);
-
     }
 
     public static void AddEventListener(Byte eventCode, Consumer consumer){

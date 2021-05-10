@@ -246,6 +246,7 @@ public class MediaFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     long currentTime = System.currentTimeMillis();
                     if (currentTime - lastTimeClick <= MAX_DURATION)
                         return;
+                    Observer.SubscribeCurrentMediaFiles((ArrayList<MediaFile>) mediaFiles);
                     lastTimeClick = currentTime;
                     YoYo.with(Techniques.BounceIn).onEnd(a -> TransitionViewDetail(position)).duration(300).playOn(v);
                 });
@@ -273,10 +274,10 @@ public class MediaFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
                 ((ViewHolder_DateGrid)holder).getConstraintLayout().setOnClickListener(
                         v -> {
-                            Observer.SubscribeCurrentMediaFiles((ArrayList<MediaFile>) mediaFiles);
                             long currentTime = System.currentTimeMillis();
                             if(currentTime - lastTimeClick <= MAX_DURATION)
                                 return;
+                            Observer.SubscribeCurrentMediaFiles((ArrayList<MediaFile>) mediaFiles);
                             lastTimeClick = currentTime;
                             YoYo.with(Techniques.BounceIn).onEnd(a -> {
                                 TransitionViewDetail(position);
@@ -314,6 +315,7 @@ public class MediaFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             long currentTime = System.currentTimeMillis();
                             if (currentTime - lastTimeClick <= MAX_DURATION)
                                 return;
+                            Observer.SubscribeCurrentMediaFiles((ArrayList<MediaFile>) mediaFiles);
                             lastTimeClick = currentTime;
                             YoYo.with(Techniques.BounceIn).onEnd(a -> TransitionViewDetail(position)).duration(300).playOn(v);
                         });

@@ -65,7 +65,7 @@ public class ViewAllGridFragment extends Fragment implements IOnBackPressed {
 
     private void loadAllImage(View thisView) {
         ArrayList<MediaFile> mediaEntries = DataHandler.GetListMediaFiles();
-        Observer.SubscribeCurrentMediaFiles(mediaEntries);
+        //Observer.SubscribeCurrentMediaFiles(mediaEntries);
         MediaFileAdapter mediaFileAdapter =
                 new MediaFileAdapter(
                         thisView.getContext(),

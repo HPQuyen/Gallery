@@ -193,6 +193,7 @@ public class AlbumDetailActivity extends AppCompatActivity {
                         Log.d("Nothing", "" + data.getBooleanExtra("CHANGE", false));
                         if(data.getBooleanExtra("CHANGE", false))
                         {
+                            this.isChanged = true;
                             Observer.Invoke(Observer.ObserverCode.TRIGGER_ADAPTER_ALBUM_CHANGE, getAlbumName());
                         }
                     }

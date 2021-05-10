@@ -52,7 +52,7 @@ public class AlbumFragment extends Fragment implements IOnBackPressed {
 
     private void loadAllAlbum(View thisView) {
         ArrayList<String> albums = DataHandler.GetListAlbumName();
-        Log.d("Nothing","Nothing load all albums");
+        Log.d("Nothing","Load all albums");
         if (albums != null) {
             AlbumAdapter albumAdapter =
                     new AlbumAdapter(

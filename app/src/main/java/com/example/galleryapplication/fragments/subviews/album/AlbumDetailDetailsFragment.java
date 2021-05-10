@@ -66,7 +66,7 @@ public class AlbumDetailDetailsFragment extends Fragment implements IOnBackPress
                 DataHandler.ALL
         );
 
-        Observer.SubscribeCurrentMediaFiles(mediaFiles);
+        //Observer.SubscribeCurrentMediaFiles(mediaFiles);
         MediaFileAdapter mediaFileAdapter =
                 new MediaFileAdapter(
                         thisView.getContext(),
