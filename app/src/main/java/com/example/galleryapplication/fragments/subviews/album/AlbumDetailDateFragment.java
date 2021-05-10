@@ -19,6 +19,7 @@ import com.example.galleryapplication.activities.AlbumDetailActivity;
 import com.example.galleryapplication.adapters.DateGridMediaFileAdapter;
 import com.example.galleryapplication.classes.DataHandler;
 import com.example.galleryapplication.classes.Observer;
+import com.example.galleryapplication.enumerators._VIEW;
 import com.example.galleryapplication.interfaces.IOnBackPressed;
 
 import org.jetbrains.annotations.NotNull;
@@ -58,12 +59,16 @@ public class AlbumDetailDateFragment extends Fragment implements IOnBackPressed 
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     private void loadAllAlbumImages(View thisView) {
-        ArrayList<String> listDate = DataHandler.GetDateByAlbum(getContext(), ((AlbumDetailActivity)requireActivity()).getAlbumName());
+        ArrayList<String> listDate = DataHandler.GetDateByAlbum(
+                getContext(), ((AlbumDetailActivity)requireActivity()).getAlbumName()
+        );
 
         DateGridMediaFileAdapter dateGridMediaFileAdapter =
                 new DateGridMediaFileAdapter(
                         thisView.getContext(),
-                        listDate
+                        listDate,
+                        ((AlbumDetailActivity)requireActivity()).getAlbumName(),
+                        _VIEW._ALBUMS
                 );
 
         Observer.AddEventListener(

@@ -6,8 +6,6 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.util.DisplayMetrics;
 
-import androidx.annotation.RequiresApi;
-
 import com.example.galleryapplication.R;
 import com.example.galleryapplication.classes.App;
 import com.example.galleryapplication.classes.Constants;

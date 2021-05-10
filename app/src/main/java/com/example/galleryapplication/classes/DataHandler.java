@@ -529,6 +529,36 @@ public class DataHandler {
         return true;
     }
 
+    public static ArrayList<MediaFile> GetMediaFileByFavourite(){
+        ArrayList<MediaFile> mediaFileList = new ArrayList<>();
+        for (int i = 0; i < mediaFileArrayList.size(); i++) {
+            if(favouriteIdArrayList.contains(mediaFileArrayList.get(i).id)){
+                mediaFileList.add(mediaFileArrayList.get(i));
+            }
+        }
+        return mediaFileList;
+    }
+
+    public static ArrayList<String> GetDateByFavourite(){
+        ArrayList<String> mediaFileDate = new ArrayList<>();
+        for (MediaFile mediaFile : mediaFileArrayList) {
+            if(favouriteIdArrayList.contains(mediaFile.id) && !mediaFileDate.contains(mediaFile.date)){
+                mediaFileDate.add(mediaFile.date);
+            }
+        }
+        return mediaFileDate;
+    }
+
+    public static ArrayList<MediaFile> GetMediaFileByFavouriteDate(String date){
+        ArrayList<MediaFile> mediaFileList = new ArrayList<>();
+        for (MediaFile mediaFile : mediaFileArrayList) {
+            if(favouriteIdArrayList.contains(mediaFile.id) && mediaFile.date.equals(date)){
+                mediaFileList.add(mediaFile);
+            }
+        }
+        return mediaFileList;
+    }
+
     public static void MoveToIncognitoFolder(@NonNull Context context, MediaFile mediaFile){
         incognitoFileArrayList.add(mediaFile);
         SaveIncognitoFile(context);

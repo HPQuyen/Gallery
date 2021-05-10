@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,7 +31,6 @@ import androidx.preference.PreferenceManager;
 import com.example.galleryapplication.R;
 import com.example.galleryapplication.classes.Constants;
 import com.example.galleryapplication.classes.DataHandler;
-import com.example.galleryapplication.classes.MediaFile;
 import com.example.galleryapplication.classes.Observer;
 import com.example.galleryapplication.enumerators._LAYOUT;
 import com.example.galleryapplication.enumerators._VIEW;
@@ -41,7 +39,9 @@ import com.example.galleryapplication.fragments.mainviews.SlideshowFragment;
 import com.example.galleryapplication.fragments.mainviews.ViewAllDateFragment;
 import com.example.galleryapplication.fragments.mainviews.ViewAllDetailsFragment;
 import com.example.galleryapplication.fragments.mainviews.ViewAllGridFragment;
-import com.example.galleryapplication.interfaces.IAction;
+import com.example.galleryapplication.fragments.subviews.favorite.FavoriteDateFragment;
+import com.example.galleryapplication.fragments.subviews.favorite.FavoriteDetailsFragment;
+import com.example.galleryapplication.fragments.subviews.favorite.FavoriteGridFragment;
 import com.example.galleryapplication.interfaces.IOnBackPressed;
 import com.example.galleryapplication.utils.LanguageHandler;
 import com.example.galleryapplication.utils.SharedPrefs;
@@ -56,16 +56,20 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
     private Toolbar toolbar;
     private BottomNavigationView bottomNavBar;
 
-    private _LAYOUT mainLayout = _LAYOUT._GRID;
     private _VIEW mainView = _VIEW._ALL;
 
-    private _LAYOUT albumLayout = _LAYOUT._GRID;
-    private _LAYOUT favoriteLayout = _LAYOUT._GRID;
+    private _LAYOUT mainLayout;
+    private _LAYOUT albumLayout;
+    private _LAYOUT favoriteLayout;
 
     private Fragment viewAllGridFragment;
     private Fragment viewAllDateFragment;
     private Fragment viewAllDetailsFragment;
     private Fragment slideshowFragment;
+
+    private Fragment favoriteGridFragment;
+    private Fragment favoriteDateFragment;
+    private Fragment favoriteDetailsFragment;
 
     private Fragment albumFragment;
 
@@ -79,8 +83,7 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
 
         if (isInDarkMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        }
-        else {
+        } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
 
@@ -94,9 +97,22 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
 
         if (!checkPermission(this))
             return;
+
+        this.mainLayout =
+                (SharedPrefs.getInstance().get(SharedPrefs.VIEWALLLAYOUT, _LAYOUT.class) != null) ?
+                        SharedPrefs.getInstance().get(SharedPrefs.VIEWALLLAYOUT, _LAYOUT.class) :
+                        _LAYOUT._GRID;
+        this.albumLayout =
+                (SharedPrefs.getInstance().get(SharedPrefs.ALBUMLAYOUT, _LAYOUT.class) != null) ?
+                        SharedPrefs.getInstance().get(SharedPrefs.ALBUMLAYOUT, _LAYOUT.class) :
+                        _LAYOUT._GRID;
+        this.favoriteLayout =
+                (SharedPrefs.getInstance().get(SharedPrefs.FAVORITELAYOUT, _LAYOUT.class) != null) ?
+                        SharedPrefs.getInstance().get(SharedPrefs.FAVORITELAYOUT, _LAYOUT.class) :
+                        _LAYOUT._GRID;
+
         init();
     }
-
 
     @RequiresApi(api = Build.VERSION_CODES.R)
     @SuppressLint({"NonConstantResourceId", "ResourceAsColor"})
@@ -120,7 +136,22 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
 
         albumFragment = new AlbumFragment();
 
-        setCurrentFragment(viewAllGridFragment);
+        favoriteGridFragment = new FavoriteGridFragment();
+        favoriteDateFragment = new FavoriteDateFragment();
+        favoriteDetailsFragment = new FavoriteDetailsFragment();
+
+        switch (this.mainLayout) {
+            default:
+            case _GRID:
+                setCurrentFragment(viewAllGridFragment);
+                break;
+            case _DATE:
+                setCurrentFragment(viewAllDateFragment);
+                break;
+            case _DETAILS:
+                setCurrentFragment(viewAllDetailsFragment);
+                break;
+        }
 
         bottomNavBar = findViewById(R.id.main_BottomNavigator);
         bottomNavBar.setOnNavigationItemSelectedListener(
@@ -160,13 +191,13 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
 
                             switch (favoriteLayout) {
                                 case _GRID:
-                                    // TODO
+                                    setCurrentFragment(favoriteGridFragment);
                                     break;
                                 case _DATE:
-                                    // TODO
+                                    setCurrentFragment(favoriteDateFragment);
                                     break;
                                 case _DETAILS:
-                                    // TODO
+                                    setCurrentFragment(favoriteDetailsFragment);
                                     break;
                             }
 
@@ -174,8 +205,6 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
                             break;
 
                         case R.id.fragItems_Camera:
-                            // TODO
-
                             item.setCheckable(false);
                             break;
                     }
@@ -274,7 +303,7 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
                 favoriteLayout = _LAYOUT._DATE;
 
                 invalidateOptionsMenu();
-                // TODO
+                setCurrentFragment(favoriteDateFragment);
 
                 return true;
 
@@ -283,7 +312,7 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
                 favoriteLayout = _LAYOUT._GRID;
 
                 invalidateOptionsMenu();
-                // TODO
+                setCurrentFragment(favoriteGridFragment);
 
                 return true;
 
@@ -292,7 +321,7 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
                 favoriteLayout = _LAYOUT._DETAILS;
 
                 invalidateOptionsMenu();
-                // TODO
+                setCurrentFragment(favoriteDetailsFragment);
 
                 return true;
 
@@ -313,8 +342,11 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         // TODO: Save necessary stuffs into SharePreference
+        SharedPrefs.getInstance().put(SharedPrefs.VIEWALLLAYOUT, this.mainLayout);
+        SharedPrefs.getInstance().put(SharedPrefs.ALBUMLAYOUT, this.albumLayout);
+        SharedPrefs.getInstance().put(SharedPrefs.FAVORITELAYOUT, this.favoriteLayout);
+        super.onDestroy();
     }
 
     private void setCurrentFragment (Fragment fragment) {
@@ -357,7 +389,10 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
     }
 
     public void OnClickCamera(MenuItem item){
-        startActivityForResult(new Intent(this, CameraActivity.class), Constants.RequestCode.CAMERA_REQUEST_CODE);
+        startActivityForResult(
+                new Intent(this, CameraActivity.class),
+                Constants.RequestCode.CAMERA_REQUEST_CODE
+        );
     }
     //#endregion
 
