@@ -24,6 +24,7 @@ public class Observer {
         public static final byte TRIGGER_GLIDE_UPDATE = 1;
         public static final byte TRIGGER_OPEN_VIDEO = 2;
         public static final byte TRIGGER_ADAPTER_ALBUM_CHANGE = 3;
+        public static final byte TRIGGER_ADAPTER_FAVOURITE_CHANGE = 4;
     }
     private static final HashMap<Byte, ArrayList<IAction>> localEventListener = new HashMap<>();
     private static final HashMap<Byte, ArrayList<Consumer>> localParamEventListener = new HashMap<>();

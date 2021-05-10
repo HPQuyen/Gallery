@@ -45,6 +45,8 @@ public class DataHandler {
     // In order to get media file call GetListMediaFiles
     @RequiresApi(api = Build.VERSION_CODES.R)
     public static void LoadAllMediaFiles(@NonNull Context context){
+        if(mediaFileArrayList.size() != 0)
+            return;
         Uri queryUri = MediaStore.Files.getContentUri("external");
         String[] projections = new String[]{
                 MediaStore.Files.FileColumns._ID,
@@ -297,6 +299,8 @@ public class DataHandler {
         for (MediaFile mediaFile : mediaFileArrayList) {
             if(mediaFileId.contains(mediaFile.id) && mediaFile.date.equals(date)){
                 mediaFileList.add(mediaFile);
+                if(mediaFileList.size() == mediaFileId.size())
+                    break;
             }
         }
         return mediaFileList;
@@ -316,7 +320,6 @@ public class DataHandler {
         ArrayList<String> mediaFileId = albumHashMap.get(albumName);
         for (int i = 0; i < mediaFileArrayList.size(); i++) {
             if(mediaFileId.contains(mediaFileArrayList.get(i).id)){
-                Log.d("Nothing", mediaFileArrayList.get(i).id);
                 mediaFileList.add(mediaFileArrayList.get(i));
                 if(NUMBER_OF_FILE == ONE || mediaFileList.size() == mediaFileId.size())
                     break;
@@ -331,6 +334,8 @@ public class DataHandler {
         for (int i = 0; i < mediaFileArrayList.size(); i++) {
             if(favouriteIdArrayList.contains(mediaFileArrayList.get(i).id)){
                 mediaFileList.add(mediaFileArrayList.get(i));
+                if(mediaFileList.size() == favouriteIdArrayList.size())
+                    break;
             }
         }
         return mediaFileList;
@@ -351,6 +356,8 @@ public class DataHandler {
         for (MediaFile mediaFile : mediaFileArrayList) {
             if(favouriteIdArrayList.contains(mediaFile.id) && mediaFile.date.equals(date)){
                 mediaFileList.add(mediaFile);
+                if(mediaFileList.size() == favouriteIdArrayList.size())
+                    break;
             }
         }
         return mediaFileList;
@@ -527,36 +534,6 @@ public class DataHandler {
         albumHashMap.put(replaceName, albumHashMap.remove(albumName));
         SaveAlbum(context);
         return true;
-    }
-
-    public static ArrayList<MediaFile> GetMediaFileByFavourite(){
-        ArrayList<MediaFile> mediaFileList = new ArrayList<>();
-        for (int i = 0; i < mediaFileArrayList.size(); i++) {
-            if(favouriteIdArrayList.contains(mediaFileArrayList.get(i).id)){
-                mediaFileList.add(mediaFileArrayList.get(i));
-            }
-        }
-        return mediaFileList;
-    }
-
-    public static ArrayList<String> GetDateByFavourite(){
-        ArrayList<String> mediaFileDate = new ArrayList<>();
-        for (MediaFile mediaFile : mediaFileArrayList) {
-            if(favouriteIdArrayList.contains(mediaFile.id) && !mediaFileDate.contains(mediaFile.date)){
-                mediaFileDate.add(mediaFile.date);
-            }
-        }
-        return mediaFileDate;
-    }
-
-    public static ArrayList<MediaFile> GetMediaFileByFavouriteDate(String date){
-        ArrayList<MediaFile> mediaFileList = new ArrayList<>();
-        for (MediaFile mediaFile : mediaFileArrayList) {
-            if(favouriteIdArrayList.contains(mediaFile.id) && mediaFile.date.equals(date)){
-                mediaFileList.add(mediaFile);
-            }
-        }
-        return mediaFileList;
     }
 
     public static void MoveToIncognitoFolder(@NonNull Context context, MediaFile mediaFile){

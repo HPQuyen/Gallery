@@ -26,6 +26,7 @@ import com.example.galleryapplication.interfaces.IOnBackPressed;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 public class FavoriteGridFragment extends Fragment implements IOnBackPressed {
 
@@ -55,14 +56,12 @@ public class FavoriteGridFragment extends Fragment implements IOnBackPressed {
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         this.recyclerView = view.findViewById(R.id.recyclerView);
-        Log.d("Nothing", "on create view grid fragment");
         loadFavoriteImages(view);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     private void loadFavoriteImages(View thisView) {
         ArrayList<MediaFile> mediaFiles = DataHandler.GetMediaFileByFavourite();
-
         Observer.SubscribeCurrentMediaFiles(mediaFiles);
         MediaFileAdapter mediaFileAdapter =
                 new MediaFileAdapter(
@@ -73,8 +72,10 @@ public class FavoriteGridFragment extends Fragment implements IOnBackPressed {
                 );
 
         Observer.AddEventListener(
-                Observer.ObserverCode.TRIGGER_ADAPTER_CHANGE,
-                mediaFileAdapter::notifyDataSetChanged
+                Observer.ObserverCode.TRIGGER_ADAPTER_FAVOURITE_CHANGE,() -> {
+                    mediaFileAdapter.UpdateNewListMediaFile(DataHandler.GetMediaFileByFavourite());
+                    mediaFileAdapter.notifyDataSetChanged();
+                }
         );
 
         this.recyclerView.setAdapter(mediaFileAdapter);

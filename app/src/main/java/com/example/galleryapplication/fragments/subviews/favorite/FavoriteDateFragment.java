@@ -68,8 +68,10 @@ public class FavoriteDateFragment extends Fragment implements IOnBackPressed {
                 );
 
         Observer.AddEventListener(
-                Observer.ObserverCode.TRIGGER_ADAPTER_CHANGE,
-                dateGridMediaFileAdapter::notifyDataSetChanged
+                Observer.ObserverCode.TRIGGER_ADAPTER_FAVOURITE_CHANGE,() -> {
+                    dateGridMediaFileAdapter.UpdateNewListDate(DataHandler.GetDateByFavourite());
+                    dateGridMediaFileAdapter.notifyDataSetChanged();
+                }
         );
 
         this.recyclerView.setAdapter(dateGridMediaFileAdapter);
