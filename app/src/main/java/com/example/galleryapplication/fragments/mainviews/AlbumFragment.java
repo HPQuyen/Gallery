@@ -1,6 +1,7 @@
 package com.example.galleryapplication.fragments.mainviews;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +52,7 @@ public class AlbumFragment extends Fragment implements IOnBackPressed {
 
     private void loadAllAlbum(View thisView) {
         ArrayList<String> albums = DataHandler.GetListAlbumName();
-
+        Log.d("Nothing","Nothing load all albums");
         if (albums != null) {
             AlbumAdapter albumAdapter =
                     new AlbumAdapter(
@@ -60,8 +61,9 @@ public class AlbumFragment extends Fragment implements IOnBackPressed {
                     );
 
             Observer.AddEventListener(
-                    Observer.ObserverCode.TRIGGER_ADAPTER_CHANGE, () -> {
-                        albumAdapter.SetNewListAlbum(DataHandler.GetListAlbumName());
+                    Observer.ObserverCode.TRIGGER_ADAPTER_ALBUM_CHANGE, () -> {
+                        Log.d("Nothing", "Update new list album name");
+                        albumAdapter.UpdateNewListAlbum(DataHandler.GetListAlbumName());
                         albumAdapter.notifyDataSetChanged();
                     }
             );

@@ -76,9 +76,14 @@ public class AlbumDetailDetailsFragment extends Fragment implements IOnBackPress
                 );
 
         Observer.AddEventListener(
-                Observer.ObserverCode.TRIGGER_ADAPTER_CHANGE,
-                mediaFileAdapter::notifyDataSetChanged
-        );
+                Observer.ObserverCode.TRIGGER_ADAPTER_ALBUM_CHANGE,(newAlbumName) -> {
+                    mediaFileAdapter.UpdateNewListMediaFile(DataHandler.GetMediaFileByAlbum(
+                            thisView.getContext(),
+                            (String) newAlbumName,
+                            DataHandler.ALL
+                    ));
+                    mediaFileAdapter.notifyDataSetChanged();
+                });
 
         this.recyclerView.setAdapter(mediaFileAdapter);
         this.recyclerView.setLayoutManager(

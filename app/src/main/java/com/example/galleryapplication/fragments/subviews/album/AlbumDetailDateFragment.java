@@ -1,16 +1,21 @@
 package com.example.galleryapplication.fragments.subviews.album;
 
+import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.galleryapplication.R;
+import com.example.galleryapplication.activities.AlbumDetailActivity;
 import com.example.galleryapplication.adapters.DateGridMediaFileAdapter;
 import com.example.galleryapplication.classes.DataHandler;
 import com.example.galleryapplication.classes.Observer;
@@ -44,14 +49,16 @@ public class AlbumDetailDateFragment extends Fragment implements IOnBackPressed 
         );
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         this.recyclerView = view.findViewById(R.id.parentDateRecyclerView);
         loadAllAlbumImages(view);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     private void loadAllAlbumImages(View thisView) {
-        ArrayList<String> listDate = DataHandler.GetListDate();
+        ArrayList<String> listDate = DataHandler.GetDateByAlbum(getContext(), ((AlbumDetailActivity)requireActivity()).getAlbumName());
 
         DateGridMediaFileAdapter dateGridMediaFileAdapter =
                 new DateGridMediaFileAdapter(
@@ -60,9 +67,10 @@ public class AlbumDetailDateFragment extends Fragment implements IOnBackPressed 
                 );
 
         Observer.AddEventListener(
-                Observer.ObserverCode.TRIGGER_ADAPTER_CHANGE,
-                dateGridMediaFileAdapter::notifyDataSetChanged
-        );
+                Observer.ObserverCode.TRIGGER_ADAPTER_ALBUM_CHANGE,(newAlbumName) -> {
+                    dateGridMediaFileAdapter.UpdateNewListDate(DataHandler.GetDateByAlbum(getContext(), (String) newAlbumName));
+                    dateGridMediaFileAdapter.notifyDataSetChanged();
+                });
 
         this.recyclerView.setAdapter(dateGridMediaFileAdapter);
         this.recyclerView.setLayoutManager(

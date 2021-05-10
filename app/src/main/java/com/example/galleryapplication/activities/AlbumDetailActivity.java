@@ -13,6 +13,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,6 +23,7 @@ import com.example.galleryapplication.R;
 import com.example.galleryapplication.classes.Constants;
 import com.example.galleryapplication.classes.DataHandler;
 import com.example.galleryapplication.classes.MediaFile;
+import com.example.galleryapplication.classes.Observer;
 import com.example.galleryapplication.enumerators._LAYOUT;
 import com.example.galleryapplication.fragments.subviews.album.AlbumDetailDateFragment;
 import com.example.galleryapplication.fragments.subviews.album.AlbumDetailDetailsFragment;
@@ -161,12 +163,48 @@ public class AlbumDetailActivity extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode){
+                case Constants.RequestCode.ALBUM_MODIFY_REQUEST_CODE:
+                    if (data != null) {
+                        Bundle bundle = data.getExtras();
+
+                        String albumName = bundle.getString("ALBUM_NAME");
+                        ArrayList<String> albumPhotos = bundle.getStringArrayList("SELECTED_MEDIA");
+
+                        DataHandler.RenameAlbum(this, this.albumName, albumName);
+
+                        DataHandler.UpdateAlbum(
+                                this,
+                                albumName,
+                                albumPhotos
+                        );
+                        this.albumName = albumName;
+                        this.isChanged = true;
+                        Observer.Invoke(Observer.ObserverCode.TRIGGER_ADAPTER_ALBUM_CHANGE, getAlbumName());
+                    }
+                    break;
+                case Constants.RequestCode.VIEW_DETAIL_REQUEST_CODE:
+                    if(data != null){
+                        Log.d("Nothing", "" + data.getBooleanExtra("CHANGE", false));
+                        if(data.getBooleanExtra("CHANGE", false))
+                        {
+                            Observer.Invoke(Observer.ObserverCode.TRIGGER_ADAPTER_ALBUM_CHANGE, getAlbumName());
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
     }
 
-    private void setCurrentFragment (Fragment fragment) {
+    private void setCurrentFragment(Fragment fragment) {
         FragmentTransaction fragTransaction = getSupportFragmentManager().beginTransaction();
         fragTransaction.replace(R.id.albumDetailFrameLayout, fragment);
         fragTransaction.commit();
@@ -216,11 +254,11 @@ public class AlbumDetailActivity extends AppCompatActivity {
         builder.setPositiveButton(
                 R.string.delete_album_ok_1,
                 (DialogInterface.OnClickListener) (dialog, id) -> {
-            DataHandler.RemoveAlbum(this, this.albumName);
+                    DataHandler.RemoveAlbum(this, this.albumName);
 
-            isChanged = true;
-            backToPrevious();
-        });
+                    isChanged = true;
+                    backToPrevious();
+                });
         builder.setNegativeButton(
                 R.string.delete_album_cancel_1,
                 (DialogInterface.OnClickListener) (dialog, id) -> dialog.dismiss()

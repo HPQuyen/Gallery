@@ -466,15 +466,14 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
                                 data.getExtras()
                                         .getStringArrayList("SELECTED_MEDIA")
                                 );
-                        Observer.Invoke(Observer.ObserverCode.TRIGGER_ADAPTER_CHANGE);
+                        Observer.Invoke(Observer.ObserverCode.TRIGGER_ADAPTER_ALBUM_CHANGE);
                     }
                     break;
                 case Constants.RequestCode.ALBUM_DETAIL_REQUEST_CODE:
                     if (data != null) {
                         this.albumLayout = (_LAYOUT) data.getSerializableExtra("LAYOUT");
-
                         if (data.getBooleanExtra("IS_CHANGED", false)) {
-                            Observer.Invoke(Observer.ObserverCode.TRIGGER_ADAPTER_CHANGE);
+                            Observer.Invoke(Observer.ObserverCode.TRIGGER_ADAPTER_ALBUM_CHANGE);
                         }
                     }
                     break;

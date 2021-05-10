@@ -26,7 +26,7 @@ import java.util.List;
 public class DateGridMediaFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final Context context;
-    private final List<String> dateList;
+    private List<String> dateList;
 
     /**
      * Provide a reference to the type of views that you are using
@@ -66,6 +66,10 @@ public class DateGridMediaFileAdapter extends RecyclerView.Adapter<RecyclerView.
      */
     public DateGridMediaFileAdapter(Context context, List<String> dateList) {
         this.context = context;
+        this.dateList = dateList;
+    }
+
+    public void UpdateNewListDate(ArrayList<String> dateList){
         this.dateList = dateList;
     }
 

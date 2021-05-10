@@ -39,7 +39,7 @@ import java.util.List;
 public class MediaFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final Context context;
-    private final List<MediaFile> mediaFiles;
+    private List<MediaFile> mediaFiles;
 
     private final _LAYOUT layout;
     private final VIEW_DETAIL_MODE viewDetailMode;
@@ -168,6 +168,10 @@ public class MediaFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         this.mediaFiles = mediaFiles;
         this.layout = layout;
         this.viewDetailMode = viewDetailMode;
+    }
+
+    public void UpdateNewListMediaFile(ArrayList<MediaFile> mediaFiles){
+        this.mediaFiles = mediaFiles;
     }
 
     // Create new views (invoked by the layout manager)

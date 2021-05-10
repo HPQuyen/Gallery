@@ -23,6 +23,7 @@ public class Observer {
         public static final byte TRIGGER_ADAPTER_CHANGE = 0;
         public static final byte TRIGGER_GLIDE_UPDATE = 1;
         public static final byte TRIGGER_OPEN_VIDEO = 2;
+        public static final byte TRIGGER_ADAPTER_ALBUM_CHANGE = 3;
     }
     private static final HashMap<Byte, ArrayList<IAction>> localEventListener = new HashMap<>();
     private static final HashMap<Byte, ArrayList<Consumer>> localParamEventListener = new HashMap<>();
@@ -70,10 +71,10 @@ public class Observer {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static <T> void Invoke(Byte eventCode, T objects){
+    public static <T> void Invoke(Byte eventCode, T object){
         if(!localParamEventListener.containsKey(eventCode))
             return;
-        Objects.requireNonNull(localParamEventListener.get(eventCode)).forEach(consumer -> consumer.accept(objects));
+        Objects.requireNonNull(localParamEventListener.get(eventCode)).forEach(consumer -> consumer.accept(object));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -83,6 +84,15 @@ public class Observer {
         Objects.requireNonNull(localEventListener.get(eventCode)).forEach(IAction::invoke);
         localEventListener.get(eventCode).clear();
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public static <T> void InvokeOnce(Byte eventCode, T object){
+        if(!localParamEventListener.containsKey(eventCode))
+            return;
+        Objects.requireNonNull(localParamEventListener.get(eventCode)).forEach(consumer -> consumer.accept(object));
+        localParamEventListener.get(eventCode).clear();
+    }
+
 
     public static void SubscribeCurrentMediaFiles(ArrayList<MediaFile> mediaFiles){
         currentMediaFiles = mediaFiles;

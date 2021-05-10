@@ -78,7 +78,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.albums = albumList;
     }
 
-    public void SetNewListAlbum(List<String> albumList){
+    public void UpdateNewListAlbum(List<String> albumList){
         this.albums = albumList;
     }
 
