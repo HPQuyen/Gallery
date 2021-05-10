@@ -69,7 +69,7 @@ public class AlbumDetailGridFragment extends Fragment implements IOnBackPressed 
                 DataHandler.ALL
         );
 
-        Observer.SubscribeCurrentMediaFiles(mediaFiles);
+        //Observer.SubscribeCurrentMediaFiles(mediaFiles);
         MediaFileAdapter mediaFileAdapter =
                 new MediaFileAdapter(
                         thisView.getContext(),
@@ -80,6 +80,7 @@ public class AlbumDetailGridFragment extends Fragment implements IOnBackPressed 
 
         Observer.AddEventListener(
                 Observer.ObserverCode.TRIGGER_ADAPTER_ALBUM_CHANGE,(newAlbumName) -> {
+                    Log.d("Nothing", "Update album detail grid fragment");
                     mediaFileAdapter.UpdateNewListMediaFile(DataHandler.GetMediaFileByAlbum(
                             thisView.getContext(),
                             (String) newAlbumName,

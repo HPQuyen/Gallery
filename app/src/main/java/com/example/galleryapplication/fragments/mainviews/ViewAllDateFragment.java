@@ -66,7 +66,6 @@ public class ViewAllDateFragment extends Fragment implements IOnBackPressed {
                         listDate
                 );
 
-
         Observer.AddEventListener(
                 Observer.ObserverCode.TRIGGER_ADAPTER_CHANGE,
                 dateGridMediaFileAdapter::notifyDataSetChanged

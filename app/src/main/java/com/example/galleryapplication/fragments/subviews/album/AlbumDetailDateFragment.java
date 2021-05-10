@@ -30,7 +30,7 @@ public class AlbumDetailDateFragment extends Fragment implements IOnBackPressed 
     private RecyclerView recyclerView;
 
     public AlbumDetailDateFragment() {
-
+        
     }
 
     @Override

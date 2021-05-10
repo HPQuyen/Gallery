@@ -182,7 +182,7 @@ public class DataHandler {
      */
     public static ArrayList<String> GetListAlbumName() {
         if(albumHashMap.size() == 0)
-            return null;
+            return new ArrayList<>();
         ArrayList<String> albumName = new ArrayList<>();
         for(Map.Entry<String, ArrayList<String>> item : albumHashMap.entrySet()){
             albumName.add(item.getKey());
@@ -314,13 +314,43 @@ public class DataHandler {
             return null;
         ArrayList<MediaFile> mediaFileList = new ArrayList<>();
         ArrayList<String> mediaFileId = albumHashMap.get(albumName);
-        for (int i = 0; i < mediaFileId.size(); i++) {
-            for (int i1 = 0; i1 < mediaFileArrayList.size(); i1++) {
-                if(mediaFileArrayList.get(i1).id.equals(mediaFileId.get(i))){
-                    mediaFileList.add(mediaFileArrayList.get(i1));
-                    if(NUMBER_OF_FILE == ONE)
-                        break;
-                }
+        for (int i = 0; i < mediaFileArrayList.size(); i++) {
+            if(mediaFileId.contains(mediaFileArrayList.get(i).id)){
+                Log.d("Nothing", mediaFileArrayList.get(i).id);
+                mediaFileList.add(mediaFileArrayList.get(i));
+                if(NUMBER_OF_FILE == ONE || mediaFileList.size() == mediaFileId.size())
+                    break;
+            }
+
+        }
+        return mediaFileList;
+    }
+
+    public static ArrayList<MediaFile> GetMediaFileByFavourite(){
+        ArrayList<MediaFile> mediaFileList = new ArrayList<>();
+        for (int i = 0; i < mediaFileArrayList.size(); i++) {
+            if(favouriteIdArrayList.contains(mediaFileArrayList.get(i).id)){
+                mediaFileList.add(mediaFileArrayList.get(i));
+            }
+        }
+        return mediaFileList;
+    }
+
+    public static ArrayList<String> GetDateByFavourite(){
+        ArrayList<String> mediaFileDate = new ArrayList<>();
+        for (MediaFile mediaFile : mediaFileArrayList) {
+            if(favouriteIdArrayList.contains(mediaFile.id) && !mediaFileDate.contains(mediaFile.date)){
+                mediaFileDate.add(mediaFile.date);
+            }
+        }
+        return mediaFileDate;
+    }
+
+    public static ArrayList<MediaFile> GetMediaFileByFavouriteDate(String date){
+        ArrayList<MediaFile> mediaFileList = new ArrayList<>();
+        for (MediaFile mediaFile : mediaFileArrayList) {
+            if(favouriteIdArrayList.contains(mediaFile.id) && mediaFile.date.equals(date)){
+                mediaFileList.add(mediaFile);
             }
         }
         return mediaFileList;
@@ -463,10 +493,12 @@ public class DataHandler {
             Return false if album doest not exist
         </return>
      */
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public static boolean UpdateAlbum(@NonNull Context context, String albumName, ArrayList<String> listImage){
         if(!albumHashMap.containsKey(albumName))
             return false;
-        albumHashMap.put(albumName, listImage);
+        albumHashMap.replace(albumName, listImage);
         SaveAlbum(context);
         return true;
     }
