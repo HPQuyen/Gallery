@@ -485,6 +485,7 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
                         {
                             DataHandler.UpdateMediaFiles(this);
                             Observer.Invoke(Observer.ObserverCode.TRIGGER_ADAPTER_CHANGE);
+                            Observer.InvokeOnce(Observer.ObserverCode.TRIGGER_ADAPTER_FAVOURITE_CHANGE);
                         }
                     }
                     break;

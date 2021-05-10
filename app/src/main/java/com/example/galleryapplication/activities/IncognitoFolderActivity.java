@@ -143,7 +143,6 @@ public class IncognitoFolderActivity extends AppCompatActivity {
                         VIEW_DETAIL_MODE.INCOGNITO
                 );
 
-
         this.recyclerView.setAdapter(mediaFileAdapter);
         this.recyclerView.setLayoutManager(
                 new GridLayoutManager(this, 4)

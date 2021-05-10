@@ -69,8 +69,10 @@ public class FavoriteDetailsFragment extends Fragment implements IOnBackPressed 
                 );
 
         Observer.AddEventListener(
-                Observer.ObserverCode.TRIGGER_ADAPTER_CHANGE,
-                mediaFileAdapter::notifyDataSetChanged
+                Observer.ObserverCode.TRIGGER_ADAPTER_FAVOURITE_CHANGE,() -> {
+                    mediaFileAdapter.UpdateNewListMediaFile(DataHandler.GetMediaFileByFavourite());
+                    mediaFileAdapter.notifyDataSetChanged();
+                }
         );
 
         this.recyclerView.setAdapter(mediaFileAdapter);

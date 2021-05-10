@@ -24,6 +24,8 @@ import com.example.galleryapplication.enumerators._VIEW;
 import java.util.ArrayList;
 import java.util.List;
 
+import ly.img.android.events.$EventCall_BrushSettings_STATE_REVERTED;
+
 public class DateGridMediaFileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final Context context;
@@ -128,10 +130,31 @@ public class DateGridMediaFileAdapter extends RecyclerView.Adapter<RecyclerView.
                         VIEW_DETAIL_MODE.NORMAL
                 );
 
-        Observer.AddEventListener(
-                Observer.ObserverCode.TRIGGER_ADAPTER_CHANGE,
-                mediaFileAdapter::notifyDataSetChanged
-        );
+        switch(mode){
+            case _ALL:
+                Observer.AddEventListener(
+                        Observer.ObserverCode.TRIGGER_ADAPTER_CHANGE, () -> {
+                            mediaFileAdapter.UpdateNewListMediaFile(DataHandler.GetMediaFilesByDate(this.context, date));
+                            mediaFileAdapter.notifyDataSetChanged();
+                        });
+                break;
+            case _ALBUMS:
+                Observer.AddEventListener(
+                        Observer.ObserverCode.TRIGGER_ADAPTER_ALBUM_CHANGE, () -> {
+                            mediaFileAdapter.UpdateNewListMediaFile(DataHandler.GetMediaFilesByAlbumDate(this.context, albumName, date));
+                            mediaFileAdapter.notifyDataSetChanged();
+                        });
+                break;
+            case _FAVORITE:
+                Observer.AddEventListener(
+                        Observer.ObserverCode.TRIGGER_ADAPTER_FAVOURITE_CHANGE, () -> {
+                            mediaFileAdapter.UpdateNewListMediaFile(DataHandler.GetMediaFileByFavouriteDate(date));
+                            mediaFileAdapter.notifyDataSetChanged();
+                        });
+
+                break;
+        };
+
 
         ((ViewHolder) holder).getRecyclerView().setAdapter(mediaFileAdapter);
         ((ViewHolder) holder).getRecyclerView().setLayoutManager(
