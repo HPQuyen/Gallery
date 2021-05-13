@@ -2,7 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
     <!-- "Slideshow" -->
     <item
         android:id="@+id/Slideshow_ViewAll"
@@ -21,21 +20,18 @@
             <item
                 android:id="@+id/GridOnly_ViewAll"
                 android:title="@string/actionbar_gridonly_layout_1"
-                android:icon="@drawable/ic_gridonly_layout"
                 app:showAsAction="ifRoom" />
 
             <!-- "Grid-Date layout" -->
             <item
                 android:id="@+id/GridDate_ViewAll"
                 android:title="@string/actionbar_griddate_layout_1"
-                android:icon="@drawable/ic_griddate_layout"
                 app:showAsAction="ifRoom" />
 
             <!-- "Details List layout" -->
             <item
                 android:id="@+id/DetailsList_ViewAll"
                 android:title="@string/actionbar_details_layout_1"
-                android:icon="@drawable/ic_details_layout"
                 app:showAsAction="ifRoom" />
         </menu>
     </item>

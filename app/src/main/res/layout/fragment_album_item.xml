@@ -34,24 +34,15 @@
                 android:id="@+id/albumName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
                 android:gravity="end"
-                android:maxLines="1"
-                android:text="@string/album_name_1"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textAppearance="@style/TextViewAlbumTitleAppearance" />
 
             <TextView
                 android:id="@+id/albumMembersNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:maxLines="1"
-                android:text="@string/album_members_number_1"
-                android:textColor="@color/colorOnPrimary_main"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textAppearance="@style/TextViewAlbumDescriptionAppearance" />
         </LinearLayout>
 
     </FrameLayout>

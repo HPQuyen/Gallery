@@ -14,8 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
-        app:titleTextColor="@color/colorOnPrimary_main"
-        android:background="@color/colorPrimary_main"
+        style="@style/ToolbarAppearance"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -25,11 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@string/title_default_1"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:textColor="@color/colorOnPrimary_main"
-            android:includeFontPadding="false"
-            />
+            android:textAppearance="@style/TextViewTitleAppearance" />
 
     </androidx.appcompat.widget.Toolbar>
 

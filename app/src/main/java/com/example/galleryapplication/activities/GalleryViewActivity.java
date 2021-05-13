@@ -56,7 +56,7 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
     private Toolbar toolbar;
     private BottomNavigationView bottomNavBar;
 
-    private _VIEW mainView = _VIEW._ALL;
+    private _VIEW mainView;
 
     private _LAYOUT mainLayout;
     private _LAYOUT albumLayout;
@@ -98,19 +98,6 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
         if (!checkPermission(this))
             return;
 
-        this.mainLayout =
-                (SharedPrefs.getInstance().get(SharedPrefs.VIEWALLLAYOUT, _LAYOUT.class) != null) ?
-                        SharedPrefs.getInstance().get(SharedPrefs.VIEWALLLAYOUT, _LAYOUT.class) :
-                        _LAYOUT._GRID;
-        this.albumLayout =
-                (SharedPrefs.getInstance().get(SharedPrefs.ALBUMLAYOUT, _LAYOUT.class) != null) ?
-                        SharedPrefs.getInstance().get(SharedPrefs.ALBUMLAYOUT, _LAYOUT.class) :
-                        _LAYOUT._GRID;
-        this.favoriteLayout =
-                (SharedPrefs.getInstance().get(SharedPrefs.FAVORITELAYOUT, _LAYOUT.class) != null) ?
-                        SharedPrefs.getInstance().get(SharedPrefs.FAVORITELAYOUT, _LAYOUT.class) :
-                        _LAYOUT._GRID;
-
         init();
     }
 
@@ -140,16 +127,69 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
         favoriteDateFragment = new FavoriteDateFragment();
         favoriteDetailsFragment = new FavoriteDetailsFragment();
 
-        switch (this.mainLayout) {
+        if (SharedPrefs.isFirstTimeOperated) {
+            this.mainView = _VIEW._ALL;
+
+            SharedPrefs.isFirstTimeOperated = false;
+        }
+        else {
+            this.mainView =
+                    (SharedPrefs.getInstance().get(SharedPrefs.VIEW, _VIEW.class) != null) ?
+                            SharedPrefs.getInstance().get(SharedPrefs.VIEW, _VIEW.class) :
+                            _VIEW._ALL;
+        }
+
+        this.mainLayout =
+                (SharedPrefs.getInstance().get(SharedPrefs.VIEWALLLAYOUT, _LAYOUT.class) != null) ?
+                        SharedPrefs.getInstance().get(SharedPrefs.VIEWALLLAYOUT, _LAYOUT.class) :
+                        _LAYOUT._GRID;
+        this.albumLayout =
+                (SharedPrefs.getInstance().get(SharedPrefs.ALBUMLAYOUT, _LAYOUT.class) != null) ?
+                        SharedPrefs.getInstance().get(SharedPrefs.ALBUMLAYOUT, _LAYOUT.class) :
+                        _LAYOUT._GRID;
+        this.favoriteLayout =
+                (SharedPrefs.getInstance().get(SharedPrefs.FAVORITELAYOUT, _LAYOUT.class) != null) ?
+                        SharedPrefs.getInstance().get(SharedPrefs.FAVORITELAYOUT, _LAYOUT.class) :
+                        _LAYOUT._GRID;
+
+        switch (this.mainView) {
             default:
-            case _GRID:
-                setCurrentFragment(viewAllGridFragment);
+            case _ALL:
+                switch (this.mainLayout) {
+                    default:
+                    case _GRID:
+                        setCurrentFragment(viewAllGridFragment);
+                        break;
+                    case _DATE:
+                        setCurrentFragment(viewAllDateFragment);
+                        break;
+                    case _DETAILS:
+                        setCurrentFragment(viewAllDetailsFragment);
+                        break;
+                }
+
+                mainTitle.setText(R.string.title_default_1);
                 break;
-            case _DATE:
-                setCurrentFragment(viewAllDateFragment);
+            case _ALBUMS:
+                setCurrentFragment(albumFragment);
+
+                mainTitle.setText(R.string.title_albums_1);
                 break;
-            case _DETAILS:
-                setCurrentFragment(viewAllDetailsFragment);
+            case _FAVORITE:
+                switch (this.favoriteLayout) {
+                    default:
+                    case _GRID:
+                        setCurrentFragment(favoriteGridFragment);
+                        break;
+                    case _DATE:
+                        setCurrentFragment(favoriteDateFragment);
+                        break;
+                    case _DETAILS:
+                        setCurrentFragment(favoriteDetailsFragment);
+                        break;
+                }
+
+                mainTitle.setText(R.string.title_favorite_1);
                 break;
         }
 
@@ -219,44 +259,80 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
 
         MenuInflater inflater = getMenuInflater();
 
+        boolean isInDarkMode =
+                SharedPrefs.getInstance().get(SharedPrefs.DARKTHEME, Boolean.class);
+
         switch (mainView) {
             case _ALL:
-                inflater.inflate(R.menu.actionbar_viewall_menu, menu);
+                if (!isInDarkMode)
+                    inflater.inflate(R.menu.actionbar_viewall_menu, menu);
+                else
+                    inflater.inflate(R.menu.actionbar_viewall_menu_darkmode, menu);
 
                 switch (this.mainLayout) {
                     case _DATE:
-                        menu.findItem(R.id.ViewDropDown_ViewAll)
-                                .setIcon(R.drawable.ic_griddate_layout);
+                        if (!isInDarkMode)
+                            menu.findItem(R.id.ViewDropDown_ViewAll)
+                                    .setIcon(R.drawable.ic_griddate_layout);
+                        else
+                            menu.findItem(R.id.ViewDropDown_ViewAll)
+                                    .setIcon(R.drawable.ic_griddate_layout_darkmode);
                         break;
                     case _DETAILS:
-                        menu.findItem(R.id.ViewDropDown_ViewAll)
-                                .setIcon(R.drawable.ic_details_layout);
+                        if (!isInDarkMode)
+                            menu.findItem(R.id.ViewDropDown_ViewAll)
+                                    .setIcon(R.drawable.ic_details_layout);
+                        else
+                            menu.findItem(R.id.ViewDropDown_ViewAll)
+                                    .setIcon(R.drawable.ic_details_layout_darkmode);
                         break;
                     case _GRID:
                     default:
-                        menu.findItem(R.id.ViewDropDown_ViewAll)
-                                .setIcon(R.drawable.ic_gridonly_layout);
+                        if (!isInDarkMode)
+                            menu.findItem(R.id.ViewDropDown_ViewAll)
+                                    .setIcon(R.drawable.ic_gridonly_layout);
+                        else
+                            menu.findItem(R.id.ViewDropDown_ViewAll)
+                                    .setIcon(R.drawable.ic_gridonly_layout_darkmode);
                 }
                 return true;
             case _ALBUMS:
-                inflater.inflate(R.menu.actionbar_album_menu, menu);
+                if (!isInDarkMode)
+                    inflater.inflate(R.menu.actionbar_album_menu, menu);
+                else
+                    inflater.inflate(R.menu.actionbar_album_menu_darkmode, menu);
                 return true;
             case _FAVORITE:
-                inflater.inflate(R.menu.actionbar_favorite_menu, menu);
+                if (!isInDarkMode)
+                    inflater.inflate(R.menu.actionbar_favorite_menu, menu);
+                else
+                    inflater.inflate(R.menu.actionbar_favorite_menu_darkmode, menu);
 
                 switch (this.favoriteLayout) {
                     case _DATE:
-                        menu.findItem(R.id.ViewDropDown_Favorite)
-                                .setIcon(R.drawable.ic_griddate_layout);
+                        if (!isInDarkMode)
+                            menu.findItem(R.id.ViewDropDown_Favorite)
+                                    .setIcon(R.drawable.ic_griddate_layout);
+                        else
+                            menu.findItem(R.id.ViewDropDown_Favorite)
+                                    .setIcon(R.drawable.ic_griddate_layout_darkmode);
                         break;
                     case _DETAILS:
-                        menu.findItem(R.id.ViewDropDown_Favorite)
-                                .setIcon(R.drawable.ic_details_layout);
+                        if (!isInDarkMode)
+                            menu.findItem(R.id.ViewDropDown_Favorite)
+                                    .setIcon(R.drawable.ic_details_layout);
+                        else
+                            menu.findItem(R.id.ViewDropDown_Favorite)
+                                    .setIcon(R.drawable.ic_details_layout_darkmode);
                         break;
                     case _GRID:
                     default:
-                        menu.findItem(R.id.ViewDropDown_Favorite)
-                                .setIcon(R.drawable.ic_gridonly_layout);
+                        if (!isInDarkMode)
+                            menu.findItem(R.id.ViewDropDown_Favorite)
+                                    .setIcon(R.drawable.ic_gridonly_layout);
+                        else
+                            menu.findItem(R.id.ViewDropDown_Favorite)
+                                    .setIcon(R.drawable.ic_gridonly_layout_darkmode);
                 }
 
                 return true;
@@ -343,6 +419,7 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
     @Override
     protected void onDestroy() {
         // TODO: Save necessary stuffs into SharePreference
+        SharedPrefs.getInstance().put(SharedPrefs.VIEW, this.mainView);
         SharedPrefs.getInstance().put(SharedPrefs.VIEWALLLAYOUT, this.mainLayout);
         SharedPrefs.getInstance().put(SharedPrefs.ALBUMLAYOUT, this.albumLayout);
         SharedPrefs.getInstance().put(SharedPrefs.FAVORITELAYOUT, this.favoriteLayout);
@@ -446,7 +523,7 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
         if (requestCode == Constants.RequestCode.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE) {
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
                 init();
-            }else{
+            } else {
                 Toast.makeText(this, "Access Permission Denied",
                         Toast.LENGTH_SHORT).show();
                 onBackPressed();

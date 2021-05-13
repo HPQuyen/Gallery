@@ -8,7 +8,6 @@
 
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/image_view_item"
-        android:src="@drawable/_28195615_136128921308288_9046592716708631099_n"
         android:scaleType="fitCenter"
         android:layout_height="match_parent"
         android:layout_width="match_parent"

@@ -7,13 +7,13 @@
     <item
         android:id="@+id/Slideshow_Favorite"
         android:title="@string/actionbar_slideshow_1"
-        android:icon="@drawable/ic_slideshow"
+        android:icon="@drawable/ic_slideshow_darkmode"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/ViewDropDown_Favorite"
         android:title="@string/actionbar_title_layout_1"
-        android:icon="@drawable/ic_gridonly_layout"
+        android:icon="@drawable/ic_gridonly_layout_darkmode"
         app:showAsAction="ifRoom">
         <menu>
             <!-- "Grid-Only layout" -->
@@ -40,7 +40,7 @@
     <item
         android:id="@+id/Settings_Favorite"
         android:title="@string/actionbar_settings_1"
-        android:icon="@drawable/ic_settings"
+        android:icon="@drawable/ic_settings_darkmode"
         android:onClick="settings"
         app:showAsAction="ifRoom" />
 

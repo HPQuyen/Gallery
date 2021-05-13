@@ -29,6 +29,7 @@ import com.example.galleryapplication.fragments.subviews.album.AlbumDetailDateFr
 import com.example.galleryapplication.fragments.subviews.album.AlbumDetailDetailsFragment;
 import com.example.galleryapplication.fragments.subviews.album.AlbumDetailGridFragment;
 import com.example.galleryapplication.interfaces.IOnBackPressed;
+import com.example.galleryapplication.utils.SharedPrefs;
 
 import java.util.ArrayList;
 
@@ -60,7 +61,14 @@ public class AlbumDetailActivity extends AppCompatActivity {
         ActionBar mainActionBar = getSupportActionBar();
         assert mainActionBar != null;
         mainActionBar.setDisplayShowTitleEnabled(false);
-        mainActionBar.setHomeAsUpIndicator(R.drawable.ic_back_to_previous);
+
+        boolean isInDarkMode = SharedPrefs.getInstance().get(SharedPrefs.DARKTHEME, Boolean.class);
+
+        if (!isInDarkMode)
+            mainActionBar.setHomeAsUpIndicator(R.drawable.ic_back_to_previous);
+        else
+            mainActionBar.setHomeAsUpIndicator(R.drawable.ic_back_to_previous_darkmode);
+
         mainActionBar.setDisplayHomeAsUpEnabled(true);
 
         albumDetailGridFragment = new AlbumDetailGridFragment();
@@ -91,21 +99,40 @@ public class AlbumDetailActivity extends AppCompatActivity {
         if (optionsMenuActionBar == null) optionsMenuActionBar = menu;
 
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.actionbar_album_detail_menu, menu);
+
+        boolean isInDarkMode =
+                SharedPrefs.getInstance().get(SharedPrefs.DARKTHEME, Boolean.class);
+
+        if (!isInDarkMode)
+            inflater.inflate(R.menu.actionbar_album_detail_menu, menu);
+        else
+            inflater.inflate(R.menu.actionbar_album_detail_menu_darkmode, menu);
 
         switch (this.albumLayout) {
             case _DATE:
-                menu.findItem(R.id.ViewDropDown_AlbumDetail)
-                        .setIcon(R.drawable.ic_griddate_layout);
+                if (!isInDarkMode)
+                    menu.findItem(R.id.ViewDropDown_AlbumDetail)
+                            .setIcon(R.drawable.ic_griddate_layout);
+                else
+                    menu.findItem(R.id.ViewDropDown_AlbumDetail)
+                            .setIcon(R.drawable.ic_griddate_layout_darkmode);
                 break;
             case _DETAILS:
-                menu.findItem(R.id.ViewDropDown_AlbumDetail)
-                        .setIcon(R.drawable.ic_details_layout);
+                if (!isInDarkMode)
+                    menu.findItem(R.id.ViewDropDown_AlbumDetail)
+                            .setIcon(R.drawable.ic_details_layout);
+                else
+                    menu.findItem(R.id.ViewDropDown_AlbumDetail)
+                            .setIcon(R.drawable.ic_details_layout_darkmode);
                 break;
             case _GRID:
             default:
-                menu.findItem(R.id.ViewDropDown_AlbumDetail)
-                        .setIcon(R.drawable.ic_gridonly_layout);
+                if (!isInDarkMode)
+                    menu.findItem(R.id.ViewDropDown_AlbumDetail)
+                            .setIcon(R.drawable.ic_gridonly_layout);
+                else
+                    menu.findItem(R.id.ViewDropDown_AlbumDetail)
+                            .setIcon(R.drawable.ic_gridonly_layout_darkmode);
         }
 
         return true;

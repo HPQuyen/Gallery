@@ -63,7 +63,7 @@
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
             android:contentDescription="@string/content_description"
-            app:backgroundTint="@color/colorVariant_1_sub"
+            app:backgroundTint="@color/colorPrimary_sub"
             app:layout_constraintBottom_toTopOf="@+id/bottom_navigation_view"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/ic_add"
@@ -80,7 +80,7 @@
             android:layout_marginBottom="10dp"
             android:contentDescription="@string/content_description"
             android:visibility="invisible"
-            app:backgroundTint="@color/colorVariant_1_sub"
+            app:backgroundTint="@color/colorPrimary_sub"
             app:layout_constraintBottom_toTopOf="@+id/fab_menu"
             app:layout_constraintEnd_toEndOf="@+id/fab_menu"
             app:srcCompat="@drawable/ic_delete" />
@@ -96,7 +96,7 @@
             android:layout_marginBottom="10dp"
             android:contentDescription="@string/content_description"
             android:visibility="invisible"
-            app:backgroundTint="@color/colorVariant_1_sub"
+            app:backgroundTint="@color/colorPrimary_sub"
             app:layout_constraintBottom_toTopOf="@+id/delete_fab"
             app:layout_constraintEnd_toEndOf="@+id/delete_fab"
             app:srcCompat="@drawable/ic_baseline_info_24" />
@@ -112,7 +112,7 @@
             android:layout_marginBottom="10dp"
             android:contentDescription="@string/content_description"
             android:visibility="invisible"
-            app:backgroundTint="@color/colorVariant_1_sub"
+            app:backgroundTint="@color/colorPrimary_sub"
             app:layout_constraintBottom_toTopOf="@+id/info_fab"
             app:layout_constraintEnd_toEndOf="@+id/info_fab"
             app:srcCompat="@drawable/ic_baseline_drive_file_move_rtl_24" />

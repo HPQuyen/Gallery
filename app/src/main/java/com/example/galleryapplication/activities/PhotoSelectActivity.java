@@ -18,6 +18,7 @@ import com.example.galleryapplication.R;
 import com.example.galleryapplication.adapters.PhotoSelectAdapter;
 import com.example.galleryapplication.classes.DataHandler;
 import com.example.galleryapplication.classes.MediaFile;
+import com.example.galleryapplication.utils.SharedPrefs;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,7 +44,14 @@ public class PhotoSelectActivity extends AppCompatActivity {
         ActionBar mainActionBar = getSupportActionBar();
         assert mainActionBar != null;
         mainActionBar.setDisplayShowTitleEnabled(false);
-        mainActionBar.setHomeAsUpIndicator(R.drawable.ic_back_to_previous);
+
+        boolean isInDarkMode = SharedPrefs.getInstance().get(SharedPrefs.DARKTHEME, Boolean.class);
+
+        if (!isInDarkMode)
+            mainActionBar.setHomeAsUpIndicator(R.drawable.ic_back_to_previous);
+        else
+            mainActionBar.setHomeAsUpIndicator(R.drawable.ic_back_to_previous_darkmode);
+
         mainActionBar.setDisplayHomeAsUpEnabled(true);
 
         ArrayList<MediaFile> mediaEntries = DataHandler.GetListMediaFiles();
@@ -78,7 +86,13 @@ public class PhotoSelectActivity extends AppCompatActivity {
         if (optionsMenuActionBar == null) optionsMenuActionBar = menu;
 
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.actionbar_save_selection_menu, menu);
+
+        boolean isInDarkMode = SharedPrefs.getInstance().get(SharedPrefs.DARKTHEME, Boolean.class);
+
+        if (!isInDarkMode)
+            inflater.inflate(R.menu.actionbar_save_selection_menu, menu);
+        else
+            inflater.inflate(R.menu.actionbar_save_selection_menu_darkmode, menu);
 
         return true;
     }

@@ -72,13 +72,13 @@
     <!--    #endregion    -->
 
     <!--    #region Incognito Folder Activity-->
-    <string name="title_new_pin_code_form">Set up pin code</string>
-    <string name="label_pin_code_et">Pin code</string>
-    <string name="label_confirm_pin_code_et">Confirm pin code</string>
+    <string name="title_new_pin_code_form">Set up PIN code</string>
+    <string name="label_pin_code_et">PIN code</string>
+    <string name="label_confirm_pin_code_et">Confirm PIN code</string>
 
-    <string name="err_msg_pin_code_lenth">Pin code requires at least 6 digits</string>
-    <string name="err_msg_pin_code_not_match">Confirm pin code does not match</string>
-    <string name="err_msg_pin_code_incorrect">Pin code is not correct</string>
+    <string name="err_msg_pin_code_lenth">PIN code requires at least 6 digits</string>
+    <string name="err_msg_pin_code_not_match">Confirm PIN code does not match</string>
+    <string name="err_msg_pin_code_incorrect">PIN code is not correct</string>
 
     <string name="err_msg_hide_file_failed">Move to incognito folder failed</string>
     <string name="err_msg_hide_file_success">Move to incognito folder success</string>
@@ -102,7 +102,6 @@
     <string name="language_vietnamese_code" translatable="false">vi</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_default_v.2_1">Add new album</string>
     <string name="add_album_save_1">Save</string>
     <string name="album_name_add_album_1">Album name</string>
@@ -122,4 +121,7 @@
     <string name="delete_album_cancel_1">Cancel</string>
     <string name="modify_album_1">Modify album</string>
     <string name="modify_photos_1">Modify photos</string>
+    <string name="info_album_label_2">Album</string>
+    <string name="title_delete_failed">Delete is aborted</string>
+    <string name="title_delete_cancel">Delete is cancelled</string>
 </resources>

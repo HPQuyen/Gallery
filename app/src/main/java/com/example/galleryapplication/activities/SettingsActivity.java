@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.galleryapplication.R;
 import com.example.galleryapplication.fragments.subviews.settings.GeneralSettingsFragment;
+import com.example.galleryapplication.utils.SharedPrefs;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -29,7 +30,14 @@ public class SettingsActivity extends AppCompatActivity {
         ActionBar mainActionBar = getSupportActionBar();
         assert mainActionBar != null;
         mainActionBar.setDisplayShowTitleEnabled(false);
-        mainActionBar.setHomeAsUpIndicator(R.drawable.ic_back_to_previous);
+
+        boolean isInDarkMode = SharedPrefs.getInstance().get(SharedPrefs.DARKTHEME, Boolean.class);
+
+        if (!isInDarkMode)
+            mainActionBar.setHomeAsUpIndicator(R.drawable.ic_back_to_previous);
+        else
+            mainActionBar.setHomeAsUpIndicator(R.drawable.ic_back_to_previous_darkmode);
+
         mainActionBar.setDisplayHomeAsUpEnabled(true);
 
         Fragment settingsFragment = new GeneralSettingsFragment();

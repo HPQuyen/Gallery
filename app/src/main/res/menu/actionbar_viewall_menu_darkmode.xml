@@ -2,35 +2,35 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
     <!-- "Slideshow" -->
     <item
-        android:id="@+id/Slideshow_Favorite"
+        android:id="@+id/Slideshow_ViewAll"
         android:title="@string/actionbar_slideshow_1"
-        android:icon="@drawable/ic_slideshow"
+        android:icon="@drawable/ic_slideshow_darkmode"
+        android:onClick="OnClickSlideshow"
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/ViewDropDown_Favorite"
+        android:id="@+id/ViewDropDown_ViewAll"
         android:title="@string/actionbar_title_layout_1"
-        android:icon="@drawable/ic_gridonly_layout"
+        android:icon="@drawable/ic_gridonly_layout_darkmode"
         app:showAsAction="ifRoom">
         <menu>
             <!-- "Grid-Only layout" -->
             <item
-                android:id="@+id/GridOnly_Favorite"
+                android:id="@+id/GridOnly_ViewAll"
                 android:title="@string/actionbar_gridonly_layout_1"
                 app:showAsAction="ifRoom" />
 
             <!-- "Grid-Date layout" -->
             <item
-                android:id="@+id/GridDate_Favorite"
+                android:id="@+id/GridDate_ViewAll"
                 android:title="@string/actionbar_griddate_layout_1"
                 app:showAsAction="ifRoom" />
 
             <!-- "Details List layout" -->
             <item
-                android:id="@+id/DetailsList_Favorite"
+                android:id="@+id/DetailsList_ViewAll"
                 android:title="@string/actionbar_details_layout_1"
                 app:showAsAction="ifRoom" />
         </menu>
@@ -38,9 +38,9 @@
 
     <!-- "Settings" -->
     <item
-        android:id="@+id/Settings_Favorite"
+        android:id="@+id/Settings_ViewAll"
         android:title="@string/actionbar_settings_1"
-        android:icon="@drawable/ic_settings"
+        android:icon="@drawable/ic_settings_darkmode"
         android:onClick="settings"
         app:showAsAction="ifRoom" />
 

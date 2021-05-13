@@ -5,32 +5,33 @@
 
     <!-- "Slideshow" -->
     <item
-        android:id="@+id/Slideshow_Favorite"
-        android:title="@string/actionbar_slideshow_1"
-        android:icon="@drawable/ic_slideshow"
+        android:id="@+id/Modify_AlbumDetail"
+        android:title="@string/modify_album_1"
+        android:icon="@drawable/ic_edit_album_darkmode"
+        android:onClick="modifyAlbum"
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/ViewDropDown_Favorite"
+        android:id="@+id/ViewDropDown_AlbumDetail"
         android:title="@string/actionbar_title_layout_1"
-        android:icon="@drawable/ic_gridonly_layout"
+        android:icon="@drawable/ic_gridonly_layout_darkmode"
         app:showAsAction="ifRoom">
         <menu>
             <!-- "Grid-Only layout" -->
             <item
-                android:id="@+id/GridOnly_Favorite"
+                android:id="@+id/GridOnly_AlbumDetail"
                 android:title="@string/actionbar_gridonly_layout_1"
                 app:showAsAction="ifRoom" />
 
             <!-- "Grid-Date layout" -->
             <item
-                android:id="@+id/GridDate_Favorite"
+                android:id="@+id/GridDate_AlbumDetail"
                 android:title="@string/actionbar_griddate_layout_1"
                 app:showAsAction="ifRoom" />
 
             <!-- "Details List layout" -->
             <item
-                android:id="@+id/DetailsList_Favorite"
+                android:id="@+id/DetailsList_AlbumDetail"
                 android:title="@string/actionbar_details_layout_1"
                 app:showAsAction="ifRoom" />
         </menu>
@@ -38,10 +39,10 @@
 
     <!-- "Settings" -->
     <item
-        android:id="@+id/Settings_Favorite"
-        android:title="@string/actionbar_settings_1"
-        android:icon="@drawable/ic_settings"
-        android:onClick="settings"
+        android:id="@+id/Delete_AlbumDetail"
+        android:title="@string/delete_album_1"
+        android:icon="@drawable/ic_delete_darkmode"
+        android:onClick="deleteAlbum"
         app:showAsAction="ifRoom" />
 
 </menu>

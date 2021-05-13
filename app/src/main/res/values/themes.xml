@@ -1,27 +1,76 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="DefaultAppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="themeName">LightTheme</item>
+
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/colorPrimary_main</item>
-        <item name="colorPrimaryVariant">@color/colorVariant_1_main</item>
+        <item name="colorPrimaryDark">@color/colorVariant_1_main</item>
+        <item name="colorPrimaryVariant">@color/colorVariant_2_main</item>
         <item name="colorOnPrimary">@color/colorOnPrimary_main</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/colorPrimary_sub</item>
-        <item name="colorSecondaryVariant">@color/colorVariant_1_sub</item>
-        <item name="colorOnSecondary">@color/colorOnPrimary_sub</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/colorVariant_1_main</item>
+
+        <item name="colorAccent">@color/colorPrimary_main</item>
+        <item name="colorControlNormal">@color/colorVariant_1_main</item>
+
         <!-- Customize your theme here. -->
         <item name="windowActionBar">false</item>
 
-        <item name="popupMenuBackground">@color/colorVariant_1_main</item>
+        <item name="popupMenuBackground">@color/colorPrimary_main</item>
 
         <item name="android:itemTextAppearance">@style/ItemTextAppearance</item>
         <item name="android:actionOverflowButtonStyle">@style/MoreSettings</item>
 
-        <item name="android:textColorPrimary">@color/colorPrimary_sub</item>
-        <item name="android:textColorSecondary">@color/colorVariant_1_sub</item>
+        <item name="android:textColorPrimary">@color/colorVariant_1_sub</item>
+        <item name="android:textColorSecondary">@color/colorPrimary_sub</item>
 
+    </style>
+
+    <style name="ToolbarAppearance" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">@color/colorPrimary_main</item>
+    </style>
+
+    <style name="TextViewTitleAppearance" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textColor">@color/colorOnPrimary_main</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="TextViewAlbumTitleAppearance" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textColor">@color/colorVariant_2_main</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="TextViewAlbumDescriptionAppearance" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">@color/colorOnPrimary_sub</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="TextInputEditAppearance" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="TextAlbumButtonAppearance" parent="TextAppearance.AppCompat.Button">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/colorPrimary_main</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:drawableLeft">@drawable/ic_photo_to_album</item>
+    </style>
+
+    <style name="TextAlbumSelectedAppearance" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/colorPrimary_main</item>
     </style>
 
     <style name="MoreSettings">
@@ -31,8 +80,5 @@
     <style name="ItemTextAppearance">
         <item name="android:textColor">@color/colorOnPrimary_main</item>
     </style>
-
-
-
 
 </resources>
