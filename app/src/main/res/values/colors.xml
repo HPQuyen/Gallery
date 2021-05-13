@@ -14,11 +14,11 @@
     <color name="colorVariant_2_main">#8ab6d6</color>
     <color name="colorOnPrimary_main">#fbe0c4</color>
 
-    <color name="colorPrimary_sub">#132c33</color>
-    <color name="colorVariant_1_sub">#126e82</color>
+    <color name="colorVariant_1_sub">#132c33</color>
+    <color name="colorPrimary_sub">#126e82</color>
     <color name="colorVariant_2_sub">#51c4d3</color>
     <color name="colorOnPrimary_sub">#d8e3e7</color>
-    <color name="color_divider">#ECECEC</color>
 
+    <color name="color_divider">#ECECEC</color>
     <color name="transparent">#00FFFFFF</color>
 </resources>

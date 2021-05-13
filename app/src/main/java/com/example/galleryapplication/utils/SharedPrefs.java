@@ -11,9 +11,13 @@ public class SharedPrefs {
     public static final String LANGUAGE = "language";
     public static final String DARKTHEME = "theme_dark";
 
+    public static final String VIEW = "view";
+
     public static final String VIEWALLLAYOUT = "viewall_layout";
     public static final String ALBUMLAYOUT = "album_layout";
     public static final String FAVORITELAYOUT = "favorite_layout";
+
+    public static boolean isFirstTimeOperated = true;
 
     private static SharedPrefs instance;
     private final SharedPreferences sharedPreferences;

@@ -49,7 +49,7 @@
     <string name="info_detail_label_2">Chi tiết</string>
     <string name="info_resolution_label_2">Độ phân giải</string>
     <string name="info_file_size_label_2">Kích thước tệp</string>
-    <string name="info_album_label_2">Album</string>
+    <string name="info_album_label_2">Bộ sưu tập</string>
     <string name="info_path_label_2">Đường dẫn</string>
     <string name="title_delete_confirm">Bạn đã chắc chắn rồi chứ?</string>
     <string name="sub_text_delete_confirm">Tạm thời xóa tệp tin</string>
@@ -85,4 +85,23 @@
     <string name="delete_album_ok_1">OK</string>
     <string name="delete_album_cancel_1">Hủy</string>
     <string name="modify_photos_1">Thay đổi ảnh</string>
+    <string name="next_btn">Tiếp</string>
+    <string name="add_fab">Thêm</string>
+    <string name="title_action_cancel">Hành động bị hủy</string>
+    <string name="title_basic_setting">Thiết lập cơ bản</string>
+    <string name="title_other">Khác</string>
+    <string name="msg_save_file_success">Lưu tệp thành công</string>
+    <string name="msg_save_file_failed">Lưu tệp thất bại</string>
+    <string name="title_new_pin_code_form">Thiết lập mã PIN</string>
+    <string name="label_pin_code_et">Mã PIN</string>
+    <string name="label_confirm_pin_code_et">Xác nhận mã PIN</string>
+    <string name="err_msg_pin_code_lenth">Mã PIN cần ít nhất 6 chữ số</string>
+    <string name="err_msg_pin_code_not_match">Mã PIN xác nhận không khớp</string>
+    <string name="err_msg_pin_code_incorrect">Mã PIN không chính xác</string>
+    <string name="err_msg_hide_file_failed">Di chuyển đến thư mục an toàn thất bại</string>
+    <string name="err_msg_hide_file_success">Di chuyển đến thư mục an toàn thành công</string>
+    <string name="sub_text_remove_from_incognito">Xóa tệp tin khỏi thư mục an toàn</string>
+    <string name="msg_remove_from_incognito_success">Xóa tệp tin khỏi thư mục an toàn thành công</string>
+    <string name="msg_remove_from_incognito_failed">Xóa tệp tin khỏi thư mục an toàn thất bại</string>
+    <string name="title_incognito">Thư mục an toàn</string>
 </resources>

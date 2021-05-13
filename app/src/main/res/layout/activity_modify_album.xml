@@ -13,8 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
-        android:background="@color/colorPrimary_main"
-        app:titleTextColor="@color/colorOnPrimary_main"
+        style="@style/ToolbarAppearance"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -24,10 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@string/title_default_v.2_1"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:textColor="@color/colorOnPrimary_main"
-            android:includeFontPadding="false" />
+            android:textAppearance="@style/TextViewTitleAppearance" />
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -55,9 +51,6 @@
                 android:id="@+id/albumModifyNameEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:includeFontPadding="false"
-                android:textSize="20sp"
                 android:inputType="text"
                 android:maxLines="1"
                 android:lines="1"
@@ -72,10 +65,8 @@
             android:id="@+id/buttonModifyPhotosToAlbum"
             android:layout_marginHorizontal="50dp"
             android:layout_marginTop="15dp"
-            android:textSize="20sp"
-            android:textColor="@color/colorPrimary_main"
             android:text="@string/add_photo_to_album_1"
-            android:drawableLeft="@drawable/ic_photo_to_album"
+            style="@style/TextAlbumButtonAppearance"
             android:background="@drawable/drawable_button_add_album_border"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -88,8 +79,7 @@
             android:id="@+id/numberModifyPhotosToAlbum"
             android:layout_marginHorizontal="50dp"
             android:layout_marginTop="15dp"
-            android:textSize="20sp"
-            android:textColor="@color/colorPrimary_main"
+            android:textAppearance="@style/TextAlbumSelectedAppearance"
             android:text="@string/number_photo_selected_add_album_1"
             android:gravity="right"
             app:layout_constraintTop_toBottomOf="@+id/buttonModifyPhotosToAlbum"

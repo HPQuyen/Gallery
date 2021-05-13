@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- "Save" -->
+    <item
+        android:id="@+id/AddAlbum_Save"
+        android:title="@string/add_album_save_1"
+        android:icon="@drawable/ic_save_add_album_darkmode"
+        android:onClick="saveSelections"
+        app:showAsAction="ifRoom" />
+
+</menu>

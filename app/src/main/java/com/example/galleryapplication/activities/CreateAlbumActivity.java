@@ -19,6 +19,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.galleryapplication.R;
 import com.example.galleryapplication.classes.Constants;
 import com.example.galleryapplication.classes.DataHandler;
+import com.example.galleryapplication.utils.SharedPrefs;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -47,7 +48,13 @@ public class CreateAlbumActivity extends AppCompatActivity {
         ActionBar mainActionBar = getSupportActionBar();
         assert mainActionBar != null;
         mainActionBar.setDisplayShowTitleEnabled(false);
-        mainActionBar.setHomeAsUpIndicator(R.drawable.ic_back_to_previous);
+        boolean isInDarkMode = SharedPrefs.getInstance().get(SharedPrefs.DARKTHEME, Boolean.class);
+
+        if (!isInDarkMode)
+            mainActionBar.setHomeAsUpIndicator(R.drawable.ic_back_to_previous);
+        else
+            mainActionBar.setHomeAsUpIndicator(R.drawable.ic_back_to_previous_darkmode);
+
         mainActionBar.setDisplayHomeAsUpEnabled(true);
 
         albumInputLayout = findViewById(R.id.albumModifyNameInputLayout);
@@ -84,7 +91,13 @@ public class CreateAlbumActivity extends AppCompatActivity {
         if (optionsMenuActionBar == null) optionsMenuActionBar = menu;
 
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.actionbar_save_selection_menu, menu);
+
+        boolean isInDarkMode = SharedPrefs.getInstance().get(SharedPrefs.DARKTHEME, Boolean.class);
+
+        if (!isInDarkMode)
+            inflater.inflate(R.menu.actionbar_save_selection_menu, menu);
+        else
+            inflater.inflate(R.menu.actionbar_save_selection_menu_darkmode, menu);
 
         return true;
     }
