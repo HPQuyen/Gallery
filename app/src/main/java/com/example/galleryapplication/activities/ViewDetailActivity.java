@@ -18,6 +18,7 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Environment;
 
 
@@ -29,6 +30,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import com.bumptech.glide.Glide;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.example.galleryapplication.adapters.SlideshowAdapter;
@@ -50,6 +52,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -107,11 +110,11 @@ public class ViewDetailActivity extends AppCompatActivity {
     private boolean menuFabClick = false;
 
     private MediaFile selectedMediaFile;
-    private List<MediaFile> mediaFileSlider;
+    private List<MediaFile> mediaFileSlider = new ArrayList<>();
 
     //#endregion
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,7 +138,7 @@ public class ViewDetailActivity extends AppCompatActivity {
         Init();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @SuppressLint({"NonConstantResourceId", "UseCompatLoadingForDrawables", "RestrictedApi"})
     private void Init(){
 
@@ -144,7 +147,15 @@ public class ViewDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if(intent != null){
             currentPosition = intent.getIntExtra(MediaFile.FILE_ADAPTER_POSITION, 0);
-            selectedMediaFile = mediaFileSlider.get(currentPosition);
+
+            if(intent.getData() != null){
+                selectedMediaFile = DataHandler.GetMediaFileByUri(this, intent.getData());
+                mediaFileSlider = new ArrayList<>();
+                mediaFileSlider.add(selectedMediaFile);
+            }else{
+                selectedMediaFile = mediaFileSlider.get(currentPosition);
+
+            }
         }
         viewPager2 = findViewById(R.id.view_pager_slider);
         SlideshowAdapter slideshowAdapter = new SlideshowAdapter(this, mediaFileSlider, viewPager2, SLIDER_MODE.NORMAL);
@@ -158,8 +169,6 @@ public class ViewDetailActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                Log.d("Nothing", "On page select " + position);
-                Log.d("Nothing", "Size list media: " + mediaFileSlider.size());
                 selectedMediaFile = mediaFileSlider.get(position);
                 if(viewDetailMode == VIEW_DETAIL_MODE.NORMAL)
                     favouriteFab.setImageDrawable(selectedMediaFile.isFavourite?getDrawable(R.drawable.ic_baseline_favorite_32):getDrawable(R.drawable.ic_baseline_favorite_border_24));
@@ -200,6 +209,10 @@ public class ViewDetailActivity extends AppCompatActivity {
             return false;
         });
 
+        if(intent.getData() != null){
+            findViewById(R.id.fab_menu).setVisibility(View.GONE);
+            return;
+        }
 
         // Set up view detail info
         infoBottomSheetDialog = new BottomSheetDialog(this);

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Debug;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
@@ -401,6 +402,26 @@ public class DataHandler {
                 }
                 String folderName = resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME));
                 mediaFile = new MediaFile(id, mediaType, fileUrl, MediaFile.SecondsToDatetimeString(epochTime), MediaFile.FormatFileSize(fileSize), resolution, folderName, favouriteIdArrayList.contains(id), System.currentTimeMillis(), MediaFile.SecondsToDateString(epochTime));
+            }
+            return mediaFile;
+        }
+        Toast.makeText(context,"No such file", Toast.LENGTH_LONG).show();
+        return null;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    public static MediaFile GetMediaFileByUri(@NonNull Context context, Uri uri){
+        MediaFile mediaFile = null;
+        String[] projections = new String[]{
+                MediaStore.Files.FileColumns._ID };
+
+        @SuppressLint("Recycle")
+        Cursor resultSet = context.getContentResolver().query(uri, projections, null, null, null);
+        if(resultSet != null){
+            if (resultSet.moveToNext()){
+                // Get epochtime in seconds
+                String id = resultSet.getString(resultSet.getColumnIndex(MediaStore.Files.FileColumns._ID));
+                return GetMediaFileById(context, id);
             }
             return mediaFile;
         }
