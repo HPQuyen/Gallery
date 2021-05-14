@@ -264,6 +264,7 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
 
         switch (mainView) {
             case _ALL:
+                Observer.SubscribeCurrentMediaFiles(DataHandler.GetListMediaFiles());
                 if (!isInDarkMode)
                     inflater.inflate(R.menu.actionbar_viewall_menu, menu);
                 else
@@ -303,6 +304,7 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
                     inflater.inflate(R.menu.actionbar_album_menu_darkmode, menu);
                 return true;
             case _FAVORITE:
+                Observer.SubscribeCurrentMediaFiles(DataHandler.GetMediaFileByFavourite());
                 if (!isInDarkMode)
                     inflater.inflate(R.menu.actionbar_favorite_menu, menu);
                 else
@@ -562,7 +564,7 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
                         {
                             DataHandler.UpdateMediaFiles(this);
                             Observer.Invoke(Observer.ObserverCode.TRIGGER_ADAPTER_CHANGE);
-                            Observer.InvokeOnce(Observer.ObserverCode.TRIGGER_ADAPTER_FAVOURITE_CHANGE);
+                            Observer.Invoke(Observer.ObserverCode.TRIGGER_ADAPTER_FAVOURITE_CHANGE);
                         }
                     }
                     break;

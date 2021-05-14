@@ -8,7 +8,8 @@
         android:id="@+id/Slideshow_Favorite"
         android:title="@string/actionbar_slideshow_1"
         android:icon="@drawable/ic_slideshow"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"
+        android:onClick="OnClickSlideshow" />
 
     <item
         android:id="@+id/ViewDropDown_Favorite"
