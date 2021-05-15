@@ -46,6 +46,8 @@ import com.example.galleryapplication.interfaces.IOnBackPressed;
 import com.example.galleryapplication.utils.LanguageHandler;
 import com.example.galleryapplication.utils.SharedPrefs;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
 import ly.img.android.pesdk.ui.utils.PermissionRequest;
 
@@ -461,6 +463,19 @@ public class GalleryViewActivity extends AppCompatActivity implements Permission
     }
 
     public void OnClickSlideshow(MenuItem item){
+        Observer.SubscribeCurrentMediaFiles(DataHandler.GetListMediaFiles());
+        FragmentTransaction fragTransaction = getSupportFragmentManager().beginTransaction();
+        fragTransaction.replace(R.id.fragment_Settings_FrameLayout, slideshowFragment);
+        fragTransaction.addToBackStack(null);
+        fragTransaction.commit();
+    }
+
+    public void OnClickSlideshowFavorite(MenuItem item){
+        if(DataHandler.GetMediaFileByFavourite().size() <= 0){
+            Snackbar.make(findViewById(R.id.main_BottomNavigator), "No favorite file found", Snackbar.LENGTH_SHORT);
+            return;
+        }
+        Observer.SubscribeCurrentMediaFiles(DataHandler.GetMediaFileByFavourite());
         FragmentTransaction fragTransaction = getSupportFragmentManager().beginTransaction();
         fragTransaction.replace(R.id.fragment_Settings_FrameLayout, slideshowFragment);
         fragTransaction.addToBackStack(null);

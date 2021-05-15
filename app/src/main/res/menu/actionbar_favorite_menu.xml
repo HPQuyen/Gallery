@@ -9,7 +9,7 @@
         android:title="@string/actionbar_slideshow_1"
         android:icon="@drawable/ic_slideshow"
         app:showAsAction="ifRoom"
-        android:onClick="OnClickSlideshow" />
+        android:onClick="OnClickSlideshowFavorite" />
 
     <item
         android:id="@+id/ViewDropDown_Favorite"
